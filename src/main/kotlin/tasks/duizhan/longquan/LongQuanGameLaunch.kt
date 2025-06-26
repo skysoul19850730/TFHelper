@@ -196,8 +196,12 @@ class LongQuanGameLaunch : IGameLaunch {
                 CanreJujue.click()
                 return
             }
-            delay(33000)
-            Config.adv_close.click()
+            if(NoAdvOk.isFit()){
+                NoAdvOk.click()
+            }else {
+                delay(33000)
+                Config.adv_close.click()
+            }
             delay(3000)
             MPoint(100, 130).click()
         }

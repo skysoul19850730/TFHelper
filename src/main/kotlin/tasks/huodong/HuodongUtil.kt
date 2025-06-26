@@ -8,6 +8,7 @@ import tasks.huodong.qiuxiang.QiuXiangDay7
 import tasks.huodong.qiuxiang.QiuXiangDay8
 import tasks.huodong.qiuxiang2.QiuXiang2Day1
 import tasks.huodong.qiuxiang2.QiuXiang2Day2
+import tasks.huodong.qiuxiang2.QiuXiang2Day3
 import tasks.huodong.sanguo.*
 import tasks.huodong.shuihu.*
 import tasks.huodong.shuihu3.*
@@ -16,6 +17,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.Date
+import kotlin.math.abs
 
 object HuodongUtil {
     var state = mutableStateOf(false)
@@ -48,10 +50,11 @@ object HuodongUtil {
     private fun getHuodongDoing():HeroDoing?{
 
         var today = LocalDate.now()
-        var dayDt = ChronoUnit.DAYS.between(today, huodongStartTime).toInt()
+        var dayDt = abs( ChronoUnit.DAYS.between(today, huodongStartTime).toInt())
         return when(dayDt%perCircleDate){
             0->QiuXiang2Day1()
             1->QiuXiang2Day2()
+            2-> QiuXiang2Day3()
             else->null
         }
     }

@@ -82,9 +82,14 @@ abstract class IRoomFind {
         //如果有广告
         if(Recognize.IcAdv4Hezuo.isFit()){
             Recognize.IcAdv4Hezuo.click()
-            delay(34*1000)
-            Config.adv_close.click()
             delay(2000)
+            if(Recognize.NoAdvOk.isFit()){
+                Recognize.NoAdvOk.click()
+            }else {
+                delay(34 * 1000)
+                Config.adv_close.click()
+            }
+
 
             while (!Recognize.Duizhan.isFit()) {//等回到“对战” 首页
                 Config.adv_close.click()

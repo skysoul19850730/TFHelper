@@ -9,7 +9,7 @@ import ui.zhandou.hanbing.HanBingModel
 
 class HB5ZHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
-    val isRenwu = false
+    val isRenwu = true
 
     val zhanjiang = HeroCreator.zhanjiang2.create()
     val tieqi = HeroCreator.tieqi.create()
@@ -39,11 +39,11 @@ class HB5ZHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
         guanDealList.add(
             GuanDeal(91, isOver = { bingqi.isFull() },
-                chooseHero = { upAny(bingqi) }, onGuanDealStart = { carDoing.downHero(yuren) })
+                chooseHero = { upAny(bingqi) }, onGuanDealStart = { carDoing.downHero(wangjiang) })
         )
 
-        guanDealList.add(GuanDeal(100, isOver = { yuren.isFull() && yandou },
-            chooseHero = { upAny(yuren, zhuangbei = { yandou }) }, onGuanDealStart = { carDoing.downHero(bingqi) })
+        guanDealList.add(GuanDeal(100, isOver = { wangjiang.isFull() && yandou },
+            chooseHero = { upAny(wangjiang, zhuangbei = { yandou }) }, onGuanDealStart = { carDoing.downHero(bingqi) })
         )
 
         guanDealList.add(

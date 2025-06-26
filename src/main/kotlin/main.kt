@@ -51,6 +51,7 @@ import ui.MainUIData
 import ui.launcher
 import ui.weights.MCheckBox
 import tasks.xiaka.XiaKaUtil
+import tesshelper.Tess
 import ui.weights.MRadioBUtton
 import utils.*
 import java.text.SimpleDateFormat
@@ -1165,11 +1166,16 @@ fun freshHeros(){
 
 fun test() {
 
+//    val img = getImageFromRes("ttttest22.png")
+//
+//    val text = Tess.getText(img)
+//    text.log(text)
+
 //    testCircle()
 //    AYUtil.testAY19()
 //    AYUtil.testHB199()
 //    AYUtil.testAY39()
-    freshHeros()
+//    freshHeros()
 
 //   val list= File(Config.caiji_main_path + "\\tmp").listFiles().map {
 //        var name = it.name
