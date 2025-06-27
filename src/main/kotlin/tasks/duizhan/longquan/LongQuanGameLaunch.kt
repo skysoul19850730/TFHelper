@@ -191,7 +191,7 @@ class LongQuanGameLaunch : IGameLaunch {
     private suspend fun seeAdv(){
         if(CanreJujue.isFit() || CanreJujueFail.isFit()) {
             Config.adv_point.click()
-            delay(2000)
+            delay(5000)
             if(CanreJujue.isFit() || CanreJujueFail.isFit()) {//点了广告后，但未请求到
                 CanreJujue.click()
                 return
@@ -199,10 +199,10 @@ class LongQuanGameLaunch : IGameLaunch {
             if(NoAdvOk.isFit()){
                 NoAdvOk.click()
             }else {
-                delay(33000)
+                delay(30000)
                 Config.adv_close.click()
             }
-            delay(3000)
+            delay(2000)
             MPoint(100, 130).click()
         }
     }

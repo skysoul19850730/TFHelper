@@ -381,7 +381,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 
         while (shuaxinClicked) {
             MRobot.singleClick(Config.zhandou_shuaxinPoint)
-            delay(50)
+            delay(100)
             withTimeoutOrNull(400) {
                 while (shuaxinClicked) {
                     hs = doGetPreHeros()
