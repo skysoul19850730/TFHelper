@@ -52,6 +52,7 @@ import ui.launcher
 import ui.weights.MCheckBox
 import tasks.xiaka.XiaKaUtil
 import tesshelper.Tess
+import test.WindowTest
 import ui.weights.MRadioBUtton
 import utils.*
 import java.text.SimpleDateFormat
@@ -1170,6 +1171,14 @@ fun test() {
 //
 //    val text = Tess.getText(img)
 //    text.log(text)
+
+    GlobalScope.launch {
+        var img = WindowTest.getLongPic()
+        var text = Tess.getText(img)
+        text.log(text)
+        img.saveTo(File(App.caijiPath, "long_${System.currentTimeMillis()}.png"))
+    }
+
 
 //    testCircle()
 //    AYUtil.testAY19()

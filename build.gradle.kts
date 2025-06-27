@@ -25,6 +25,9 @@ dependencies {
     implementation("net.sourceforge.tess4j:tess4j:5.7.0")
     implementation("com.android.tools.ddms:ddmlib:26.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+
+    implementation("org.apache.httpcomponents:httpclient:4.5.13")
+
 }
 
 tasks.withType<KotlinCompile>() {

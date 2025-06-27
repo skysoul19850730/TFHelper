@@ -12,6 +12,7 @@ import tasks.XueLiang
 import utils.ImgUtil
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
+import kotlin.math.abs
 
 abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
 
@@ -96,9 +97,13 @@ abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
 
         var tem = XueLiang.getXueLiang()
         var count = 0
-        while(curXue - tem>0.03 && curGuan<150){
-            count++
+        while(curGuan<150){
+            if(abs(curXue-tem)>0.03) {
+                count++
+                curXue = tem
+            }
             delay(200)
+            tem = XueLiang.getXueLiang()
             if(count>=3){
                 xueChecked = true
                 GlobalScope.launch {
