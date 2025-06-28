@@ -1,6 +1,7 @@
 package tasks.duizhan.longquan
 
 import data.Config
+import data.Config.adv_point
 import data.Config.delayLong
 import data.Config.delayNor
 import data.MPoint
@@ -192,9 +193,15 @@ class LongQuanGameLaunch : IGameLaunch {
         if(CanreJujue.isFit() || CanreJujueFail.isFit()) {
             Config.adv_point.click()
             delay(2000)
-            if(CanreJujue.isFit() || CanreJujueFail.isFit()) {//点了广告后，但未请求到
+            var count = 0
+            while(CanreJujue.isFit() || CanreJujueFail.isFit()) {//点了广告后，但未请求到
+                count++
+                if(count>5){
                 CanreJujue.click()
-                return
+                return}else{
+                    adv_point.click()
+                    delay(2000)
+                }
             }
             if(NoAdvOk.isFit()){
                 NoAdvOk.click()
