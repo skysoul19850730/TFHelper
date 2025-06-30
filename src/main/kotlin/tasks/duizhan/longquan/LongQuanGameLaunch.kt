@@ -202,7 +202,7 @@ class LongQuanGameLaunch : IGameLaunch {
                 delay(30000)
                 Config.adv_close.click()
             }
-            delay(2000)
+            delay(3000)
             MPoint(100, 130).click()
         }
     }

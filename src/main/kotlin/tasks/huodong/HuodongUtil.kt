@@ -6,10 +6,7 @@ import tasks.huodong.qiuxiang.QiuXiangDay2
 import tasks.huodong.qiuxiang.QiuXiangDay3
 import tasks.huodong.qiuxiang.QiuXiangDay7
 import tasks.huodong.qiuxiang.QiuXiangDay8
-import tasks.huodong.qiuxiang2.QiuXiang2Day1
-import tasks.huodong.qiuxiang2.QiuXiang2Day2
-import tasks.huodong.qiuxiang2.QiuXiang2Day3
-import tasks.huodong.qiuxiang2.QiuXiang2Day4
+import tasks.huodong.qiuxiang2.*
 import tasks.huodong.sanguo.*
 import tasks.huodong.shuihu.*
 import tasks.huodong.shuihu3.*
@@ -57,6 +54,7 @@ object HuodongUtil {
             1->QiuXiang2Day2()
             2-> QiuXiang2Day3()
             3-> QiuXiang2Day4()
+            6-> QiuXiang2Day7()
             else->null
         }
     }
