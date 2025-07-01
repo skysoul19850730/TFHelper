@@ -17,8 +17,6 @@ class QiuXiang2Day1 : BaseQiuxiang2() {
     val huanqiu = HeroCreator.huanqiu.create()
 
 
-
-
     override fun initHeroes() {
         heros = arrayListOf(zhanjiang, niutou, maomi, saman2, efei, nvwang, bingqi, muqiu, shengqi, huanqiu)
         damu = true
@@ -26,48 +24,43 @@ class QiuXiang2Day1 : BaseQiuxiang2() {
         guanDealList.add(GuanDeal(
             0,
             isOver = {
-                fulls(zhanjiang,niutou,maomi,saman2)
+                fulls(zhanjiang, niutou, maomi, saman2)
             },
             chooseHero = {
-                if(zhanjiang.isInCar()) {
+                if (zhanjiang.isInCar()) {
                     upAny(zhanjiang, niutou, maomi, saman2)
-                }else upAny(zhanjiang)
+                } else upAny(zhanjiang)
             }
         ))
 
         guanDealList.add(GuanDeal(
             40,
             isOver = {
-                fulls(efei) && nvwang.isInCar() && qiangxi
+                fulls(efei) && qiangxi
             },
             chooseHero = {
-                if(nvwang.isInCar()){
-                    upAny(efei, zhuangbei = {qiangxi})
-                }else{
-                    upAny(efei,nvwang, zhuangbei = {qiangxi})
-                }
+                upAny(efei, zhuangbei = { qiangxi })
             }
         ))
 
-        add49()
 
         guanDealList.add(GuanDeal(
             50,
             isOver = {
-                fulls(zhanjiang, niutou, maomi, saman2,efei) && nvwang.isInCar()
+                fulls(zhanjiang, niutou, maomi, saman2, efei) && nvwang.isInCar()
             },
             chooseHero = {
-                if(nvwang.isInCar()){
-                    upAny(zhanjiang, niutou, maomi, saman2,efei)
-                }else{
-                    upAny(zhanjiang, niutou, maomi, saman2,efei,nvwang)
+                if (nvwang.isInCar()) {
+                    upAny(zhanjiang, niutou, maomi, saman2, efei)
+                } else {
+                    upAny(zhanjiang, niutou, maomi, saman2, efei, nvwang)
                 }
             }
         ))
 
-        addHuan(140,{longxin})
+        addHuan(140, { longxin })
         add149()
-        addHuan(150,{qiangxi})
+        addHuan(150, { qiangxi })
 
         curGuanDeal = guanDealList.get(0)
     }

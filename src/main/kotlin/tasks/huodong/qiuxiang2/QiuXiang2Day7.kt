@@ -37,10 +37,10 @@ class QiuXiang2Day7 : BaseQiuxiang2() {
         guanDealList.add(GuanDeal(
             startGuan = 50,
             isOver = {
-                fulls(maomi)
+                fulls(bingqi)
             },
             chooseHero = {
-                upAny(maomi)
+                upAny(bingqi)
             }
         ))
 
