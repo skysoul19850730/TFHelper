@@ -254,7 +254,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
             if (!first) {
                 log("某次刷卡失败了，超时未识别到卡")
                 if (!imgLoged) {
-                    log(getImage(App.rectWindow))
+//                    log(getImage(App.rectWindow))
                     imgLoged = true
                 }
                 if (Recognize.saleRect.isFit()) {//识别不到 识别看看是不是英雄弹窗挡住了//如果上卡和下卡一起操作，这里会导致下卡失败//加到这里应该没问题，毕竟是识别出错后才尝试看有没有未关闭弹窗
@@ -381,7 +381,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 
         while (shuaxinClicked) {
             MRobot.singleClick(Config.zhandou_shuaxinPoint)
-            delay(50)
+            delay(100)
             withTimeoutOrNull(400) {
                 while (shuaxinClicked) {
                     hs = doGetPreHeros()
@@ -406,14 +406,14 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
             if(shuaxinClicked){
                 log("刷新点击没成功，再点一次2")
 
-                log( getImage(
-                    MRect.create4P(
-                        Config.zhandou_hero1CheckRect.left,
-                        Config.zhandou_hero1CheckRect.top,
-                        Config.zhandou_hero3CheckRect.right,
-                        Config.zhandou_hero1CheckRect.bottom
-                    )
-                ))
+//                log( getImage(
+//                    MRect.create4P(
+//                        Config.zhandou_hero1CheckRect.left,
+//                        Config.zhandou_hero1CheckRect.top,
+//                        Config.zhandou_hero3CheckRect.right,
+//                        Config.zhandou_hero1CheckRect.bottom
+//                    )
+//                ))
             }else{
                 //刷到一个不一样的，就代表刷新了,但可能 比如  只有第三个识别到女王，前两个还没识别到呢，但可以确认已经ok了，那么就用之前方式获取
                 //但如果hs本身就3个都有，且和之前不同，那么就可以直接用了，就不用再识别一次

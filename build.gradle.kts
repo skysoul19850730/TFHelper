@@ -25,6 +25,16 @@ dependencies {
     implementation("net.sourceforge.tess4j:tess4j:5.7.0")
     implementation("com.android.tools.ddms:ddmlib:26.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+
+    implementation("org.apache.httpcomponents:httpclient:4.5.13")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("commons-io:commons-io:2.19.0")
+    implementation("commons-codec:commons-codec:1.18.0")
+    implementation("org.openpnp:opencv:4.6.0-0")
+    implementation("com.alibaba:fastjson:1.2.76")
+        implementation("org.projectlombok:lombok:1.18.24") // 使用最新版本
+//        annotationProcessor 'org.projectlombok:lombok:1.18.24' // 使用最新版本
+
 }
 
 tasks.withType<KotlinCompile>() {

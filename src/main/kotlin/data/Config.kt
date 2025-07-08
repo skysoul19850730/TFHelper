@@ -189,4 +189,7 @@ object Config {
     val Color_AY39_Null = Color(30, 30, 30)
 
     var qianRect = MRect.createWH(174,569,88,30)
+
+
+    val changtuRect = MRect.create4P(30,223,978,548)
 }
