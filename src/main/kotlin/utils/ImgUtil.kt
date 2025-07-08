@@ -9,6 +9,7 @@ import getImage
 import getImageFromRes
 import log
 import logOnly
+import saveTo
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.awt.image.BufferedImage.TYPE_INT_RGB

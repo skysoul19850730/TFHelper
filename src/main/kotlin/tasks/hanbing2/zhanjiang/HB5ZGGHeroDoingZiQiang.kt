@@ -127,7 +127,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
         guanDealList.add(GuanDeal(
             170,
-            isOver = {wangjiang.isInCar() && longxin},
+            isOver = {wangjiang.isFull() && longxin},
             chooseHero = {
                 carDoing.downHero(yuren)
                 upAny(wangjiang, zhuangbei = {longxin})
@@ -139,7 +139,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
             GuanDeal(189, isOver = {currentGuan() > 189},
             chooseHero = {
                 delay(300)
-                val ind =upBase()
+                val ind =upAny(tieqi,zhanjiang,wangjiang,sishen,dianfa,gugu)
                 if(ind<0){
                     upAny(guangqiu)
                 }else ind
@@ -148,13 +148,14 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
         )
 
         guanDealList.add(GuanDeal(191, isOver = {
-            fullBase() && longxin
+            fullBase()
         }, chooseHero = {
             if(needReCheckStar) {
                 carDoing.reCheckStars()
                 needReCheckStar = false
             }
-            upBase(zhuangbei = { longxin })
+            carDoing.downHero(wangjiang)
+            upBase()
         }, onGuanDealStart = {
             needReCheckStar = true
         }))
@@ -191,14 +192,14 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                 return heros.upAny(tieqi)
             } else {
                 //等点名
-//                    XueLiang.observerXueDown()//掉血 等于 白球撞上了
-//                    step199 = 2
-//                    delay(300)//怕不同步，延迟300，满上萨满
+                    XueLiang.observerXueDown()//掉血 等于 白球撞上了
+                    step199 = 2
+                    delay(300)//怕不同步，延迟300，满上萨满
 
                 //按3 会改成2，不监听掉血了，怕处于涨血状态判断不准。白球撞完按3
-                while (step199 == 1) {
-                    delay(100)
-                }
+//                while (step199 == 1) {
+//                    delay(100)
+//                }
 
                 return heros.upAny(tieqi)
             }
@@ -212,7 +213,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                 position199 = -1
             }
             if (carDoing.hasOpenSpace() || carDoing.hasNotFull() ) {
-                return heros.upAny(zhanjiang, yuren, sishen, tieqi, wangjiang, gugu)
+                return heros.upAny(zhanjiang, yuren, sishen, tieqi, dianfa, gugu)
             } else {
                 while (step199 == 2) {
                     var dianmingIndex = carDoing.getHB199Selected()
@@ -221,7 +222,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                         carDoing.downPosition(dianmingIndex)
                         position199 = -1
                         count199++
-                        return heros.upAny(zhanjiang, yuren, sishen, tieqi, wangjiang, gugu)
+                        return heros.upAny(zhanjiang, yuren, sishen, tieqi, dianfa, gugu)
                     }
                     delay(100)
                 }
