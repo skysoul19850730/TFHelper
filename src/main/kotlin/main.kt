@@ -32,7 +32,6 @@ import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.sun.jna.platform.win32.*
-import com.sun.jna.platform.win32.WinDef.HWND
 import data.*
 import kotlinx.coroutines.*
 import model.CarDoing
@@ -51,7 +50,6 @@ import ui.MainUIData
 import ui.launcher
 import ui.weights.MCheckBox
 import tasks.xiaka.XiaKaUtil
-import tesshelper.Tess
 import test.WindowTest
 import ui.weights.MRadioBUtton
 import utils.*
@@ -1173,10 +1171,12 @@ fun test() {
 //    text.log(text)
 
     GlobalScope.launch {
-        var img = WindowTest.getLongPic()
-        var text = Tess.getText(img)
-        text.log(text)
-        img.saveTo(File(App.caijiPath, "long_${System.currentTimeMillis()}.png"))
+//        var img = WindowTest.getLongPic()
+//        var text = Tess.getText(img)
+//        text.log(text)
+//        img.saveTo(File(App.caijiPath, "long_${System.currentTimeMillis()}.png"))
+        var img = getImageFromRes("sss.png")
+        var texxt =WindowTest.imgText(img)
     }
 
 

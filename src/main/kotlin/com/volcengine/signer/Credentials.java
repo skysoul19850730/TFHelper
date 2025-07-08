@@ -1,9 +1,7 @@
 package com.volcengine.signer;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import lombok.Data;
 
-@Data
 public class Credentials {
 
     @JSONField(name = "ak")

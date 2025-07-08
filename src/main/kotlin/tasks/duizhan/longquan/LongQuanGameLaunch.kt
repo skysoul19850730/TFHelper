@@ -1,6 +1,7 @@
 package tasks.duizhan.longquan
 
 import data.Config
+import data.Config.adv_point
 import data.Config.delayLong
 import data.Config.delayNor
 import data.MPoint
@@ -199,7 +200,7 @@ class LongQuanGameLaunch : IGameLaunch {
             if(NoAdvOk.isFit()){
                 NoAdvOk.click()
             }else {
-                delay(30000)
+                delay(27000)
                 Config.adv_close.click()
             }
             delay(3000)
