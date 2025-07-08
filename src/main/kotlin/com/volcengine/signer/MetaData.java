@@ -1,8 +1,6 @@
 package com.volcengine.signer;
 
-import lombok.Data;
 
-@Data
 public class MetaData {
     private String algorithm;
     private String credentialScope;
