@@ -232,6 +232,18 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
 
     }
 
+    fun changeZhuangbei(guan:Int, zhuangbei: ()->Boolean){
+        guanDealList.add(
+            GuanDeal(
+                guan,
+                isOver = zhuangbei,
+                chooseHero = {
+                    upAny(zhuangbei = zhuangbei)
+                }
+            )
+        )
+    }
+
     override suspend fun onKeyDown(code: Int): Boolean {
         if(code== KeyEvent.VK_NUMPAD3 && qiuPlaying){
             qiuStopFlag = true

@@ -30,6 +30,9 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
     var position199 = -1
 
+    override fun onChuanzhangClick(position: Int) {
+        chuanzhangDownLoadPositionFromKey = position
+    }
 
     override suspend fun onKeyDown(code: Int): Boolean {
         //如果龙王识别出错可以按快捷下对应卡牌，但不知道快捷键按下得时间，所以不能延时进行上卡，只能快捷键9来恢复上卡
@@ -38,6 +41,26 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             waiting = !waiting
             return true
         }
+
+        if (guankaTask?.currentGuanIndex == 129 ||guankaTask?.currentGuanIndex == 128 ||guankaTask?.currentGuanIndex == 127 ||
+            guankaTask?.currentGuanIndex == 99||guankaTask?.currentGuanIndex == 98 ||guankaTask?.currentGuanIndex == 97) {//船长
+            chuanzhangDownLoadPositionFromKey = -1
+            chuanzhangDownLoadPositionFromKey = when (code) {
+                KeyEvent.VK_NUMPAD2 -> 0
+                KeyEvent.VK_NUMPAD1 -> 1
+                KeyEvent.VK_NUMPAD5 -> 2
+                KeyEvent.VK_NUMPAD4 -> 3
+                KeyEvent.VK_NUMPAD8 -> 4
+                KeyEvent.VK_NUMPAD7 -> 5
+                KeyEvent.VK_NUMPAD0 -> 6
+                KeyEvent.VK_NUMPAD3 -> 100
+                else -> {
+                    return false
+                }
+            }
+            return true
+        }
+
 
         if (guankaTask?.currentGuanIndex == 199 ||guankaTask?.currentGuanIndex == 198 ) {
             position199 = when (code) {

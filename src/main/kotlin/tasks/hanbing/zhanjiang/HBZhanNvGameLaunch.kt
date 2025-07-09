@@ -83,6 +83,7 @@ class HBZhanNvGameLaunch : IGameLaunch {
         if (Recognize.BtnOk.isFit()) {
             log("checkIfEnd ok")
             stopOneGame()
+            App.save()
             delay(100)
             Recognize.BtnOk.click()
             delay(delayLong)

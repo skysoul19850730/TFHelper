@@ -13,6 +13,7 @@ object HeroCreator{
     val anfa = HeroBuilder("anfa")
     val baoku = HeroBuilder("baoku", isGC = true)
     val bawang = HeroBuilder("bawang")
+    val binggong = HeroBuilder("binggong")
     val bingnv = HeroBuilder("bingnv")
     val bingnv2 = HeroBuilder("bingnv2")
     val bingqi = HeroBuilder("bingqi")

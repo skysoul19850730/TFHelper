@@ -192,19 +192,23 @@ class LongQuanGameLaunch : IGameLaunch {
     private suspend fun seeAdv(){
         if(CanreJujue.isFit() || CanreJujueFail.isFit()) {
             Config.adv_point.click()
-            withTimeout(5000){
+            log("1")
+            withTimeoutOrNull(5000){
                 delay(1000)
                 while (CanreJujue.isFit() || CanreJujueFail.isFit()) {
                     Config.adv_point.click()
                     delay(1000)
                 }
+                log("2")
             }
             if(CanreJujue.isFit() || CanreJujueFail.isFit()) {//点了广告后，但未请求到
                 CanreJujue.click()
+                log("3")
                 return
             }
             if(NoAdvOk.isFit()){
                 NoAdvOk.click()
+                log("4")
             }else {
 
                var ll = withTimeoutOrNull(30000){
@@ -214,9 +218,13 @@ class LongQuanGameLaunch : IGameLaunch {
                     CanreJujue.click()
                    1
                 }
+
+                log("5")
                 if(ll==1){
+                    log("6")
                     return
                 }
+                log("7")
                 Config.adv_close.click()
             }
             delay(3000)

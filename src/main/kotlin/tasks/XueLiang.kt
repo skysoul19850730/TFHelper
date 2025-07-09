@@ -34,7 +34,7 @@ object XueLiang {
         var curXue = recordXue
 
         while(recordXue-curXue<0.05){
-            delay(100)
+            delay(30)
             curXue = getXueLiang(getImage(App.rectWindow))
             if(curXue>recordXue){//有可能处于回血状态，回血的话就把记录的血提升到当前血，再继续监听掉血
                 recordXue = curXue

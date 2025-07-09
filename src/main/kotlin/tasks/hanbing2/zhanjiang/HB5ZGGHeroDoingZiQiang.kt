@@ -3,6 +3,7 @@ package tasks.hanbing2.zhanjiang
 import data.HeroBean
 import data.HeroCreator
 import kotlinx.coroutines.delay
+import log
 import tasks.XueLiang
 import tasks.hanbing2.BaseSimpleHBHeroDoing
 import java.awt.event.KeyEvent
@@ -193,6 +194,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
             } else {
                 //等点名
                     XueLiang.observerXueDown()//掉血 等于 白球撞上了
+                log("白球撞上了，进入step2")
                     step199 = 2
                     delay(300)//怕不同步，延迟300，满上萨满
 

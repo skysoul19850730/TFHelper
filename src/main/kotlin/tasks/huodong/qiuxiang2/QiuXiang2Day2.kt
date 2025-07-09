@@ -40,16 +40,6 @@ class QiuXiang2Day2 : BaseQiuxiang2() {
         ))
 
         guanDealList.add(GuanDeal(
-            startGuan = 80,
-            isOver = {
-                fulls(xiongmao)
-            },
-            chooseHero = {
-                carDoing.downHero(nvyao)
-                upAny(xiongmao)
-            }
-        ))
-        guanDealList.add(GuanDeal(
             startGuan = 91,
             onlyDoSomething = {
                 carDoing.downHero(baoku)
