@@ -1,5 +1,6 @@
 package model
 
+import App
 import colorCompare
 import data.*
 import getImage
@@ -304,6 +305,7 @@ data class CarPosition(
 
         logOnly("car:${carDoing.chePosition} position:${mPos} hb199 hasCount :$hasCount")
         if (hasCount > 300) {
+            App.save()
             return true
         }
         return false

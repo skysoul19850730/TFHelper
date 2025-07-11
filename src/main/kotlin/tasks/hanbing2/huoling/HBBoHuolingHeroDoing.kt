@@ -8,7 +8,7 @@ import tasks.hanbing2.BaseSimpleHBHeroDoing
 
 class HBBoHuolingHeroDoing : BaseSimpleHBHeroDoing() {
 
-    val xiongmao = HeroCreator.xiongmao.create()
+    val xiongmao = HeroCreator.xiongmao2.create()
     val shuiling = HeroCreator.shuiling.create()
     val huoling = HeroCreator.huoling.create()
     val gugong = HeroCreator.gugong.create()
@@ -39,7 +39,7 @@ class HBBoHuolingHeroDoing : BaseSimpleHBHeroDoing() {
         guanDealList.add(
             GuanDeal(109, isOver = { false },
                 chooseHero = {
-                    delay(300)
+                    delay(500)
                     val ind = upBase()
                     if (ind < 0) {
                         upAny(guangqiu)
@@ -47,7 +47,19 @@ class HBBoHuolingHeroDoing : BaseSimpleHBHeroDoing() {
                 })
         )
 
-        changeZhuangbei(110) { qiangxi }
+
+        guanDealList.add(GuanDeal(111, isOver = {
+            fullBase() && qiangxi
+        }, chooseHero = {
+            if(needReCheckStar) {
+                carDoing.reCheckStars()
+                needReCheckStar = false
+            }
+            upBase(zhuangbei = { qiangxi })
+        }, onGuanDealStart = {
+            needReCheckStar = true
+        }))
+
 
         guanDealList.add(
             GuanDeal(129, onlyDoSomething = {
@@ -62,11 +74,12 @@ class HBBoHuolingHeroDoing : BaseSimpleHBHeroDoing() {
         }, onGuanDealStart = { stopChuanZhangOberserver() }))
 
         changeZhuangbei(150) { qiangxi }
-
+        changeZhuangbei(170) { yandou }
+        changeZhuangbei(180) { qiangxi }
         guanDealList.add(
             GuanDeal(189, isOver = { currentGuan() > 189 },
                 chooseHero = {
-                    delay(300)
+                    delay(500)
                     val ind = upBase()
                     if (ind < 0) {
                         upAny(guangqiu)
@@ -136,10 +149,10 @@ class HBBoHuolingHeroDoing : BaseSimpleHBHeroDoing() {
     }
 
     fun fullBase(): Boolean {
-        return fulls(xiongmao, shuiling, huoling, gugong, nvyao, binggong, baoku)
+        return fulls( binggong,xiongmao, shuiling, huoling, gugong, nvyao, baoku)
     }
 
     fun List<HeroBean?>.upBase(zhuangbei: (() -> Boolean)? = null): Int {
-        return upAny(xiongmao, shuiling, huoling, gugong, nvyao, binggong, baoku, zhuangbei = zhuangbei)
+        return upAny( binggong,xiongmao, shuiling, huoling, gugong, nvyao, baoku, zhuangbei = zhuangbei)
     }
 }

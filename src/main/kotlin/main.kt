@@ -1163,6 +1163,11 @@ fun freshHeros(){
     }
 }
 
+private fun setBrightness(value:Int){
+    var cmd =  "WMIC /NAMESPACE:\\\\root\\wmi PATH WmiMonitorBrightnessMethods WHERE \"Active=TRUE\" CALL WmiSetBrightness Brightness="+ value+" Timeout=0"
+    Runtime.getRuntime().exec(cmd)
+}
+
 fun test() {
 
 //    val img = getImageFromRes("ttttest22.png")
@@ -1170,14 +1175,16 @@ fun test() {
 //    val text = Tess.getText(img)
 //    text.log(text)
 
-    GlobalScope.launch {
-//        var img = WindowTest.getLongPic()
-//        var text = Tess.getText(img)
-//        text.log(text)
-//        img.saveTo(File(App.caijiPath, "long_${System.currentTimeMillis()}.png"))
-        var img = getImageFromRes("sss.png")
-        var texxt =WindowTest.imgText(img)
-    }
+    setBrightness(50)
+
+//    GlobalScope.launch {
+////        var img = WindowTest.getLongPic()
+////        var text = Tess.getText(img)
+////        text.log(text)
+////        img.saveTo(File(App.caijiPath, "long_${System.currentTimeMillis()}.png"))
+//        var img = getImageFromRes("sss.png")
+//        var texxt =WindowTest.imgText(img)
+//    }
 
 
 //    testCircle()

@@ -1,19 +1,11 @@
 package tasks.anyue.zhanjiang
 
-import data.Config
 import data.HeroBean
 import data.HeroCreator
-import getImage
-import getImageFromRes
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import log
-import tasks.Boss
 import tasks.XueLiang
-import utils.ImgUtil
 import java.awt.event.KeyEvent
-import java.awt.image.BufferedImage
 
 class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
 
@@ -22,7 +14,7 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
     val tuling = HeroCreator.tuling.create()
     val sishen = HeroCreator.sishen2.create()
     val dijing = HeroCreator.dijing.create()
-    val guangqiu = HeroCreator.guangqiu.create()
+    val yuren = HeroCreator.yuren.create()
     val huanqiu = HeroCreator.huanqiu.create()
     val shexian = HeroCreator.shexian.create()
 
@@ -36,7 +28,7 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
     }
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, tieqi, tuling, sishen, gugu, shexian, dianfa, dijing, huanqiu, guangqiu)
+        heros = arrayListOf(zhanjiang, tieqi, tuling, sishen, gugu, shexian, dianfa, dijing, huanqiu, yuren)
         heros39Up4 = arrayListOf(tuling, dianfa, sishen, gugu)
 
         guanDealList.add(GuanDeal(0, isOver = {
@@ -99,6 +91,19 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
 
         guanDealList.add(GuanDeal(71, isOver = { longxin }, chooseHero = { upAny(zhuangbei = { longxin }) }))
 
+
+        guanDealList.add(GuanDeal(
+            startGuan = 100,
+            isOver = {
+                fulls(yuren)
+            },
+            chooseHero = {
+                upAny(yuren)
+            }
+            , onGuanDealStart = {
+                carDoing.downHero(dianfa)
+            }
+        ))
 
         guanDealList.add(GuanDeal(111, onlyDoSomething = {
             carDoing.downHero(shexian)
