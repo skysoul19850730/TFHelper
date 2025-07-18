@@ -26,6 +26,8 @@ dependencies {
     implementation("com.android.tools.ddms:ddmlib:26.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
 
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
+
     implementation("org.apache.httpcomponents:httpclient:4.5.13")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("commons-io:commons-io:2.19.0")

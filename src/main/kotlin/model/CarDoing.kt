@@ -36,6 +36,10 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
     fun hasOpenSpace() = carps.take(6).count {
         it.mIsOpen && it.mHeroBean == null
     } > 0
+
+    fun hasAllOpenSpace() = carps.count {
+        it.mIsOpen && it.mHeroBean == null
+    }>0
     fun hasSpace() = carps.take(6).count {
        it.mHeroBean == null
     } > 0

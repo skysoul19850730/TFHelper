@@ -72,7 +72,10 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
             upAny(zhanjiang, gugu, tieqi, tuling, sishen, dianfa, shexian, zhuangbei = { yandou })
         }))
 
-        guanDealList.add(GuanDeal(51, isOver = { qiangxi }, chooseHero = { upAny(zhuangbei = { qiangxi }) }))
+        guanDealList.add(GuanDeal(51, isOver = { yuren.isFull() && qiangxi }, chooseHero = {
+            carDoing.downHero(sishen)
+            upAny(yuren, zhuangbei = { qiangxi }) }
+        ,))
 
 
         guanDealList.add(GuanDeal(69, isOver = {
@@ -89,7 +92,9 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
             }
         }))
 
-        guanDealList.add(GuanDeal(71, isOver = { longxin }, chooseHero = { upAny(zhuangbei = { longxin }) }))
+        guanDealList.add(GuanDeal(71, isOver = {sishen.isFull() && longxin }, chooseHero = {
+            carDoing.downHero(yuren)
+            upAny(sishen,zhuangbei = { longxin }) }))
 
 
         guanDealList.add(GuanDeal(
@@ -140,7 +145,7 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
 //            || guankaTask?.currentGuanIndex == 49 || guankaTask?.currentGuanIndex == 48
         ) {
             if(code==KeyEvent.VK_NUMPAD0) {
-                qiu69 = true
+                qiu69 = !qiu69
                 return true
             }
         }

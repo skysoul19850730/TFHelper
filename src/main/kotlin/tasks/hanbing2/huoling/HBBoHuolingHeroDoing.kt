@@ -2,7 +2,10 @@ package tasks.hanbing2.huoling
 
 import data.HeroBean
 import data.HeroCreator
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import log
 import tasks.XueLiang
 import tasks.hanbing2.BaseSimpleHBHeroDoing
 
@@ -125,7 +128,7 @@ class HBBoHuolingHeroDoing : BaseSimpleHBHeroDoing() {
             carDoing.downPosition(dianmingIndex)
             position199 = -1
         }
-        if (carDoing.hasOpenSpace() || carDoing.hasNotFull()) {
+        if (carDoing.hasAllOpenSpace() || carDoing.hasNotFull()) {
             return heros.upBase()
         } else {
             while (true) {
@@ -142,7 +145,91 @@ class HBBoHuolingHeroDoing : BaseSimpleHBHeroDoing() {
 
         return -1
     }
+private var step199 = 1  // 1打白球阶段， 2点名阶段，
+    private var count199 = 0
 
+    private var baiqiuCount = 0
+//    private suspend fun deal199(heros: List<HeroBean?>): Int {
+//        while (step199 == 0) {
+//            delay(200)
+//        }
+//        if (step199 == 1) {
+//            if (huoling.isInCar()) {
+//                carDoing.downHero(huoling)
+//            }
+//
+//                //等点名
+//                XueLiang.observerXueDown()//掉血 等于 白球撞上了
+//                log("白球撞上了，进入step2")
+//
+//                baiqiuCount++
+//                if(baiqiuCount<3) {
+//                    GlobalScope.launch {
+//                        delay(3200)
+//                        step199 = 1
+//                    }
+//                }
+//                step199 = 2
+//                delay(300)//怕不同步，延迟300，满上萨满
+//
+//
+//                //按3 会改成2，不监听掉血了，怕处于涨血状态判断不准。白球撞完按3
+////                while (step199 == 1) {
+////                    delay(100)
+////                }
+//
+//
+//                return heros.upAny(huoling)
+//        } else if (step199 == 2) {
+//
+//            var dianmingIndex = carDoing.getHB199Selected()
+//
+//            var other = otherCarDoing.getHB199Selected()
+//
+//            if (position199 > -1 || dianmingIndex > -1) {
+//                carDoing.downPosition(position199)
+//                carDoing.downPosition(dianmingIndex)
+//                count199++
+//                position199 = -1
+//            }
+//            if (position199 > -1 || dianmingIndex > -1 || other>-1) {
+//                count199++
+////                GlobalScope.launch {
+////                    delay(2000)
+////                    step199 = 1
+////                }
+//            }
+//
+//
+//            if (carDoing.hasAllOpenSpace() || carDoing.hasNotFull() ) {
+//                return heros.upBase()
+//            } else {
+//                while (step199 == 2) {
+//                    var dianmingIndex = carDoing.getHB199Selected()
+//                    other = otherCarDoing.getHB199Selected()
+//                    if (position199 > -1 || dianmingIndex > -1 || other>-1) {
+//                        count199++
+////                        GlobalScope.launch {
+////                            delay(2000)
+////                            step199 = 1
+////                        }
+//                    }
+//
+//                    if (position199 > -1 || dianmingIndex > -1) {
+//                        carDoing.downPosition(position199)
+//                        carDoing.downPosition(dianmingIndex)
+//                        position199 = -1
+//                        return heros.upBase()
+//                    }
+//                    delay(100)
+//                }
+//            }
+//
+//        }
+//
+//
+//        return -1
+//    }
 
     private fun currentGuan(): Int {
         return guankaTask?.currentGuanIndex ?: 0

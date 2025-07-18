@@ -11,12 +11,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import log
 import logOnly
+import saveTo
 import tasks.HeroDoing
 import tasks.SimpleHeZuoHeroDoing
 import ui.zhandou.UIKeyListenerManager
 import utils.ImgUtil.forEach4Result
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
+import java.io.File
 
 abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {
 
@@ -151,9 +153,9 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         }
     }
     suspend fun onChuanZhangPoint(img2: BufferedImage? = null) {
-//        var img = img2 ?: getImage(App.rectWindow)
+        var img = img2 ?: getImage(App.rectWindow)
         logOnly("船长点名啦")
-//        img.saveTo(File(App.caijiPath, "${System.currentTimeMillis()}.png"))//目前稳定，不用再采集了
+        img.saveTo(File(App.caijiPath, "${System.currentTimeMillis()}.png"))//目前稳定，不用再采集了
         chuanzhangDownCount++
         var isSencodDianming = chuanzhangDownCount % 2 == 0
         if (!isSencodDianming) {//第一次点卡后等3秒再开始识别

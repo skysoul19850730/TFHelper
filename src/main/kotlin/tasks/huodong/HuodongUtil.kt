@@ -7,6 +7,8 @@ import tasks.huodong.qiuxiang.QiuXiangDay3
 import tasks.huodong.qiuxiang.QiuXiangDay7
 import tasks.huodong.qiuxiang.QiuXiangDay8
 import tasks.huodong.qiuxiang2.*
+import tasks.huodong.qiuxiang3.QiuXiang3Day2
+import tasks.huodong.qiuxiang3.QiuXiang3Day3
 import tasks.huodong.sanguo.*
 import tasks.huodong.shuihu.*
 import tasks.huodong.shuihu3.*
@@ -43,7 +45,7 @@ object HuodongUtil {
         shuamoHeroDoing?.stop()
     }
 
-    var huodongStartTime = LocalDate.of(2025, 6, 24)
+    var huodongStartTime = LocalDate.of(2025, 7, 15)
     var perCircleDate = 7// 7天一轮，担心不是七天
     private fun getHuodongDoing():HeroDoing?{
 
@@ -51,11 +53,9 @@ object HuodongUtil {
         var dayDt = abs( ChronoUnit.DAYS.between(today, huodongStartTime).toInt())
         return when(dayDt%perCircleDate){
             0->QiuXiang2Day1()
-            1->QiuXiang2Day2()
-            2-> QiuXiang2Day3()
-            3-> QiuXiang2Day4()
-            6-> QiuXiang2Day7()
-            else->null
+            1-> QiuXiang3Day2()
+            2-> QiuXiang3Day3()
+            else->QiuXiang3Day2()
         }
     }
 }

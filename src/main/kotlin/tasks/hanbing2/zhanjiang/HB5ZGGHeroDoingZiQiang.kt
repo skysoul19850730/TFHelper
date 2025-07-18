@@ -2,15 +2,18 @@ package tasks.hanbing2.zhanjiang
 
 import data.HeroBean
 import data.HeroCreator
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import log
 import tasks.XueLiang
 import tasks.hanbing2.BaseSimpleHBHeroDoing
+import ui.zhandou.hanbing.HanBingModel
 import java.awt.event.KeyEvent
 
 class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
-    val isRenwu = false
+    val isRenwu = true
 
     val zhanjiang = HeroCreator.zhanjiang2.create()
     val tieqi = HeroCreator.tieqi.create()
@@ -21,7 +24,9 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
     val dianfa = HeroCreator.dianfa.create()
     val haiyao = HeroCreator.haiyao.create()
     val huanqiu = HeroCreator.huanqiu.create()
-    val guangqiu = HeroCreator.guangqiu.create()
+
+    val guangqiu = HeroBean(if(isRenwu) HanBingModel.renwuKa.value else "guangqiu", 40, needCar = false, compareRate = 0.95)
+
 
     override fun initHeroes() {
         super.initHeroes()
@@ -75,7 +80,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                 chooseHero = {
                     delay(300)
                     val ind =upBase()
-                    if(ind<0){
+                    if(ind<0 && !isRenwu){
                         upAny(guangqiu)
                     }else ind
                 })
@@ -141,7 +146,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
             chooseHero = {
                 delay(300)
                 val ind =upAny(tieqi,zhanjiang,wangjiang,sishen,dianfa,gugu)
-                if(ind<0){
+                if(ind<0 && !isRenwu){
                     upAny(guangqiu)
                 }else ind
 //                checkHeroStarAndFull(this) { currentGuan() > 189 }
@@ -180,6 +185,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
     private var step199 = 1  // 1打白球阶段， 2点名阶段，
     private var count199 = 0
 
+    private var baiqiuCount = 0
     private suspend fun deal199(heros: List<HeroBean?>): Int {
         while (step199 == 0) {
             delay(200)
@@ -195,35 +201,65 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                 //等点名
                     XueLiang.observerXueDown()//掉血 等于 白球撞上了
                 log("白球撞上了，进入step2")
+
+                baiqiuCount++
+                if(baiqiuCount<3) {
+                    GlobalScope.launch {
+                        delay(3200)
+                        step199 = 1
+                    }
+                }
                     step199 = 2
                     delay(300)//怕不同步，延迟300，满上萨满
+
 
                 //按3 会改成2，不监听掉血了，怕处于涨血状态判断不准。白球撞完按3
 //                while (step199 == 1) {
 //                    delay(100)
 //                }
 
+
                 return heros.upAny(tieqi)
             }
         } else if (step199 == 2) {
 
             var dianmingIndex = carDoing.getHB199Selected()
+
+            var other = otherCarDoing.getHB199Selected()
+
             if (position199 > -1 || dianmingIndex > -1) {
                 carDoing.downPosition(position199)
                 carDoing.downPosition(dianmingIndex)
                 count199++
                 position199 = -1
             }
+            if (position199 > -1 || dianmingIndex > -1 || other>-1) {
+                count199++
+//                GlobalScope.launch {
+//                    delay(2000)
+//                    step199 = 1
+//                }
+            }
+
+
             if (carDoing.hasOpenSpace() || carDoing.hasNotFull() ) {
                 return heros.upAny(zhanjiang, yuren, sishen, tieqi, dianfa, gugu)
             } else {
                 while (step199 == 2) {
                     var dianmingIndex = carDoing.getHB199Selected()
+                    other = otherCarDoing.getHB199Selected()
+                    if (position199 > -1 || dianmingIndex > -1 || other>-1) {
+                        count199++
+//                        GlobalScope.launch {
+//                            delay(2000)
+//                            step199 = 1
+//                        }
+                    }
+
                     if (position199 > -1 || dianmingIndex > -1) {
                         carDoing.downPosition(position199)
                         carDoing.downPosition(dianmingIndex)
                         position199 = -1
-                        count199++
                         return heros.upAny(zhanjiang, yuren, sishen, tieqi, dianfa, gugu)
                     }
                     delay(100)
@@ -293,7 +329,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
             if (guankaTask?.currentGuanIndex == 199 || guankaTask?.currentGuanIndex == 198) {
 
                 step199 = if (step199 == 1) 2 else 1
-
+                log("快捷键修改step199 为：${step199}")
                 return true
             }
         }
