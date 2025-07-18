@@ -1174,8 +1174,8 @@ fun test() {
 //
 //    val text = Tess.getText(img)
 //    text.log(text)
-
-    setBrightness(50)
+    ExcelUtil().test()
+//    setBrightness(50)
 
 //    GlobalScope.launch {
 ////        var img = WindowTest.getLongPic()
