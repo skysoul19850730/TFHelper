@@ -127,7 +127,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     var index2 = otherCarDoing.getChuanZhangMax(img)
 //                    var index2:Pair<Int, Float>? = null
                     if (index != null || index2 != null) {
-                        if (index != null && (index2 == null || index.second > index2.second)) {
+                        if (index != null && (index2 == null || index.second > index2.second ||index.second>0.2)) {
                             var hero = carDoing.carps.get(index.first).mHeroBean
                             log("检测到被标记  位置：$index  英雄：${hero?.heroName}")
                             if (hero != null && onHeroPointByChuanzhang(hero)) {

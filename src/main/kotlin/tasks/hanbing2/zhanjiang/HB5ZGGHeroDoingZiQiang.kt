@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent
 
 class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
-    val isRenwu = true
+    val isRenwu = false
 
     val zhanjiang = HeroCreator.zhanjiang2.create()
     val tieqi = HeroCreator.tieqi.create()
