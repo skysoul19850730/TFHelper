@@ -81,10 +81,18 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
         guanDealList.add(GuanDeal(69, isOver = {
             false
         }, chooseHero = {
+            var bossXue = XueLiang.getBossXueliang()
             while(!qiu69 && curGuan<70){
+                if(bossXue>0){
+                    var xue = XueLiang.getBossXueliang()
+                    if(xue>bossXue){//回血，副卡扔球了
+                        qiu69 = true
+                    }
+                }
                 delay(200)
+                bossXue = XueLiang.getBossXueliang()
             }
-            if(qiu69 && XueLiang.getBossXueliang()<0.99f){
+            if(qiu69 && XueLiang.getBossXueliang()<0.9f){
                 upAny(huanqiu)
             }else {
                 qiu69 = false
