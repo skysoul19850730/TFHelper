@@ -205,7 +205,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                 baiqiuCount++
                 if(baiqiuCount<3) {
                     GlobalScope.launch {
-                        delay(3200)
+                        delay(32000)
                         step199 = 1
                     }
                 }
