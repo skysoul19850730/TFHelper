@@ -1,8 +1,12 @@
 package database
 
+import com.alibaba.fastjson.JSONObject
+import com.alibaba.fastjson.TypeReference
 import data.Config
 import getImageFromFile
 import resFile
+import ui.utils.HerosPageData
+import ui.utils.WashDataBean
 import java.io.File
 
 object DataManager {
@@ -14,6 +18,27 @@ object DataManager {
             }
             return field
         }
+
+
+    fun initWashData():Map<String,WashDataBean> {
+        var washFile = File(dataDirPath, "wash.txt")
+        if (!washFile.exists()) {
+            washFile.createNewFile()
+        }
+        val text = washFile.readText()
+
+        val map= JSONObject.parseObject(text,object :TypeReference<Map<String,WashDataBean>>(){})
+            ?:HashMap()
+        return map
+    }
+
+    fun saveWashData(){
+        var washFile = File(dataDirPath, "wash.txt")
+        if (!washFile.exists()) {
+            washFile.createNewFile()
+        }
+        washFile.writeText(JSONObject.toJSONString(HerosPageData.washMap))
+    }
 
 
     fun init() {

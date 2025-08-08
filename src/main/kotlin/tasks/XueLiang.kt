@@ -30,11 +30,11 @@ object XueLiang {
 
     }
 
-    suspend fun observerXueDown(over:(()->Boolean)?=null) {
+    suspend fun observerXueDown(xueRate:Float = 0.05f, over:(()->Boolean)?=null) {
         var recordXue = getXueLiang(getImage(App.rectWindow))
         var curXue = recordXue
 
-        while (recordXue - curXue < 0.05  && (over?.invoke() != true)) {
+        while (recordXue - curXue < xueRate  && (over?.invoke() != true)) {
             delay(30)
             curXue = getXueLiang(getImage(App.rectWindow))
             if (curXue > recordXue) {//有可能处于回血状态，回血的话就把记录的血提升到当前血，再继续监听掉血
@@ -62,11 +62,12 @@ object XueLiang {
         var Image = img ?: getImage(App.rectWindow)
 
         log("getXueLiang start")
-        for (x in mRectBoss.right downTo mRectBoss.left step 10) {
+        for (x in mRectBoss.right downTo mRectBoss.left) {
             var checkPoint = MPoint(x, y)
             if (colorCompare(Color(Image.getRGB(checkPoint.x, checkPoint.y)), blackColor)) {
-                log("getXueLiang end")
-                return (mRectBoss.right - x).toFloat() / mRectBoss.width
+                var xue = (mRectBoss.right - x).toFloat() / mRectBoss.width
+                log("getXueLiang end:${xue}")
+                return xue
             }
         }
         log("getXueLiang end")

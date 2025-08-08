@@ -15,8 +15,8 @@ class HBBoHuolingHeroDoing : BaseSimpleHBHeroDoing() {
     val shuiling = HeroCreator.shuiling.create()
     val huoling = HeroCreator.huoling.create()
     val gugong = HeroCreator.gugong.create()
-    val binggong = HeroCreator.binggong.create()
-    val nvyao = HeroCreator.nvyao.create()
+    val binggong = HeroCreator.bingnv.create()
+    val nvyao = HeroCreator.lvgong.create()
 
     val baoku = HeroCreator.baoku.create()
 

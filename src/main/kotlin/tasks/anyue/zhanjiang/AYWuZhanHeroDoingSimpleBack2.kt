@@ -85,14 +85,27 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
         }, chooseHero = {
             var bossXue = XueLiang.getBossXueliang()
             while(!qiu69 && curGuan<70){
-                if(bossXue>0){
+                if(bossXue>0 && bossXue<0.5){
+                    delay(300)
                     var xue = XueLiang.getBossXueliang()
-                    if(xue>bossXue){//回血，副卡扔球了
-                        qiu69 = true
+                    if(xue == bossXue){
+                        //第一次判断相等，有可能是boss自己回血导致刚好回到上次观察的血量
+                        //延迟300毫秒再获取一次血量，如果还是相同就代表无敌了（boss回血频率比较低)
+                        delay(300)
+                        xue = XueLiang.getBossXueliang()
+                        if(xue==bossXue){
+                            qiu69 = true
+                        }else{
+                            bossXue = xue
+                        }
+                    }else{
+                        bossXue = xue
                     }
+                }else{
+                    delay(500)
+                    bossXue = XueLiang.getBossXueliang()
                 }
-                delay(500)
-                bossXue = XueLiang.getBossXueliang()
+
             }
             if(qiu69 && XueLiang.getBossXueliang()<0.9f){
                 upAny(huanqiu)
@@ -188,7 +201,7 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
     suspend fun check129Xue(){
 
         while(curGuan <= 129){
-            XueLiang.observerXueDown(over = {curGuan>129})
+            XueLiang.observerXueDown(xueRate = 0.6f, over = {curGuan>129})
             g129XueCount++
             if(g129XueCount==2){
                 delay(1500)
