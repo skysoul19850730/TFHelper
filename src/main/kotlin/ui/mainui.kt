@@ -49,6 +49,7 @@ import ui.caiji.caijiPage
 import ui.dialogs.timerDialog
 import ui.settings.settingPage
 import ui.theme.TFTheme
+import ui.utils.UtilPage
 import ui.weights.MRaidoGroup
 import ui.zhandou.anyue.AnYueModel
 import ui.zhandou.data.ZhanDouModel
@@ -68,6 +69,7 @@ object MainUIData {
         add(MainMenu(zdModel = HanBingModel()))
         add(MainMenu(zdModel = TianKongModel()))
         add(MainMenu(zdModel = AnYueModel()))
+        add(MainMenu("工具"))
     }
 
     var curMenu = mutableStateOf(menuList.get(0))
@@ -168,7 +170,11 @@ private fun mainContainer() {
             Box(Modifier.weight(1f).fillMaxHeight().padding(12.dp)) {
                 if (MainUIData.curMenu.value.title() == "设置") {
                     settingPage()
-                } else if (MainUIData.curMenu.value.zdModel != null) {
+                }else if(MainUIData.curMenu.value.title() == "工具"){
+                    UtilPage()
+                }
+
+                else if (MainUIData.curMenu.value.zdModel != null) {
                     zdBasePage(curMenu.value.zdModel!!)
                 }
             }
