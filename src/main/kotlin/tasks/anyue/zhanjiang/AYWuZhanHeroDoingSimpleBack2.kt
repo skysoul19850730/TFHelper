@@ -2,7 +2,9 @@ package tasks.anyue.zhanjiang
 
 import data.HeroBean
 import data.HeroCreator
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import log
 import tasks.XueLiang
 import java.awt.event.KeyEvent
@@ -89,7 +91,7 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
                         qiu69 = true
                     }
                 }
-                delay(200)
+                delay(500)
                 bossXue = XueLiang.getBossXueliang()
             }
             if(qiu69 && XueLiang.getBossXueliang()<0.9f){
@@ -130,7 +132,11 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
         }
         ))
 
-        guanDealList.add(GuanDeal(129, isOver = { curGuan > 129 }, chooseHero = { g129Index(this) })
+        guanDealList.add(GuanDeal(129, isOver = { curGuan > 129 }, chooseHero = { g129Index(this) }, onGuanDealStart = {
+            GlobalScope.launch {
+                check129Xue()
+            }
+        })
             .apply { des = "按0下射线，再按0上射线" })
 
 
@@ -174,11 +180,32 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
     }
 
 
-    var g129State = 0//0等待,1 下宝库 备宝库，2上宝库 //回到了初始态，等1再下宝库循环
+    var g129State = 1//0等待,1 下宝库 备宝库，2上宝库 //回到了初始态，等1再下宝库循环
 
+
+    var g129XueCount = 1//0,1 下射线，2，3上射线
+
+    suspend fun check129Xue(){
+
+        while(curGuan <= 129){
+            XueLiang.observerXueDown(over = {curGuan>129})
+            g129XueCount++
+            if(g129XueCount==2){
+                delay(1500)
+                g129XueCount = 0
+                g129State = if (g129State == 0) 1 else 0
+            }
+            delay(2000)
+        }
+
+    }
 
     suspend fun g129Index(heros: List<HeroBean?>): Int {
+
+
+
         if (curGuan > 129) return -1
+
         while (g129State == 0) {
             delay(100)
             if (curGuan > 129) return -1

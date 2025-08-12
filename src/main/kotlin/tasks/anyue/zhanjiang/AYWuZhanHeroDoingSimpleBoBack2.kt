@@ -5,6 +5,7 @@ import data.HeroBean
 import data.HeroCreator
 import kotlinx.coroutines.delay
 import java.awt.event.KeyEvent
+import kotlin.math.abs
 
 class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
 
@@ -147,27 +148,6 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
                 })
         )
 
-//        guanDealList.add(GuanDeal(139, isOver = { false }, chooseHero = {
-//            if (g139State == 0) {
-//                if (this.indexOf(guangqiu) > -1) {
-//                    while (g139State == 0) {
-//                        delay(100)
-//                    }
-//                    carDoing.downHero(yuren)
-//                    this.indexOf(guangqiu)
-//                } else -1
-//            } else {
-//                var index = this.indexOf(yuren)
-//                if (index > -1) {
-//                    g139State = 0
-//                    index
-//                } else -1
-//            }
-//
-//        }).apply {
-//            des =
-//                "按0切一轮咕咕狂将，执行顺序：下咕咕，上狂将，下狂将，再上咕咕，备选好狂将。为一轮。最好等预备好狂将后再按0开始一轮"
-//        })
 
 //        guanDealList.add(GuanDeal(140, isOver = {
 //            if (g149Type == 0) {
@@ -250,8 +230,66 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
 //        }))
 
 
+
+        guanDealList.add(GuanDeal(179, isOver = {
+            currentGuan()>179
+        }, chooseHero = {
+            this.deal179()
+        }
+        ).apply {
+            des= "按0 回规初始（下土灵），按1-7对应处理1-7的牌,大王按8（其实等于按0，初始态吃王），其他牌按9打死"
+        }
+        )
+
+
         curGuanDeal = guanDealList.get(0)
     }
+
+    /**
+     * //179  0初始态（其他都满，下土灵得状态，到boss就按0）。1，杀敌状态，不要的牌都按1（杀死后按0回初始态）。
+     *     //2 特殊态5，下 射线土灵，鱼人（遇到牌5按2，撞车后按0回初始态）
+     *     //3  特殊态7，冰球触发后按7上土灵，下一轮前按0回初始态。
+     */
+    var state179 = 0
+
+    //179  0初始态（其他都满，下土灵得状态，到boss就按0）。1，杀敌状态，不要的牌都按1（杀死后按0回初始态）。
+    //2 特殊态5，下 射线土灵，鱼人（遇到牌5按2，撞车后按0回初始态）
+    //3  特殊态7，冰球触发后按7上土灵，下一轮前按0回初始态。
+    suspend fun List<HeroBean?>.deal179():Int{
+        if(state179==0){
+            carDoing.downHero(dianfa)
+            if(!shexian.isFull() || !yuren.isFull()){
+                return upAny(shexian,yuren)
+            }
+        }
+        while (state179==0){
+            delay(200)
+        }
+        if(state179==1){
+            while(dianfa.isInCar() && state179==1){
+                delay(200)
+            }
+            if(!dianfa.isInCar()){
+                return this.indexOf(dianfa)
+            }
+        }
+        if(state179 == 2){
+            carDoing.downHero(shexian)
+            carDoing.downHero(dianfa)
+            carDoing.downHero(yuren)
+        }
+        while(state179==2){
+            delay(200)
+        }
+
+        if(state179== 3){
+            return this.indexOf(dianfa)
+        }
+
+
+        return -1
+    }
+
 
     private fun currentGuan(): Int {
         return guankaTask?.currentGuanIndex ?: 0
@@ -303,7 +341,92 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
         super.doAfterHeroBeforeWaiting(heroBean)
     }
 
+    var puked179 = arrayListOf<Int>()
+
+    fun addPuke(puke: Int){
+
+        var add = false
+
+        if(puked179.size==0){
+            puked179.add(puke)
+            add = true
+        }else if(puked179.size==1){
+            val one = puked179.get(0)
+            if(puke!=one && abs(puke-one)<5){
+                puked179.add(puke)
+                add = true
+            }
+        }else{
+            var min = puked179.minOrNull()!!
+            var max = puked179.maxOrNull()!!
+
+            if(!puked179.contains(puke)
+                && ((puke>min && puke-min<5) || (puke<max && max-puke<5)          )
+                ){
+                puked179.add(puke)
+                add = true
+            }
+
+
+        }
+
+        if(!add){
+            state179 = 1
+        }else{
+
+            if(puke == 5){
+                state179 = 2
+            }else if(puke == 7){
+                state179==3
+            }
+
+        }
+
+
+
+    }
+
     override suspend fun onKeyDown(code: Int): Boolean {
+
+        if(currentGuan()== 179 || currentGuan() == 178){
+            when(code){
+                KeyEvent.VK_NUMPAD0->{
+                    state179 = 0
+                }
+                KeyEvent.VK_NUMPAD1->{
+                    addPuke(1)
+                }
+                KeyEvent.VK_NUMPAD2->{
+                    addPuke(2)
+                }
+                KeyEvent.VK_NUMPAD3->{
+                    addPuke(3)
+                }
+                KeyEvent.VK_NUMPAD4->{
+                    addPuke(4)
+                }
+                KeyEvent.VK_NUMPAD5->{
+                    addPuke(5)
+                }
+                KeyEvent.VK_NUMPAD6->{
+                    addPuke(6)
+                }
+                KeyEvent.VK_NUMPAD7->{
+                    addPuke(7)
+                }
+                KeyEvent.VK_NUMPAD8->{//8是大王，吃了就行，不用addpuke。pk只计算最大最小不重复就行
+                    state179 = 0
+                }
+                KeyEvent.VK_NUMPAD9->{ //按9就杀
+                    state179 = 1
+                }
+
+            }
+
+
+            return true
+        }
+
 
         if (guankaTask?.currentGuanIndex == 129 || guankaTask?.currentGuanIndex == 128
         ) {//按0 下射线，备射线，再按0，上射线
@@ -344,12 +467,6 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
             }
         }
 
-
-        if (code == KeyEvent.VK_PLUS) {
-            MainData.kuangjiangUpTime.value += 100
-        } else if (code == KeyEvent.VK_MINUS) {
-            MainData.kuangjiangUpTime.value -= 100
-        }
 
 
         if (super.onKeyDown(code)) {

@@ -5,6 +5,7 @@ import data.MPoint
 import data.MRect
 import getImage
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeoutOrNull
 import log
 import utils.MRobot
 import java.awt.Color
@@ -29,14 +30,14 @@ object XueLiang {
 
     }
 
-    suspend fun observerXueDown(){
+    suspend fun observerXueDown(over:(()->Boolean)?=null) {
         var recordXue = getXueLiang(getImage(App.rectWindow))
         var curXue = recordXue
 
-        while(recordXue-curXue<0.05){
+        while (recordXue - curXue < 0.05  && (over?.invoke() != true)) {
             delay(30)
             curXue = getXueLiang(getImage(App.rectWindow))
-            if(curXue>recordXue){//有可能处于回血状态，回血的话就把记录的血提升到当前血，再继续监听掉血
+            if (curXue > recordXue) {//有可能处于回血状态，回血的话就把记录的血提升到当前血，再继续监听掉血
                 recordXue = curXue
             }
         }
