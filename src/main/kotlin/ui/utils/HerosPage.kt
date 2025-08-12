@@ -4,6 +4,7 @@ import VSpace16
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyListState
@@ -44,10 +45,10 @@ object HerosPageData {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HerosPage(model: Int, chooseHeros: SnapshotStateList<String>) {
+fun HerosPage(chooseHeros: SnapshotStateList<String>) {
     val heros = HerosPageData.heros
 
-    var dialogHero = remember {  mutableStateOf("")}
+    var dialogHero = remember { mutableStateOf("") }
 
     if (HerosPageData.state == null) {
         HerosPageData.state = rememberLazyListState()
@@ -57,26 +58,27 @@ fun HerosPage(model: Int, chooseHeros: SnapshotStateList<String>) {
 
         heros.forEach {
             item {
-                Box(modifier = Modifier.height(60.dp).padding(12.dp).border(2.dp, Color.Black).clickable {
-                    if (model == 1) {
-                        dialogHero.value = it
-                    } else {
-                        if (chooseHeros.contains(it)) {
-                            chooseHeros.remove(it)
-                        } else {
-                            chooseHeros.add(it)
-                        }
-                    }
+                Box(
+                    modifier = Modifier.height(60.dp).padding(12.dp).border(2.dp,if(chooseHeros.contains(it)) Color.Blue else Color.Black)
+                        .combinedClickable(onLongClick = {
+                            dialogHero.value = it
+                        }) {
+                            if (chooseHeros.contains(it)) {
+                                chooseHeros.remove(it)
+                            } else {
+                                chooseHeros.add(it)
+                            }
 
-                }, contentAlignment = Alignment.Center) {
-                    Text(it)
+                        }, contentAlignment = Alignment.Center
+                ) {
+                    Text(it, color = if(chooseHeros.contains(it)) Color.Blue else Color.Black)
                 }
             }
         }
 
     }
 
-    if(!dialogHero.value.isNullOrEmpty()) {
+    if (!dialogHero.value.isNullOrEmpty()) {
         showEditDialog(dialogHero)
     }
 }
@@ -125,6 +127,10 @@ fun showEditDialog(dialogHero: MutableState<String>) {
                         state.value = 3
                     }
                     VSpace16()
+                    button("生命光环：${data.value.life}") {
+                        state.value = 5
+                    }
+                    VSpace16()
 
                     button("保存") {
                         HerosPageData.washMap[dialogHero.value] = data.value
@@ -154,6 +160,9 @@ fun showEditDialog(dialogHero: MutableState<String>) {
             4 -> {
                 newd.jianfang = it.toFloat()
             }
+            5->{
+                newd.life = it.toFloat()
+            }
 
         }
         data.value = newd
@@ -167,13 +176,30 @@ class WashDataBean() {
     var wukang: Float = 0f
     var chuncuikang: Float = 0f
     var jianfang: Float = 0f
+    var life: Float = 0f
 
-    fun copy():WashDataBean{
+    fun copy(): WashDataBean {
         return WashDataBean().apply {
             mokang = this@WashDataBean.mokang
             wukang = this@WashDataBean.wukang
             chuncuikang = this@WashDataBean.chuncuikang
             jianfang = this@WashDataBean.jianfang
+            life = this@WashDataBean.life
         }
+    }
+
+    fun toShowString():String{
+        return "伤害减免:${jianfang} 魔抗:$mokang 物抗:${wukang} 纯粹:${chuncuikang} 生命:${life}"
+    }
+
+    fun sum(bean:WashDataBean):WashDataBean{
+        val newBean = WashDataBean().apply {
+            mokang = this@WashDataBean.mokang + bean.mokang
+            wukang = this@WashDataBean.wukang + bean.wukang
+            chuncuikang = this@WashDataBean.chuncuikang + bean.chuncuikang
+            jianfang = this@WashDataBean.jianfang + bean.jianfang
+            life = this@WashDataBean.life + bean.life
+        }
+        return newBean
     }
 }
