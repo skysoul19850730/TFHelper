@@ -19,6 +19,7 @@ import utils.ImgUtil.sim
 import utils.MRobot
 import java.awt.Color
 import java.awt.image.BufferedImage
+import kotlin.math.max
 import kotlin.system.measureTimeMillis
 
 /**
@@ -187,7 +188,7 @@ data class CarPosition(
 //            resultImg.graphics.drawImage(testImg, 0, 0, testImg.width, testImg.height, null)
         for (y in mRect.top..mRect.bottom) {
             var fit = try {
-                colorCompare(Color(testImg.getRGB(mRect.clickPoint.x, y)), Config.Color_ChuangZhang, 10)
+                colorCompare(Color(testImg.getRGB(mRect.clickPoint.x, y)), Config.Color_ChuangZhang, 15)
             } catch (e: Exception) {
                 loges(e.toString())
                 loges("mRect : ${mRect.toString()}, y is $y")
@@ -216,10 +217,11 @@ data class CarPosition(
     }
     private fun horizonCountsOfChuanzhang(testImg: BufferedImage,y:Int): Boolean{
         var simCount = 0
-        var mwidth = mRect.right - mRect.left + 1
-        for (x in mRect.left..mRect.right) {
+        val left = max(mRect.left,0)
+        var mwidth = mRect.right - left + 1
+        for (x in left..mRect.right) {
             var fit = try {
-                colorCompare(Color(testImg.getRGB(x, y)), Config.Color_ChuangZhang, 10)
+                colorCompare(Color(testImg.getRGB(x, y)), Config.Color_ChuangZhang, 15)
             } catch (e: Exception) {
                 false
             }
@@ -233,6 +235,10 @@ data class CarPosition(
             }
 
         }
+        if(simCount*1f/mwidth>0.2) {
+            log("horizonCountsOfChuanzhang ${simCount} y:$y")
+        }
+
 
         return false
     }

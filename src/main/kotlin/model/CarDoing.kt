@@ -540,8 +540,10 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
                           //如果maxRate有值，证明之前有rate满足，且横向也识别到的，就不记录这种横向没识别到的了
                         }else{
                             //如果max无值，记录到temp下暂存，如果所有的都没识别横向，那么还是取maxRate得
-                            tempIndex = index
-                            tempMaxRate = rate
+                            if(rate>tempMaxRate) {
+                                tempIndex = index
+                                tempMaxRate = rate
+                            }
                         }
                     }
                 }
