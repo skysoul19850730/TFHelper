@@ -1,12 +1,14 @@
 package tasks.hanbing.deprecated.mengyan
 
 import getImage
+import getImageFromFile
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import log
 import loges
 import model.CarDoing
 import model.CarDoing.Companion.CheType_YangChe
+import java.io.File
 import kotlin.math.abs
 
 object ChuanZhangTest {
@@ -23,11 +25,11 @@ object ChuanZhangTest {
                 chePosition=1
                 reInitPositions()
             }
-//            File(App.caijiPath, "chuanzhang").listFiles().forEach {
-//                if(it.name.startsWith("1699936572466")) {
-//                    var img = getImageFromFile(it)
-                   var img = getImage(App.rectWindow, null)
-                    log(img)
+            File(App.caijiPath, "chuanzhang").listFiles().forEach {
+                if(it.name.startsWith("1755002687764")) {
+                    var img = getImageFromFile(it)
+//                   var img = getImage(App.rectWindow, null)
+//                    log(img)
 //                var count1 = 0
 //                var count2 = 0
 //                    MRect.createWH(0,0,176,img.height).forEach{x,y->
@@ -49,8 +51,8 @@ object ChuanZhangTest {
                     } else if (index2 != null && (index == null || index2.second > index.second)) {
                         loges("检测结果 车位 1 位置 ${index2.first} rate ${index2.second}")
                     }
-//                }
-//            }
+                }
+            }
 
 
 //            var p = 0

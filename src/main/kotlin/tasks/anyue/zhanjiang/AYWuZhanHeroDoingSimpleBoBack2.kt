@@ -237,7 +237,7 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
             this.deal179()
         }
         ).apply {
-            des= "按0 回规初始（下土灵），按1-7对应处理1-7的牌,大王按8（其实等于按0，初始态吃王），其他牌按9打死"
+            des= "按0 回规初始（下土灵），按1-7对应处理1-7的牌,大王按8（其实等于按0，初始态吃王），其他牌按9打死，按7时要等球快撞上再按，上太早会打死，无法释放冰球"
         }
         )
 
@@ -377,7 +377,7 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
             if(puke == 5){
                 state179 = 2
             }else if(puke == 7){
-                state179==3
+                state179=3
             }
 
         }

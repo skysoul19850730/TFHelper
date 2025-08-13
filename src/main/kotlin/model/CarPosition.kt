@@ -15,6 +15,7 @@ import loges
 import model.CarDoing.Companion.salePoint
 import utils.AYUtil
 import utils.ImgUtil.forEach
+import utils.ImgUtil.sim
 import utils.MRobot
 import java.awt.Color
 import java.awt.image.BufferedImage
@@ -181,6 +182,7 @@ data class CarPosition(
     fun rateSelectByChuanZhang(testImg: BufferedImage): Float {
         var mHeight = mRect.bottom - mRect.top + 1
         var simCount = 0
+        log("top ${mRect.top} bottom:${mRect.bottom}")
 //            var resultImg = BufferedImage(testImg.width, testImg.height, TYPE_INT_RGB)
 //            resultImg.graphics.drawImage(testImg, 0, 0, testImg.width, testImg.height, null)
         for (y in mRect.top..mRect.bottom) {
@@ -211,6 +213,60 @@ data class CarPosition(
 //        logOnly("compareHeight:${mRect.width}X${mRect.height} ${mRect.width * mRect.height} totalCount $mHeight       okCount:$simCount   rate:$rate")
 
         return rate
+    }
+    private fun horizonCountsOfChuanzhang(testImg: BufferedImage,y:Int): Boolean{
+        var simCount = 0
+        var mwidth = mRect.right - mRect.left + 1
+        for (x in mRect.left..mRect.right) {
+            var fit = try {
+                colorCompare(Color(testImg.getRGB(x, y)), Config.Color_ChuangZhang, 10)
+            } catch (e: Exception) {
+                false
+            }
+            if (fit) {
+                simCount++
+//                if(simCount>120)//这里不能用某个样本采集的120，rect宽度大约250.但船长有的点的位置显示的圆圈很小的，所以横向有40%就可以了
+                if(simCount*1f/mwidth>0.4){
+                    log("horizonCountsOfChuanzhang ${simCount} y:$y")
+                    return true
+                }
+            }
+
+        }
+
+        return false
+    }
+    fun horizonHasLineOfChuanzhang(testImg: BufferedImage):Boolean{
+        var centerY = (mRect.bottom + mRect.top)/2
+
+//        val maxDistance = maxOf(centerY - mRect.top, mRect.bottom - centerY)
+        val maxDistance =25 //这里不能用centerY - mRect.top 因为当时取得rect很大，用这个范围也会导致横线一直偏离很多后，会到达另一个位置的连续横线处.
+        for (i in 0..maxDistance) {
+            // 检查上方行
+            if(centerY-i>=mRect.top){
+                var countH = horizonCountsOfChuanzhang(testImg,centerY-i)
+                if(countH){
+                    log("horizonHasLineOfChuanzhang:true")
+                    return true
+                }
+            }
+
+            // 检查下方行
+            if (centerY + i <= mRect.bottom && i>0) {
+                var countH = horizonCountsOfChuanzhang(testImg,centerY+i)
+                if(countH){
+                    log("horizonHasLineOfChuanzhang:true")
+                    return true
+                }
+            }
+
+        }
+
+        log("horizonHasLineOfChuanzhang:false")
+
+
+
+        return false
     }
 
     suspend fun checkStarMuluty() {

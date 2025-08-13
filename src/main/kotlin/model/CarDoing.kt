@@ -521,17 +521,37 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
         var allNull = carps.all {
             !it.hasHero()
         }
+
+        var tempIndex = -1
+        var tempMaxRate = 0f
+
         carps.forEachIndexed { index, carPosition ->
             if (carPosition.hasHero() || allNull) {//allNull是判断副车，不涉及下卡，所以每个位置都检测。如果是主车，null的位置就不检测，比如没有工程位，或者下掉的位置没补上
-//                logOnly("车$chePosition 车位$index ")
+                logOnly("车$chePosition 车位$index ")
                 var rate = carPosition.rateSelectByChuanZhang(img)
-//                logOnly("车$chePosition 车位$index 识别率：$rate")
-                if (rate > maxRate) {
-                    maxRate = rate
-                    maxIndex = index
+                logOnly("车$chePosition 车位$index 识别率：$rate")
+                if (rate > maxRate && rate>0.2) {
+                    if(carPosition.horizonHasLineOfChuanzhang(img)) {
+                        maxRate = rate
+                        maxIndex = index
+                    }else{
+                        //这里水平未识别到
+                        if(maxRate>0){
+                          //如果maxRate有值，证明之前有rate满足，且横向也识别到的，就不记录这种横向没识别到的了
+                        }else{
+                            //如果max无值，记录到temp下暂存，如果所有的都没识别横向，那么还是取maxRate得
+                            tempIndex = index
+                            tempMaxRate = rate
+                        }
+                    }
                 }
             }
         }
+        if(maxRate<0.2){//看有没有没识别到横线，但竖直方向rate很高的
+            maxRate = tempMaxRate
+            maxIndex = tempIndex
+        }
+
         var coast = System.currentTimeMillis() - startTime
         if (maxRate > 0.1) {
             log("最符合的车位是$maxIndex 其比例为:$maxRate  coast:$coast")
