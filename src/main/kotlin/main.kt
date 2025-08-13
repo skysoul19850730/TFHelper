@@ -38,6 +38,7 @@ import model.CarDoing
 import model.CarPosition
 import tasks.*
 import tasks.gameUtils.GameUtil
+import tasks.hanbing.deprecated.mengyan.ChuanZhangTest
 import tasks.hezuo.zhannvsha.ZhanNvGameLaunch
 import java.awt.Point
 import java.awt.image.BufferedImage
@@ -1174,7 +1175,8 @@ fun test() {
 //
 //    val text = Tess.getText(img)
 //    text.log(text)
-    ExcelUtil().test()
+//    ExcelUtil().test()
+    ChuanZhangTest.startChuanZhangOberserver()
 //    setBrightness(50)
 
 //    val img = getImageFromRes("1753245924065.png")
