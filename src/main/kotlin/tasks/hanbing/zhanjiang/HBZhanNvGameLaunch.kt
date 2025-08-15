@@ -11,6 +11,7 @@ import tasks.IGameLaunch
 import tasks.hanbing2.huoling.HBBoHuolingHeroDoing
 import tasks.hanbing2.zhanjiang.HB5ZGGHeroDoingZiQiang
 import tasks.hanbing2.zhanjiang.HB5ZHeroDoingBo
+import tasks.hanbing2.zhanjiang.HB5ZHeroDoingBo2
 import tasks.hanbing2.zhanjiang.HB5ZHeroDoingZiQiang
 
 class HBZhanNvGameLaunch : IGameLaunch {
@@ -70,7 +71,7 @@ class HBZhanNvGameLaunch : IGameLaunch {
             App.model_hanbing_5zhan_ziqiang ->HB5ZGGHeroDoingZiQiang()
 //            App.model_hanbing_5zhan_ziqiang ->HBZhanNvHeroDoingZiQiang5zs()
 //            App.model_hanbing_5zhan_boer ->HBHeroDoingBo5zs()
-            App.model_hanbing_5zhan_boer -> HB5ZHeroDoingBo()
+            App.model_hanbing_5zhan_boer -> HB5ZHeroDoingBo2()
             App.model_hanbing_huoling_boer -> HBBoHuolingHeroDoing()
             else ->HBZhanNvHeroDoingRenwu()
         }

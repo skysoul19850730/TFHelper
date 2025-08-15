@@ -154,12 +154,13 @@ class LongQuanGameLaunch : IGameLaunch {
         } else {
             if (Config.touxiangAuto.value && Config.touxiangAll.value) {
                 touxiang()
-            } else if (Config.touxiangAuto.value && failCount<2) {
+            } else if (Config.touxiangAuto.value && failCount < 2) {
                 touxiang()
             }
         }
     }
-    private suspend fun touxiang(){
+
+    private suspend fun touxiang() {
         delay(500)
         Config.pointDuiZhanRenshu.click()
         delay(500)
@@ -169,13 +170,13 @@ class LongQuanGameLaunch : IGameLaunch {
     private suspend fun checkAdv() {
         log("checkAdv")
         //failCount = 0 可以认为是 胜利。
-        if(failCount == 0){//胜利
+        if (failCount == 0) {//胜利
             seeAdv()
-        }else{//失败
-            if(Config.viewFailAdv.value){
-               seeAdv()
-            }else{
-                if(CanreJujue.isFit() || CanreJujueFail.isFit()) {
+        } else {//失败
+            if (Config.viewFailAdv.value) {
+                seeAdv()
+            } else {
+                if (CanreJujue.isFit() || CanreJujueFail.isFit()) {
                     delay(delayNor)
                     CanreJujue.click()
                 }
@@ -189,38 +190,44 @@ class LongQuanGameLaunch : IGameLaunch {
 //        kaida = false
 //        }
     }
-    private suspend fun seeAdv(){
-        if(CanreJujue.isFit() || CanreJujueFail.isFit()) {
+
+    private suspend fun seeAdv() {
+        if (CanreJujue.isFit() || CanreJujueFail.isFit()) {
             Config.adv_point.click()
             log("1")
-            withTimeoutOrNull(5000){
-                delay(1000)
-                while (CanreJujue.isFit() || CanreJujueFail.isFit()) {
-                    Config.adv_point.click()
-                    delay(1000)
+            delay(6000)
+            while (CanreJujue.isFit() || CanreJujueFail.isFit()) {
+                Config.adv_point.click()
+                delay(6000)
+                if (NoAdvOk.isFit()) {
+                    NoAdvOk.click()
+                    log("4")
+                    delay(3000)
+                    MPoint(100, 130).click()
+                    return
                 }
-                log("2")
             }
-            if(CanreJujue.isFit() || CanreJujueFail.isFit()) {//点了广告后，但未请求到
-                CanreJujue.click()
-                log("3")
-                return
-            }
-            if(NoAdvOk.isFit()){
+            log("2")
+//            if (CanreJujue.isFit() || CanreJujueFail.isFit()) {//点了广告后，但未请求到
+//                CanreJujue.click()
+//                log("3")
+//                return
+//            }
+            if (NoAdvOk.isFit()) {
                 NoAdvOk.click()
                 log("4")
-            }else {
+            } else {
 
-               var ll = withTimeoutOrNull(30000){
+                var ll = withTimeoutOrNull(30000) {
                     while (!CanreJujue.isFit() && !CanreJujueFail.isFit()) {
                         delay(1000)
                     }
                     CanreJujue.click()
-                   1
+                    1
                 }
 
                 log("5")
-                if(ll==1){
+                if (ll == 1) {
                     log("6")
                     return
                 }
