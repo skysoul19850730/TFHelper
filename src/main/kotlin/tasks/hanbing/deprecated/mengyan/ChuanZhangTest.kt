@@ -26,7 +26,7 @@ object ChuanZhangTest {
                 reInitPositions()
             }
             File(App.caijiPath, "chuanzhang").listFiles().forEach {
-                if(it.name.startsWith("1755002687764")) {
+                if(it.name.startsWith("1755081915520")) {
                     var img = getImageFromFile(it)
 //                   var img = getImage(App.rectWindow, null)
 //                    log(img)
