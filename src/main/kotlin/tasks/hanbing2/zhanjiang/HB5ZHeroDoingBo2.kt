@@ -147,6 +147,18 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
                 "白球撞上后 按3 进入监听点名，期间可以按数字键盘进行下卡，点名结束后，可以按3重新进入白球卡阶段（下萨满补到3星）"
         })
 
+        guanDealList.add(GuanDeal(
+            startGuan = 209,
+            isOver = {
+                false
+            },
+            chooseHero = {
+               deal210(this)
+            },
+        ).apply
+         {
+             des = "哪里被标记为黑洞就点哪里"
+         })
 
         curGuanDeal = guanDealList.first()
     }
@@ -195,7 +207,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
                 count199++
                 position199 = -1
             }
-            if (carDoing.hasOpenSpace() || carDoing.hasNotFull()) {
+            if (carDoing.hasAllOpenSpace() || carDoing.hasNotFull()) {
                 return heros.upAny(zhanjiang, dianfa, sishen, tieqi, yuren, saman, baoku)
             } else {
                 while (step199 == 2) {
@@ -217,6 +229,44 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
         return -1
     }
 
+    var click210Pos = -1
+    var lastClick210Pos = -1
+    var upList210 = arrayListOf(zhanjiang,sishen,tieqi,yuren,saman, dianfa)
+
+    private suspend fun deal210(heros: List<HeroBean?>): Int {
+
+        if(!upList210.all {
+            it.isFull()
+            }){
+            return heros.upAny(*upList210.toTypedArray())
+        }
+
+        while(click210Pos==-1 || lastClick210Pos==click210Pos){
+            delay(200)
+        }
+        val carPos = carDoing.carps.get(click210Pos)
+        val hero = carPos.mHeroBean
+        if(hero!=null){
+            carPos.isUnEnable = true
+           if(hero==zhanjiang){//还要辅助副卡战将，所以还得上来，但加到鱼人后面
+               carDoing.resetHero(zhanjiang)
+                upList210.remove(zhanjiang)
+               upList210.add(3,zhanjiang)
+           }
+
+            val lastH = upList210.last()
+            carDoing.downHero(lastH)
+            upList210.remove(lastH)
+            lastClick210Pos = click210Pos
+            return heros.upAny(*upList210.toTypedArray())
+        }else{
+            lastClick210Pos = click210Pos
+        }
+        return -1
+
+    }
+
+
     var zs99Clicked = 0
     override suspend fun onKeyDown(code: Int): Boolean {
         if (guankaTask?.currentGuanIndex == 98 || guankaTask?.currentGuanIndex == 99) {
@@ -230,6 +280,23 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
 
                 step199 = if (step199 == 1) 2 else 1
 
+                return true
+            }
+        }
+
+        if (guankaTask?.currentGuanIndex == 209 ||guankaTask?.currentGuanIndex == 208 ) {
+            click210Pos = when (code) {
+                KeyEvent.VK_NUMPAD2 -> 0
+                KeyEvent.VK_NUMPAD1 -> 1
+                KeyEvent.VK_NUMPAD5 -> 2
+                KeyEvent.VK_NUMPAD4 -> 3
+                KeyEvent.VK_NUMPAD8 -> 4
+                KeyEvent.VK_NUMPAD7 -> 5
+                KeyEvent.VK_NUMPAD0 -> 6
+                else -> -1
+            }
+
+            if(click210Pos>-1){
                 return true
             }
         }

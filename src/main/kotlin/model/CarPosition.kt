@@ -32,6 +32,8 @@ data class CarPosition(
     val carDoing: CarDoing
 ) {
 
+    var isUnEnable = false//位置被禁用，寒冰210，比如电法在位置5，死神在位置3.如果黑洞下了死神，逻辑是下电法，上死神，但addhero还是会认为死神上在了位置3，所以加个禁用属性
+
     override fun equals(other: Any?): Boolean {
         return this === other
     }

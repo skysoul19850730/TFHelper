@@ -487,7 +487,7 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
                     carps.get(6)
                 } else {
                     carps.find {
-                        it.mPos < 6 && it.mHeroBean == null
+                        it.mPos < 6 && it.mHeroBean == null && !it.isUnEnable
                     }
                 }
                 carPosition?.addHero(heroBean)
@@ -508,6 +508,18 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
         if (heroBean.isInCar()) {
             downing = true
             carps.get(heroBean.position).downHero()
+            downing = false
+            sysDataToMain()
+        }
+    }
+
+    suspend fun resetHero(heroBean: HeroBean) {
+        if (heroBean.isInCar()) {
+            downing = true
+            carps.get(heroBean.position).apply {
+                mHeroBean?.reset()
+                mHeroBean = null
+            }
             downing = false
             sysDataToMain()
         }
