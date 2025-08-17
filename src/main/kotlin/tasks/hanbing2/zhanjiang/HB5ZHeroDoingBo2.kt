@@ -11,7 +11,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
 
     val zhanjiang = HeroCreator.zhanjiang2.create()
     val tieqi = HeroCreator.tieqi.create()
-    val saman = HeroCreator.saman2.create()
+    val saman = HeroCreator.shuiling.create()
     val yuren = HeroCreator.yuren.create()
     val sishen = HeroCreator.sishen2.create()
     val haiyao = HeroCreator.haiyao.create()
@@ -107,6 +107,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
         }, onGuanDealStart = { stopChuanZhangOberserver() }))
 
         changeZhuangbei(150) { qiangxi }
+        changeZhuangbei(181) { longxin }
 
 
         guanDealList.add(

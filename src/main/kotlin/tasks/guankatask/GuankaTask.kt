@@ -41,6 +41,18 @@ class GuankaTask {
         changeListener?.onGuanChange(currentGuanIndex + 1)
     }
 
+    fun testGuan(img:BufferedImage){
+        for (i in 0..imgList.size - 1) {
+            if (ImgUtil.isImageSim(img, imgList.get(i), 0.97)) {
+                if (currentGuanIndex != i) {
+                    log("关:${i}")
+                    //识别到管卡变化，就延迟多点再循环
+//                            delay(2000)
+                    break
+                }
+            }
+        }
+    }
     fun start() {
         if (running) return
         running = true

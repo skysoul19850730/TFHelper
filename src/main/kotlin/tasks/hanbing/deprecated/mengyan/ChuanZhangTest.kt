@@ -1,13 +1,16 @@
 package tasks.hanbing.deprecated.mengyan
 
+import data.Config
 import getImage
 import getImageFromFile
+import getSubImage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import log
 import loges
 import model.CarDoing
 import model.CarDoing.Companion.CheType_YangChe
+import tasks.guankatask.GuankaTask
 import java.io.File
 import kotlin.math.abs
 
@@ -28,6 +31,8 @@ object ChuanZhangTest {
             File(App.caijiPath, "chuanzhang").listFiles().forEach {
                 if(it.name.startsWith("1755081915520")) {
                     var img = getImageFromFile(it)
+                    var guan = img.getSubImage(Config.zhandou_hezuo_guankaRect)
+                    GuankaTask().testGuan(guan)
 //                   var img = getImage(App.rectWindow, null)
 //                    log(img)
 //                var count1 = 0
@@ -44,13 +49,13 @@ object ChuanZhangTest {
 //                    }
 //                log("count1 $count1   count2 $count2")
 
-                    var index = car0.getChuanZhangMax(img)
-                    var index2 = car1.getChuanZhangMax(img)
-                    if (index != null && (index2 == null || index.second > index2.second)) {
-                        loges("检测结果 车位 0  位置 ${index.first} rate  ${index.second}")
-                    } else if (index2 != null && (index == null || index2.second > index.second)) {
-                        loges("检测结果 车位 1 位置 ${index2.first} rate ${index2.second}")
-                    }
+//                    var index = car0.getChuanZhangMax(img)
+//                    var index2 = car1.getChuanZhangMax(img)
+//                    if (index != null && (index2 == null || index.second > index2.second)) {
+//                        loges("检测结果 车位 0  位置 ${index.first} rate  ${index.second}")
+//                    } else if (index2 != null && (index == null || index2.second > index.second)) {
+//                        loges("检测结果 车位 1 位置 ${index2.first} rate ${index2.second}")
+//                    }
                 }
             }
 
