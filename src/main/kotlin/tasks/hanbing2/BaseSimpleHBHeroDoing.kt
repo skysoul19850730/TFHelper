@@ -205,7 +205,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         }
         if (qiu149State == 1) {
             GlobalScope.launch {
-                delay(2000)
+                delay(4000)
                 qiu149State = 0
 
             }
@@ -242,7 +242,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 ) {
 
                     var count = Config.rectCheckOfLeishen.hasColorCount(Config.colorLeishenHongqiu, testImg = img)
-                    if (count > 300) {
+                    if (count > 200) {
                         onLeiShenRedBallShow()
                         log("检测到红球")
                         log(img)

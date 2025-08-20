@@ -92,7 +92,11 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
                 startChuanZhangOberserver()
             })
         )
-
+        guanDealList.add(
+            GuanDeal(130, onlyDoSomething = {
+                stopChuanZhangOberserver()
+            })
+        )
 
         guanDealList.add(GuanDeal(149, isOver = {
             currentGuan() > 149
@@ -145,7 +149,7 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
         guanDealList.add(GuanDeal(
             199,
             isOver = {
-                false
+                currentGuan()>199
             },
             chooseHero = {
                 deal199Super(this)
