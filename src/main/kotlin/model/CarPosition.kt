@@ -185,7 +185,7 @@ data class CarPosition(
     fun rateSelectByChuanZhang(testImg: BufferedImage): Float {
         var mHeight = mRect.bottom - mRect.top + 1
         var simCount = 0
-        log("top ${mRect.top} bottom:${mRect.bottom}")
+//        logOnly("top ${mRect.top} bottom:${mRect.bottom}")
 //            var resultImg = BufferedImage(testImg.width, testImg.height, TYPE_INT_RGB)
 //            resultImg.graphics.drawImage(testImg, 0, 0, testImg.width, testImg.height, null)
         for (y in mRect.top..mRect.bottom) {
@@ -193,7 +193,7 @@ data class CarPosition(
                 colorCompare(Color(testImg.getRGB(mRect.clickPoint.x, y)), Config.Color_ChuangZhang, 15)
             } catch (e: Exception) {
                 loges(e.toString())
-                loges("mRect : ${mRect.toString()}, y is $y")
+//                loges("mRect : ${mRect.toString()}, y is $y")
                 false
             }
             if (fit) {
@@ -238,7 +238,7 @@ data class CarPosition(
 
         }
         if(simCount*1f/mwidth>0.2) {
-            log("horizonCountsOfChuanzhang ${simCount} y:$y")
+            logOnly("horizonCountsOfChuanzhang ${simCount} y:$y")
         }
 
 
@@ -254,7 +254,7 @@ data class CarPosition(
             if(centerY-i>=mRect.top){
                 var countH = horizonCountsOfChuanzhang(testImg,centerY-i)
                 if(countH){
-                    log("horizonHasLineOfChuanzhang:true")
+                    log("horizonHasLineOfChuanzhang:true  y:${centerY-i}")
                     return true
                 }
             }
@@ -263,7 +263,7 @@ data class CarPosition(
             if (centerY + i <= mRect.bottom && i>0) {
                 var countH = horizonCountsOfChuanzhang(testImg,centerY+i)
                 if(countH){
-                    log("horizonHasLineOfChuanzhang:true")
+                    log("horizonHasLineOfChuanzhang:true y:${centerY+i}")
                     return true
                 }
             }

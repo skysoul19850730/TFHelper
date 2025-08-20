@@ -29,57 +29,25 @@ object ChuanZhangTest {
                 reInitPositions()
             }
             File(App.caijiPath, "chuanzhang").listFiles().forEach {
-                if(it.name.startsWith("1755081915520")) {
+//                if(it.name.startsWith("123123")) {
                     var img = getImageFromFile(it)
-                    var guan = img.getSubImage(Config.zhandou_hezuo_guankaRect)
-                    GuankaTask().testGuan(guan)
-//                   var img = getImage(App.rectWindow, null)
-//                    log(img)
-//                var count1 = 0
-//                var count2 = 0
-//                    MRect.createWH(0,0,176,img.height).forEach{x,y->
-//                        if(colorCompare(Color(img.getRGB(x,y)),Config.Color_ChuangZhang,10)){
-//                            count1++
-//                        }
-//                    }
-//                    MRect.createWH(177,0,176,img.height).forEach{x,y->
-//                        if(colorCompare(Color(img.getRGB(x,y)),Config.Color_ChuangZhang,10)){
-//                            count2++
-//                        }
-//                    }
-//                log("count1 $count1   count2 $count2")
+//                    var guan = img.getSubImage(Config.zhandou_hezuo_guankaRect)
+//                    GuankaTask().testGuan(guan)
 
                     var index = car0.getChuanZhangMax(img)
-//                    var index2 = car1.getChuanZhangMax(img)
-//                    if (index != null && (index2 == null || index.second > index2.second)) {
-//                        loges("检测结果 车位 0  位置 ${index.first} rate  ${index.second}")
-//                    } else if (index2 != null && (index == null || index2.second > index.second)) {
-//                        loges("检测结果 车位 1 位置 ${index2.first} rate ${index2.second}")
-//                    }
-                }
+                    var index2 = car1.getChuanZhangMax(img)
+                log(img)
+                    if (index != null && (index2 == null || index.second > index2.second)) {
+
+                        loges("检测结果 车位 0  位置 ${index.first} rate  ${index.second}")
+                    } else if (index2 != null && (index == null || index2.second > index.second)) {
+                        loges("检测结果 车位 1 位置 ${index2.first} rate ${index2.second}")
+                    }else{
+                        loges("检测结果  未检测到点名")
+                    }
+//                }
             }
 
-
-//            var p = 0
-//            var carDoing = CarDoing(p, CheType_MaChe)
-//            carDoing.initPositions()
-//            var img = getImageFromFile(File(App.caijiPath, "1699951855366.png"))
-//            carDoing.getChuanZhangMax(img)
-//            img = getImageFromFile(File(App.caijiPath, "1699935515650.png"))
-//            carDoing.getChuanZhangMax(img)
-//            img = getImageFromFile(File(App.caijiPath, "test2.png"))
-//            carDoing.getChuanZhangMax(img)
-//            delay(50)
-//
-//
-//            p = 1
-//            carDoing = CarDoing(p, CheType_MaChe)
-//            carDoing.initPositions()
-//            img = getImageFromFile(File(App.caijiPath, "1699936572466.png"))
-//            carDoing.getChuanZhangMax(img)
-//            img = getImageFromFile(File(App.caijiPath, "1699936545563.png"))
-//            carDoing.getChuanZhangMax(img)
-//            delay(50)
         }
     }
 
