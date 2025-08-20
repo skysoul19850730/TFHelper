@@ -14,7 +14,9 @@ import logOnly
 import saveTo
 import tasks.HeroDoing
 import tasks.SimpleHeZuoHeroDoing
+import tasks.XueLiang
 import ui.zhandou.UIKeyListenerManager
+import utils.HBUtil
 import utils.ImgUtil.forEach4Result
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
@@ -24,7 +26,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
     var beimu = false
 
-    var heroDoNotDown129:HeroBean?=null
+    var heroDoNotDown129: HeroBean? = null
 
 
     var chuanzhangDownLoadPositionFromKey = -1
@@ -44,8 +46,9 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             return true
         }
 
-        if (guankaTask?.currentGuanIndex == 129 ||guankaTask?.currentGuanIndex == 128 ||guankaTask?.currentGuanIndex == 127 ||
-            guankaTask?.currentGuanIndex == 99||guankaTask?.currentGuanIndex == 98 ||guankaTask?.currentGuanIndex == 97) {//船长
+        if (guankaTask?.currentGuanIndex == 129 || guankaTask?.currentGuanIndex == 128 || guankaTask?.currentGuanIndex == 127 ||
+            guankaTask?.currentGuanIndex == 99 || guankaTask?.currentGuanIndex == 98 || guankaTask?.currentGuanIndex == 97
+        ) {//船长
             chuanzhangDownLoadPositionFromKey = -1
             chuanzhangDownLoadPositionFromKey = when (code) {
                 KeyEvent.VK_NUMPAD2 -> 0
@@ -64,7 +67,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         }
 
 
-        if (guankaTask?.currentGuanIndex == 199 ||guankaTask?.currentGuanIndex == 198 ) {
+        if (guankaTask?.currentGuanIndex == 199 || guankaTask?.currentGuanIndex == 198) {
             position199 = when (code) {
                 KeyEvent.VK_NUMPAD2 -> 0
                 KeyEvent.VK_NUMPAD1 -> 1
@@ -76,7 +79,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 else -> -1
             }
 
-            if(position199>-1){
+            if (position199 > -1) {
                 return true
             }
         }
@@ -90,15 +93,16 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
 
     open fun onHeroPointByChuanzhang(hero: HeroBean): Boolean {
-        return hero!=heroDoNotDown129
+        return hero != heroDoNotDown129
     }
 
-    var mChuanZhangJob:Job?=null
-    fun stopChuanZhangOberserver(){
-        chuanZhangObeserver= false
+    var mChuanZhangJob: Job? = null
+    fun stopChuanZhangOberserver() {
+        chuanZhangObeserver = false
         mChuanZhangJob?.cancel()
         mChuanZhangJob = null
     }
+
     fun startChuanZhangOberserver() {
         if (chuanZhangObeserver) return
         chuanZhangObeserver = true
@@ -127,7 +131,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     var index2 = otherCarDoing.getChuanZhangMax(img)
 //                    var index2:Pair<Int, Float>? = null
                     if (index != null || index2 != null) {
-                        if (index != null && (index2 == null || index.second > index2.second ||index.second>0.2)) {
+                        if (index != null && (index2 == null || index.second > index2.second || index.second > 0.2)) {
                             var hero = carDoing.carps.get(index.first).mHeroBean
                             log("检测到被标记  位置：$index  英雄：${hero?.heroName}")
                             if (hero != null && onHeroPointByChuanzhang(hero)) {
@@ -152,10 +156,11 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             }
         }
     }
+
     suspend fun onChuanZhangPoint(img2: BufferedImage? = null) {
         var img = img2 ?: getImage(App.rectWindow)
         logOnly("船长点名啦")
-        img.saveTo(File(App.caijiPath, "${System.currentTimeMillis()}.png"))//目前稳定，不用再采集了
+//        img.saveTo(File(App.caijiPath, "${System.currentTimeMillis()}.png"))//目前稳定，不用再采集了
         chuanzhangDownCount++
         var isSencodDianming = chuanzhangDownCount % 2 == 0
         if (!isSencodDianming) {//第一次点卡后等3秒再开始识别
@@ -182,6 +187,206 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 //                waiting = false
             }
         }
+    }
+
+    suspend fun deal149(heros: List<HeroBean?>): Int {
+        while (qiu149State == 1 && heroBean149!!.isInCar()) {
+            delay(200)
+        }
+        if (qiu149State == 0) {
+            carDoing.downHero(heroBean149!!)
+        }
+        var index = heros.indexOf(heroBean149)
+        if (index < 0) {
+            return index
+        }
+        while (qiu149State == 0) {
+            delay(200)
+        }
+        if (qiu149State == 1) {
+            GlobalScope.launch {
+                delay(2000)
+                qiu149State = 0
+
+            }
+            return index
+        }
+        if (qiu149State == 2) {
+            if (heroBean149!!.isFull()) {
+                waiting = true
+                return -1
+            }
+            return index
+        }
+        return -1
+    }
+
+    var heroBean149: HeroBean? = null
+    var qiu149State = 0//0下，1上，2结束
+    var leishenOberser = false
+    fun startLeishenOberserver() {
+        if (leishenOberser) return
+        leishenOberser = true
+        var leishenStart = System.currentTimeMillis()
+        var checkCount = 0
+        GlobalScope.launch {
+            delay(5000)//5秒左右才出球
+            //按截图算，大约10秒一个球（9.5）
+            while (leishenOberser) {
+
+                var img = getImage(App.rectWindow)
+
+                if (Config.leishenqiuXueTiaoRect.hasColorCount(
+                        Config.leishenqiuXueTiao, testImg = img
+                    ) > 50 || Config.leishenqiuXueTiaoRect.hasColorCount(Config.leishenqiuXueTiao2, testImg = img) > 50
+                ) {
+
+                    var count = Config.rectCheckOfLeishen.hasColorCount(Config.colorLeishenHongqiu, testImg = img)
+                    if (count > 300) {
+                        onLeiShenRedBallShow()
+                        log("检测到红球")
+                        log(img)
+                        checkCount++
+                        if (checkCount == 6) {
+                            onLeiShenSixBallOver()
+                            leishenOberser = false
+                            var time = System.currentTimeMillis()
+                            log("识别完6个球，耗时：${time - leishenStart} ms")
+                        }
+                        delay(3000)
+                    } else {
+                        //其实如果外层的血条逻辑足够准的话（因为不知道血条会不会被挡死，但挡死也就进不来了）.这里就不用再判断了，毕竟蓝色判断不准
+                        //即：如果有血条那么一定有球，如果不是红球，则就是蓝球。（经过实验，红球的判断相对很准，无非就是调下数值，如果被挡的厉害,反正如果不是红球，待检测区域redcount基本都是0)
+                        var count2 = Config.rectCheckOfLeishen.hasColorCount(Config.colorLeishenLanqiu, testImg = img)
+                        if (count2 > 2000) {
+                            onLeiShenBlueBallShow()
+                            log("检测到蓝球")
+                            log(img)
+                            checkCount++
+                            if (checkCount == 6) {
+                                onLeiShenSixBallOver()
+                                leishenOberser = false
+                                var time = System.currentTimeMillis()
+                                log("识别完6个球，耗时：${time - leishenStart} ms")
+                            }
+                            delay(3000)
+                        } else {
+                            delay(20)
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    open fun onLeiShenSixBallOver() {
+        GlobalScope.launch {
+            delay(10000)
+            qiu149State =2
+        }
+    }
+
+    open fun onLeiShenRedBallShow() {
+        qiu149State = 1
+    }
+
+    open fun onLeiShenBlueBallShow() {
+        qiu149State = 0
+    }
+
+
+    //x  400-700  y 300, wh 60
+
+//    private fun is199Bai(image: BufferedImage)
+
+    var step199Super = 0//0准备打白球阶段，1//打成白球后，2//点名阶段。点名完成后回到0
+
+    var bai = false
+    private var baiqiuCountSuper = 0
+    suspend fun deal199Super(heros: List<HeroBean?>): Int {
+        if (step199Super == 0) {
+            bai = false
+            var deal = deal199Step0()
+            if (deal.isOver.invoke()) {
+                step199Super = 1
+                return -1
+            } else {
+                return deal.chooseHero.invoke(heros)
+            }
+        } else if (step199Super == 1) {
+
+            while (!bai) {
+                delay(100)
+                var img = getImage(App.rectWindow)
+                bai = HBUtil.is199Bai(img)
+            }
+            //打成了白球
+
+            var deal = deal199Step1()
+            if (deal.isOver.invoke()) {
+                //打白//例如副卡下战将
+                XueLiang.observerXueDown()
+                log("白球撞上了，进入step2")
+
+                baiqiuCountSuper++
+                if (baiqiuCountSuper < 3) {
+                    GlobalScope.launch {
+                        delay(32000)
+                        step199Super = 0
+                    }
+                }else{
+                    step199Super = 3
+                    return -1
+                }
+                step199Super = 2
+                return deal199Step2().chooseHero.invoke(heros)
+
+            } else {
+                return deal.chooseHero.invoke(heros)
+            }
+        } else if(step199Super==2) {
+            val deal = deal199Step2()
+            var dianmingIndex = carDoing.getHB199Selected()
+
+            if (position199 > -1 || dianmingIndex > -1) {
+                carDoing.downPosition(position199)
+                carDoing.downPosition(dianmingIndex)
+                position199 = -1
+            }
+
+
+            if (carDoing.hasAllOpenSpace() || carDoing.hasNotFull()) {
+                return deal.chooseHero.invoke(heros)
+            } else {
+                while (step199Super == 2) {
+                    var dianmingIndex = carDoing.getHB199Selected()
+                    if (position199 > -1 || dianmingIndex > -1) {
+                        carDoing.downPosition(position199)
+                        carDoing.downPosition(dianmingIndex)
+                        position199 = -1
+                        return deal.chooseHero.invoke(heros)
+                    }
+                    delay(100)
+                }
+                return -1
+            }
+        }else{
+            val deal = deal199Step2()
+            return deal.chooseHero.invoke(heros)
+        }
+    }
+
+    open fun deal199Step0(): GuanDeal {
+        return GuanDeal(1)
+    }
+
+    open fun deal199Step1(): GuanDeal {
+        return GuanDeal(1)
+    }
+
+    open fun deal199Step2(): GuanDeal {
+        return GuanDeal(1)
     }
 
 

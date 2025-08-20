@@ -64,6 +64,8 @@ object App {
     val model_hanbing_huoling_boer = model_hanbing or 0x00000011
     val model_hanbing_mengyan = model_hanbing or 0x00000002
 
+    val model_hanbing_5zhan_ziqiang_fuka = model_hanbing or 0x10000008
+
     val model_anyue_zhanjiang = model_anyue or 0x00000001
     val model_anyue_5zhan = model_anyue or 0x00000002
     val model_anyue_bo = model_anyue or 0x00000003
@@ -210,7 +212,8 @@ object App {
             }
 
             //寒冰
-            model_hanbing_zhannv, model_hanbing_5zhan_ziqiang,model_hanbing_5zhan_boer,model_hanbing_huoling_boer -> {
+            model_hanbing_zhannv, model_hanbing_5zhan_ziqiang,model_hanbing_5zhan_boer,model_hanbing_huoling_boer
+            ,model_hanbing_5zhan_ziqiang_fuka-> {
                 HBZhanNvGameLaunch()
             }
 

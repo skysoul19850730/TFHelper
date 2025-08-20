@@ -90,6 +90,7 @@ object HeroCreator{
     val yanmo = HeroBuilder("yanmo")
     val youling = HeroBuilder("youling")
     val yuren = HeroBuilder("yuren")
+    val zhangjiangy = HeroBuilder("zhanjiangy")
     val zhanjiang = HeroBuilder("zhanjiang", isMohua = true)
     val zhanjiang2 = HeroBuilder("zhanjiang2", isMohua = true)
     val zhongkui = HeroBuilder("zhongkui")

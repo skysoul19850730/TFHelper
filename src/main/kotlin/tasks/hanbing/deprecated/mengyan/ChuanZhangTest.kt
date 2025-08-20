@@ -49,7 +49,7 @@ object ChuanZhangTest {
 //                    }
 //                log("count1 $count1   count2 $count2")
 
-//                    var index = car0.getChuanZhangMax(img)
+                    var index = car0.getChuanZhangMax(img)
 //                    var index2 = car1.getChuanZhangMax(img)
 //                    if (index != null && (index2 == null || index.second > index2.second)) {
 //                        loges("检测结果 车位 0  位置 ${index.first} rate  ${index.second}")
