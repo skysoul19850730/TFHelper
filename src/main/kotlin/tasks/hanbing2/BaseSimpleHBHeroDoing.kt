@@ -253,7 +253,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                             var time = System.currentTimeMillis()
                             log("识别完6个球，耗时：${time - leishenStart} ms")
                         }
-                        delay(3000)
+                        delay(5000)
                     } else {
                         //其实如果外层的血条逻辑足够准的话（因为不知道血条会不会被挡死，但挡死也就进不来了）.这里就不用再判断了，毕竟蓝色判断不准
                         //即：如果有血条那么一定有球，如果不是红球，则就是蓝球。（经过实验，红球的判断相对很准，无非就是调下数值，如果被挡的厉害,反正如果不是红球，待检测区域redcount基本都是0)
@@ -269,7 +269,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                                 var time = System.currentTimeMillis()
                                 log("识别完6个球，耗时：${time - leishenStart} ms")
                             }
-                            delay(3000)
+                            delay(5000)
                         } else {
                             delay(20)
                         }

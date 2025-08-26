@@ -144,7 +144,7 @@ object Config {
     val colorLeishenHongqiu = Color(255, 45, 85)
 
     //    val rectCheckOfLeishen = MRect.createWH(700,270,50,25)
-    val rectCheckOfLeishen = MRect.createWH(466, 273, 320, 120)
+    val rectCheckOfLeishen = MRect.createWH(566, 273, 220, 120)
     val count4SureLeishen = 30
 
     val leishenqiuXueTiao = Color(211, 71, 71)

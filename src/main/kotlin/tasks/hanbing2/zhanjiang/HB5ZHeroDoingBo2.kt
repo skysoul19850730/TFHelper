@@ -138,14 +138,15 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
         guanDealList.add(GuanDeal(
             199,
             isOver = {
-                false
+                currentGuan()>200
             },
             chooseHero = {
                 deal199(this)
             },
         ).apply {
             des =
-                "白球撞上后 按3 进入监听点名，期间可以按数字键盘进行下卡，点名结束后，可以按3重新进入白球卡阶段（下萨满补到3星）"
+                "白球撞上后 按3 进入监听点名，期间可以按数字键盘进行下卡，点名结束后，可以按3重新进入白球卡阶段（下萨满补到3星）,最后一次按3进行点名，点名完会上满卡，打崩坏阶段，" +
+                        "如果不小心按3进了打白球的话，就再按3进点名补满卡即可"
         })
 
         guanDealList.add(GuanDeal(
@@ -168,7 +169,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
     private var count199 = 0
 
     private suspend fun deal199(heros: List<HeroBean?>): Int {
-        while (step199 == 0) {
+        while (step199 == 0 && currentGuan()<200) {
             delay(200)
         }
         if (step199 == 1) {
@@ -193,7 +194,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
 //                    delay(300)//怕不同步，延迟300，满上萨满
 
                 //按3 会改成2，不监听掉血了，怕处于涨血状态判断不准。白球撞完按3
-                while (step199 == 1) {
+                while (step199 == 1 && currentGuan()<200) {
                     delay(100)
                 }
 
@@ -211,7 +212,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
             if (carDoing.hasAllOpenSpace() || carDoing.hasNotFull()) {
                 return heros.upAny(zhanjiang, dianfa, sishen, tieqi, yuren, saman, baoku)
             } else {
-                while (step199 == 2) {
+                while (step199 == 2 && currentGuan()<200) {
                     var dianmingIndex = carDoing.getHB199Selected()
                     if (position199 > -1 || dianmingIndex > -1) {
                         carDoing.downPosition(position199)
@@ -248,9 +249,10 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
         val carPos = carDoing.carps.get(click210Pos)
         val hero = carPos.mHeroBean
         if(hero!=null){
+            carDoing.resetHero(hero)
             carPos.isUnEnable = true
            if(hero==zhanjiang){//还要辅助副卡战将，所以还得上来，但加到鱼人后面
-               carDoing.resetHero(zhanjiang)
+//               carDoing.resetHero(zhanjiang)
                 upList210.remove(zhanjiang)
                upList210.add(3,zhanjiang)
            }
