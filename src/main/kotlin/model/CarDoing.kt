@@ -7,6 +7,7 @@ import getImage
 import kotlinx.coroutines.*
 import log
 import logOnly
+import utils.HBUtil
 import java.awt.Color
 import java.awt.image.BufferedImage
 
@@ -523,6 +524,13 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
             downing = false
             sysDataToMain()
         }
+    }
+    fun getChuanZhangPosition(point: MPoint?): Int {
+        point?:return -1
+        return carps.indexOfFirst {
+            it.isChuanZhangPointIn(point)
+        }
+
     }
 
     fun getChuanZhangMax(imgTest: BufferedImage? = null): Pair<Int, Float>? {

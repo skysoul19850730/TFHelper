@@ -156,6 +156,61 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             }
         }
     }
+    fun startChuanZhangOberserver2() {
+        if (chuanZhangObeserver) return
+        chuanZhangObeserver = true
+
+        mChuanZhangJob = GlobalScope.launch {
+            while (chuanZhangObeserver) {
+                //4 100 300 370
+
+
+                delay(200)
+                var img = getImage(App.rectWindow, null)
+
+                if (chuanzhangDownLoadPositionFromKey > -1) {
+                    log("船长 ：接收到快捷键事件")
+                    if (chuanzhangDownLoadPositionFromKey < 100) {//100代表对面车
+                        var hero = carDoing.carps[chuanzhangDownLoadPositionFromKey].mHeroBean
+                        if (hero != null && onHeroPointByChuanzhang(hero)) {
+                            carDoing.downHero(hero)
+                            waiting = false
+                        }
+                    }
+                    onChuanZhangPoint(img)
+                    chuanzhangDownLoadPositionFromKey = -1
+                } else {
+                    val point = HBUtil.chuanzhang(img)
+
+                    var index = carDoing.getChuanZhangPosition(point)
+                    var index2 = otherCarDoing.getChuanZhangPosition(point)
+
+                    if(index>-1 || index2>-1){
+                        if(index>-1) {
+                            var hero = carDoing.carps.get(index).mHeroBean
+                            log("检测到被标记  位置：$index  英雄：${hero?.heroName}")
+                            if (hero != null && onHeroPointByChuanzhang(hero)) {
+                                carDoing.downHero(hero)
+                                waiting = false
+                            }
+                        }
+                        onChuanZhangPoint(img)
+                    }else{
+                        var fitCount = 0
+                        MRect.createWH(4, 100, 300, 370).forEach4Result { x, y ->
+                            if (img.getRGB(x, y) == Config.Color_ChuangZhang.rgb) {
+                                fitCount++
+                            }
+                            fitCount > 1000
+                        }
+                        if (fitCount > 1000) {
+                            onChuanZhangPoint(img)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     suspend fun onChuanZhangPoint(img2: BufferedImage? = null) {
         var img = img2 ?: getImage(App.rectWindow)

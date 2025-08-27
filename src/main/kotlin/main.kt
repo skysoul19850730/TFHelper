@@ -55,6 +55,7 @@ import test.WindowTest
 import ui.weights.MRadioBUtton
 import utils.*
 import java.text.SimpleDateFormat
+import kotlin.system.measureTimeMillis
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -445,8 +446,8 @@ fun addJiexiHeroResult(state: MutableState<Boolean>) {
                     dialogBtn("修改") {
                         showInputDialog("英雄名", "${bean.file?.name?.takeLast(2)}  ex:zhanjiangp1", it) { name ->
 
-                            var pFile = File("${bean.file?.parent}",name)
-                            if(!pFile.exists()){
+                            var pFile = File("${bean.file?.parent}", name)
+                            if (!pFile.exists()) {
                                 pFile.mkdirs()
                             }
 
@@ -1152,11 +1153,11 @@ fun testClick() {
 //
 //}
 
-fun moveMouse(){
+fun moveMouse() {
     autoMoveMouse()
 }
 
-fun freshHeros(){
+fun freshHeros() {
     var subFoler = "${Config.platName}/heros"
     var heroFolder = resFile(subFoler)
     heroFolder.listFiles().forEach {
@@ -1164,19 +1165,24 @@ fun freshHeros(){
     }
 }
 
-private fun setBrightness(value:Int){
-    var cmd =  "WMIC /NAMESPACE:\\\\root\\wmi PATH WmiMonitorBrightnessMethods WHERE \"Active=TRUE\" CALL WmiSetBrightness Brightness="+ value+" Timeout=0"
+private fun setBrightness(value: Int) {
+    var cmd =
+        "WMIC /NAMESPACE:\\\\root\\wmi PATH WmiMonitorBrightnessMethods WHERE \"Active=TRUE\" CALL WmiSetBrightness Brightness=" + value + " Timeout=0"
     Runtime.getRuntime().exec(cmd)
 }
 
 fun test() {
+
+    GlobalScope.launch {
+        measureTimeMillis {
+
 
 //    val img = getImageFromRes("ttttest22.png")
 //
 //    val text = Tess.getText(img)
 //    text.log(text)
 //    ExcelUtil().test()
-    ChuanZhangTest.startChuanZhangOberserver()
+        ChuanZhangTest.startChuanZhangOberserver()
 //    setBrightness(50)
 //    HBUtil.test199Bai()
 
@@ -1247,7 +1253,10 @@ fun test() {
 
 //    var img = getImageFromFile(File("C:\\Users\\Administrator\\IdeaProjects\\intellij-sdk-code-samples\\untitled1\\tfres\\boss\\1694773514240name.png"))
 //    Boss.nvwangche.testFitImg(img)
-
+        }.apply {
+            log("test 总耗时:${this}")
+        }
+    }
 
 }
 
@@ -1255,7 +1264,7 @@ private fun testSim(hero: HeroBean, hero2: HeroBean) {
     for (i in 0..hero.imgList.size - 1) {
         var img = hero.imgList[i]
 
-        if (hero2.fitImage(img,0)) {
+        if (hero2.fitImage(img, 0)) {
             hero.log(img)
             hero.log("图相似")
         } else {

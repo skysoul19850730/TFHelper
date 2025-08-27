@@ -89,7 +89,7 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
 
         guanDealList.add(
             GuanDeal(129, onlyDoSomething = {
-                startChuanZhangOberserver()
+                startChuanZhangOberserver2()
             })
         )
         guanDealList.add(

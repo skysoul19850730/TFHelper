@@ -176,6 +176,11 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
             return -1
         }
 
+        if(curGuanDeal?.isOver?.invoke() == true){
+            waiting = true
+            return -1
+        }
+
         return curGuanDeal?.chooseHero?.invoke(heros) ?: -1
     }
 

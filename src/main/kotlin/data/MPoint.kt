@@ -48,4 +48,15 @@ class MPoint {
 //        }
         return MRobot.robot.getPixelColor(x, y) == mColorCaiji
     }
+
+    fun pointEqual(point: MPoint): Boolean {
+        return point.x == x && point.y == y
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(other==null || other !is MPoint){
+            return false
+        }
+        return pointEqual(other)
+    }
 }
