@@ -165,6 +165,7 @@ object HBUtil {
         val img = image ?: getImage(App.rectWindow)
         for (x in 700 downTo 400) {
             if (isRectAllBai(img, MRect.createWH(x, 300, 60, 60))) {
+                log(img)
                 return true
             }
         }
@@ -178,7 +179,7 @@ object HBUtil {
             var color = img.getRGB(x, y).run {
                 Color(this)
             }
-            if (colorCompare(color, Color.WHITE, 10)) {
+            if (colorCompare(color, Color.WHITE, 1)) {
                 wCount++
             }
         }

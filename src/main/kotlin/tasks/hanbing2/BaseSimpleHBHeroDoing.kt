@@ -385,15 +385,15 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 log("白球撞上了，进入step2")
 
                 baiqiuCountSuper++
-                if (baiqiuCountSuper < 3) {
-                    GlobalScope.launch {
-                        delay(32000)
-                        step199Super = 0
-                    }
-                }else{
-                    step199Super = 3
-                    return -1
-                }
+//                if (baiqiuCountSuper < 1) {
+//                    GlobalScope.launch {
+//                        delay(32000)
+//                        step199Super = 0
+//                    }
+//                }else{
+//                    step199Super = 3
+//                    return -1
+//                }
                 step199Super = 2
                 return deal199Step2().chooseHero.invoke(heros)
 
