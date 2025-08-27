@@ -19,6 +19,7 @@ import utils.ImgUtil.sim
 import utils.MRobot
 import java.awt.Color
 import java.awt.image.BufferedImage
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.system.measureTimeMillis
 
@@ -95,7 +96,6 @@ data class CarPosition(
     }
 
 
-
     suspend fun downHero() {
         if (mHeroBean != null) {
             withContext(Dispatchers.Main) {
@@ -110,10 +110,10 @@ data class CarPosition(
                     withTimeoutOrNull(2000) {
                         var clickNum = 0
                         while (!cardShow) {
-                            if(clickNum>1){//有些英雄使用原来的click点位，点不出弹窗，甚至直接鼠标移动到那个点点击也点不出来。这种就移动2，3个像素去点击一下
-                                 //目前见到过的只有在家时的龙拳，以为是家里电脑问题，在pc上也遇到了一个水灵不下卡。
+                            if (clickNum > 1) {//有些英雄使用原来的click点位，点不出弹窗，甚至直接鼠标移动到那个点点击也点不出来。这种就移动2，3个像素去点击一下
+                                //目前见到过的只有在家时的龙拳，以为是家里电脑问题，在pc上也遇到了一个水灵不下卡。
                                 click2()
-                            }else {
+                            } else {
                                 click()
                             }
                             clickNum++
@@ -155,8 +155,9 @@ data class CarPosition(
     suspend fun click() {
         MRobot.singleClick(mRect.clickPoint)
     }
+
     suspend fun click2() {
-        var point = MPoint(mRect.clickPoint.x+2,mRect.clickPoint.y+3)
+        var point = MPoint(mRect.clickPoint.x + 2, mRect.clickPoint.y + 3)
         MRobot.singleClick(point)
     }
 
@@ -180,6 +181,12 @@ data class CarPosition(
             log("识别到19点名一次结束")
         }
         return count > 120
+    }
+
+    fun isChuanZhangPointIn(point: MPoint): Boolean {
+        return (abs(point.x - mRect.clickPoint.x) < 8
+                && abs(point.y - mRect.clickPoint.y) < 30
+                )
     }
 
     fun rateSelectByChuanZhang(testImg: BufferedImage): Float {
@@ -217,9 +224,10 @@ data class CarPosition(
 
         return rate
     }
-    private fun horizonCountsOfChuanzhang(testImg: BufferedImage,y:Int): Boolean{
+
+    private fun horizonCountsOfChuanzhang(testImg: BufferedImage, y: Int): Boolean {
         var simCount = 0
-        val left = max(mRect.left,0)
+        val left = max(mRect.left, 0)
         var mwidth = mRect.right - left + 1
         for (x in left..mRect.right) {
             var fit = try {
@@ -230,40 +238,41 @@ data class CarPosition(
             if (fit) {
                 simCount++
 //                if(simCount>120)//这里不能用某个样本采集的120，rect宽度大约250.但船长有的点的位置显示的圆圈很小的，所以横向有40%就可以了
-                if(simCount*1f/mwidth>0.4){
+                if (simCount * 1f / mwidth > 0.4) {
                     log("horizonCountsOfChuanzhang ${simCount} y:$y")
                     return true
                 }
             }
 
         }
-        if(simCount*1f/mwidth>0.2) {
+        if (simCount * 1f / mwidth > 0.2) {
             logOnly("horizonCountsOfChuanzhang ${simCount} y:$y")
         }
 
 
         return false
     }
-    fun horizonHasLineOfChuanzhang(testImg: BufferedImage):Boolean{
-        var centerY = (mRect.bottom + mRect.top)/2
+
+    fun horizonHasLineOfChuanzhang(testImg: BufferedImage): Boolean {
+        var centerY = (mRect.bottom + mRect.top) / 2
 
 //        val maxDistance = maxOf(centerY - mRect.top, mRect.bottom - centerY)
-        val maxDistance =25 //这里不能用centerY - mRect.top 因为当时取得rect很大，用这个范围也会导致横线一直偏离很多后，会到达另一个位置的连续横线处.
+        val maxDistance = 25 //这里不能用centerY - mRect.top 因为当时取得rect很大，用这个范围也会导致横线一直偏离很多后，会到达另一个位置的连续横线处.
         for (i in 0..maxDistance) {
             // 检查上方行
-            if(centerY-i>=mRect.top){
-                var countH = horizonCountsOfChuanzhang(testImg,centerY-i)
-                if(countH){
-                    log("horizonHasLineOfChuanzhang:true  y:${centerY-i}")
+            if (centerY - i >= mRect.top) {
+                var countH = horizonCountsOfChuanzhang(testImg, centerY - i)
+                if (countH) {
+                    log("horizonHasLineOfChuanzhang:true  y:${centerY - i}")
                     return true
                 }
             }
 
             // 检查下方行
-            if (centerY + i <= mRect.bottom && i>0) {
-                var countH = horizonCountsOfChuanzhang(testImg,centerY+i)
-                if(countH){
-                    log("horizonHasLineOfChuanzhang:true y:${centerY+i}")
+            if (centerY + i <= mRect.bottom && i > 0) {
+                var countH = horizonCountsOfChuanzhang(testImg, centerY + i)
+                if (countH) {
+                    log("horizonHasLineOfChuanzhang:true y:${centerY + i}")
                     return true
                 }
             }
@@ -306,7 +315,7 @@ data class CarPosition(
             log(img)
             logOnly("star color is red:${starColor.red} green:${starColor.green} blue:${starColor.blue}")
         }
-        if(colorCompare(starColor, level5)){
+        if (colorCompare(starColor, level5)) {
             return 5
         }
         if (colorCompare(starColor, level4)) {
