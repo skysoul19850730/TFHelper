@@ -29,7 +29,14 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
             fullBase()
         }, chooseHero = {
             if (zhanjiang.isGold()) {
-                upAny(zhanjiang, haiyao, dianfa, tieqi, saman, sishen, baoku)
+                var index = indexOf(haiyao)
+                if(index>-1 && !haiyao.isInCar()){
+                    while(currentGuan()<8){
+                        delay(500)
+                    }
+                    return@GuanDeal index
+                }
+                upAny(zhanjiang,  dianfa, tieqi, saman, sishen, baoku,haiyao)
             } else {
                 upAny(zhanjiang)
             }
