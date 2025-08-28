@@ -1182,9 +1182,9 @@ fun test() {
 //    val text = Tess.getText(img)
 //    text.log(text)
 //    ExcelUtil().test()
-        ChuanZhangTest.startChuanZhangOberserver()
+//        ChuanZhangTest.startChuanZhangOberserver()
 //    setBrightness(50)
-//    HBUtil.test199Bai()
+    HBUtil.test199Bai()
 
 //    val img = getImageFromRes("1753245924065.png")
 

@@ -386,10 +386,10 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
                 baiqiuCountSuper++
 //                if (baiqiuCountSuper < 1) {
-//                    GlobalScope.launch {
-//                        delay(32000)
-//                        step199Super = 0
-//                    }
+                    GlobalScope.launch {
+                        delay(32000)
+                        step199Super = 3
+                    }
 //                }else{
 //                    step199Super = 3
 //                    return -1
@@ -427,7 +427,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 return -1
             }
         }else{
-            val deal = deal199Step2()
+            val deal = deal199Step3()
             return deal.chooseHero.invoke(heros)
         }
     }
@@ -441,6 +441,9 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     }
 
     open fun deal199Step2(): GuanDeal {
+        return GuanDeal(1)
+    }
+    open fun deal199Step3(): GuanDeal {
         return GuanDeal(1)
     }
 

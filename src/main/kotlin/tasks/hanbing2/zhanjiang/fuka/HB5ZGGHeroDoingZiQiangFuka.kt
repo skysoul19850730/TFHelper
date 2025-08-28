@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent
 
 class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
 
-    val isRenwu = false
+    val isRenwu = true
 
     //xiongmao,xiaoye,saman,shexian,lvgong,zhanjiang,nvyao,niutou,kuangjiang,guangqiu
     val zhanjiang = HeroCreator.zhangjiangy.create()
@@ -26,8 +26,8 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
     val kuangjiang = HeroCreator.kuangjiang.create()
     val shexian = HeroCreator.shexian.create()
 
-    val guangqiu =
-        HeroBean(if (isRenwu) HanBingModel.renwuKa.value else "guangqiu", 40, needCar = false, compareRate = 0.95)
+    val guangqiu = HeroCreator.yuren.create()
+//        HeroBean(if (isRenwu) HanBingModel.renwuKa.value else "guangqiu", 40, needCar = false, compareRate = 0.95)
 
 
     override fun initHeroes() {
@@ -165,6 +165,15 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
     override fun deal199Step0(): GuanDeal {
         return GuanDeal(0, isOver = {
             true
+        })
+    }
+
+    override fun deal199Step3(): GuanDeal {
+        return GuanDeal(0, isOver = {
+            guangqiu.isFull()
+        }, chooseHero = {
+            carDoing.downHero(niutou)
+            upAny(guangqiu)
         })
     }
 

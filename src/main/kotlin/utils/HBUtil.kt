@@ -162,15 +162,34 @@ object HBUtil {
 
     //x  400-700  y 300, wh 60
     private fun is199BaiDo(image: BufferedImage?): Boolean {
+        //再补一个没有黑，或黑的count小于500，这里会把战将斧子的认定为打白，一片斧子都是白的，这条粗线上某个60，60的块都是斧子白，所以加个黑色很少来确定球白了
         val img = image ?: getImage(App.rectWindow)
+        var allWhite= false
         for (x in 700 downTo 400) {
             if (isRectAllBai(img, MRect.createWH(x, 300, 60, 60))) {
-                log(img)
-                return true
+                allWhite = true
+                break
             }
         }
+        if(allWhite){
+            logOnly("检测到区域白块，继续检测是否还存在黑洞")
+            for (x in 700 downTo 400) {
+                val rect = MRect.createWH(x, 300, 60, 60)
 
-        return false
+                if(rect.hasColorCount(Color.BLACK,0,img)>500){
+                    //并且不存在大区块黑色
+                    allWhite = false
+                    logOnly("检测到黑洞，白区可能是其他因素，比如战将斧子！！")
+                    break
+                }
+            }
+        }
+        if(allWhite){
+            logOnly("没有黑洞，可以认定黑洞被打白了")
+            log(img)
+        }
+
+        return allWhite
     }
 
     private fun isRectAllBai(img: BufferedImage, rect: MRect): Boolean {
