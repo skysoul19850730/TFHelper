@@ -203,12 +203,12 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                 log("白球撞上了，进入step2")
 
                 baiqiuCount++
-                if(baiqiuCount<3) {
-                    GlobalScope.launch {
-                        delay(32000)
-                        step199 = 1
-                    }
-                }
+//                if(baiqiuCount<3) {
+//                    GlobalScope.launch {
+//                        delay(32000)
+//                        step199 = 1
+//                    }
+//                }
                     step199 = 2
                     delay(300)//怕不同步，延迟300，满上萨满
 
