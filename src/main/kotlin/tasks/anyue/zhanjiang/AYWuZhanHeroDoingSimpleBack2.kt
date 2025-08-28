@@ -166,6 +166,13 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
     }
     var qiu69 = false
 
+    override suspend fun onHuanQiuPost() {
+        if (guankaTask?.currentGuanIndex == 69 || guankaTask?.currentGuanIndex == 68){
+            return
+        }
+        super.onHuanQiuPost()
+    }
+
     override suspend fun onKeyDown(code: Int): Boolean {
 
         if (guankaTask?.currentGuanIndex == 69 || guankaTask?.currentGuanIndex == 68

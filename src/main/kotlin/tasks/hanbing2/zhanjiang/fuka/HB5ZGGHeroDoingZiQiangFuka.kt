@@ -174,7 +174,7 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
         }, chooseHero = {
             carDoing.downHero(xiaoye)
             carDoing.downHero(niutou)
-            upAny(guangqiu)
+            upAny(xiongmao,zhanjiang,guangqiu,shexian,saman,lvgong,kuangjiang)
         })
     }
 
