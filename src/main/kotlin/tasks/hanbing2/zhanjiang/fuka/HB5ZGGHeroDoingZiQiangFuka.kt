@@ -170,8 +170,9 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
 
     override fun deal199Step3(): GuanDeal {
         return GuanDeal(0, isOver = {
-            guangqiu.isFull()
+            fulls(xiongmao,zhanjiang,guangqiu,shexian,saman,lvgong,kuangjiang)
         }, chooseHero = {
+            carDoing.downHero(xiaoye)
             carDoing.downHero(niutou)
             upAny(guangqiu)
         })
