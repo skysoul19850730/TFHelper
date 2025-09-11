@@ -117,6 +117,15 @@ class ZhanNvGameLaunch : IGameLaunch {
             stopOneGame()
             delay(100)
             Recognize.BtnOk.click()
+            delay(500)
+            while(Recognize.BtnOk.isFit()){
+                log("check ok but btn still there")
+                delay(1000)
+                Recognize.BtnOk.rectFinal.clickPoint.apply {
+                    x += ((Math.random())*5).toInt()
+                    y += ((Math.random())*5).toInt()
+                }.click()
+            }
             delay(delayLong)
             delay(delayLong)
             isHezuoIng = false

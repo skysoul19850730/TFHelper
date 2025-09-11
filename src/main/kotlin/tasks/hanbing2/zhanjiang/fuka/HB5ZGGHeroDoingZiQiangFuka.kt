@@ -93,7 +93,16 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
             })
         )
         guanDealList.add(
-            GuanDeal(130, onlyDoSomething = {
+            GuanDeal(130, isOver = {
+                fulls(xiongmao, saman, shexian, lvgong, xiaoye, kuangjiang, zhanjiang)
+            }, chooseHero = {
+                if (needReCheckStar) {
+                    carDoing.reCheckStars()
+                    needReCheckStar = false
+                }
+                upAny(xiongmao, saman, shexian, lvgong, xiaoye, kuangjiang, zhanjiang)
+            }, onGuanDealStart  = {
+                needReCheckStar = true
                 stopChuanZhangOberserver()
             })
         )

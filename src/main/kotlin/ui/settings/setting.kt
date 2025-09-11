@@ -9,39 +9,33 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.awt.awtEvent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toPainter
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.isPrimaryPressed
-import androidx.compose.ui.input.pointer.isSecondaryPressed
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
+import copy700800
+import copyItem
 import data.Config
 import data.MPoint
-import data.MRect
 import getImage
 import grayBtn
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import log
+import logOnly
 import moveMouse
 import tasks.gameUtils.GameUtil
 import test
@@ -51,11 +45,6 @@ import ui.weights.button
 import ui.weights.showInputDialog
 import utils.ImgUtil
 import utils.MRobot
-import java.awt.Point
-import java.io.File
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 object SettingData {
 
@@ -66,6 +55,7 @@ object SettingData {
 fun BoxScope.settingPage() {
 
     var rateDialog = mutableStateOf(false)
+    var inputDimenTxt by remember { mutableStateOf("") }
 
     var bbm = mutableStateOf(false)
     var bbm2 = mutableStateOf(false)
@@ -86,6 +76,9 @@ fun BoxScope.settingPage() {
                 } else {
                     GameUtil.stopMailu()
                 }
+            }
+            button("dp700800"){
+                copy700800(inputDimenTxt)
             }
             button(if(App.autoSaving.value) "停止采集" else "自动采集"){
                 if(App.autoSaving.value){
@@ -121,6 +114,10 @@ fun BoxScope.settingPage() {
                     ImgUtil._norRate.value -= 0.01
                 })
             }
+
+            OutlinedTextField(inputDimenTxt, onValueChange = {
+                inputDimenTxt = it
+            })
         }
     }
     button("初始化", Modifier.align(Alignment.BottomCenter)) {

@@ -22,7 +22,7 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
     val sishen = HeroCreator.sishen2.create()
     val yuren = HeroCreator.yuren.create()
     val dianfa = HeroCreator.dianfa.create()
-    val haiyao = HeroCreator.haiyao.create()
+    val haiyao = HeroCreator.haiyaoy.create()
     val huanqiu = HeroCreator.huanqiu.create()
 
     val guangqiu = HeroBean(if(isRenwu) HanBingModel.renwuKa.value else "guangqiu", 40, needCar = false, compareRate = 0.95)

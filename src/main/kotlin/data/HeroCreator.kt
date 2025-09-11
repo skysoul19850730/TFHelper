@@ -34,6 +34,7 @@ object HeroCreator{
     val gugong = HeroBuilder("gugong")
     val gugu = HeroBuilder("gugu")
     val haiyao = HeroBuilder("haiyao")
+    val haiyaoy = HeroBuilder("haiyaoy")//原皮
     val houyi = HeroBuilder("houyi")
     val houzi = HeroBuilder("houzi")
     val houzi3 = HeroBuilder("houzi3")
