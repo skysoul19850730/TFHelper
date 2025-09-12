@@ -30,7 +30,7 @@ class HanBingModel() : ZhanDouModel("寒冰") {
 
     companion object {
         val imgs = mutableStateListOf<BufferedImage>()
-        val renwuKa = mutableStateOf<String>("tianshi")
+        val renwuKa = mutableStateOf<String>("kuanglong")
     }
 
     override fun onStartPre() {

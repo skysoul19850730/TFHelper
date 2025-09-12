@@ -26,8 +26,8 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
     val kuangjiang = HeroCreator.kuangjiang.create()
     val shexian = HeroCreator.shexian.create()
 
-    val guangqiu = HeroCreator.yuren.create()
-//        HeroBean(if (isRenwu) HanBingModel.renwuKa.value else "guangqiu", 40, needCar = false, compareRate = 0.95)
+    val guangqiu = if(!isRenwu) HeroCreator.yuren.create() else
+        HeroBean(HanBingModel.renwuKa.value)
 
 
     override fun initHeroes() {
