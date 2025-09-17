@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent
 
 class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
 
-    val isRenwu = true
+    val isRenwu = false
 
     //xiongmao,xiaoye,saman,shexian,lvgong,zhanjiang,nvyao,niutou,kuangjiang,guangqiu
     val zhanjiang = HeroCreator.zhangjiangy.create()
@@ -69,9 +69,10 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
                 chooseHero = {
                     delay(300)
                     val ind = upAny(xiongmao, saman, shexian, lvgong, xiaoye, kuangjiang, zhanjiang)
-                    if (ind < 0 && !isRenwu) {
-                        upAny(guangqiu)
-                    } else ind
+//                    if (ind < 0 && !isRenwu) {
+//                        upAny(guangqiu)
+//                    } else ind
+                    ind
                 })
         )
 
@@ -148,9 +149,10 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
                 chooseHero = {
                     delay(300)
                     val ind = upAny(xiongmao, zhanjiang, saman, lvgong, niutou, xiaoye,shexian)
-                    if (ind < 0 && !isRenwu) {
-                        upAny(guangqiu)
-                    } else ind
+//                    if (ind < 0 && !isRenwu) {
+//                        upAny(guangqiu)
+//                    } else ind
+                    ind
 //                checkHeroStarAndFull(this) { currentGuan() > 189 }
                 })
         )
