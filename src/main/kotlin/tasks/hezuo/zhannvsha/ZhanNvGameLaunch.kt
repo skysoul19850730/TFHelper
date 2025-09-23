@@ -14,6 +14,7 @@ import logOnly
 import tasks.Guanka
 import tasks.IGameLaunch
 import tasks.WxUtil
+import tasks.hezuo.xin5z.ZhanXin5HeroDoing
 import tesshelper.Tess
 import utils.ImgUtil
 import utils.MRobot
@@ -29,7 +30,7 @@ class ZhanNvGameLaunch : IGameLaunch {
     //幻给副卡，脚本不用
     //270（管卡不采集检测了，直接检测右上角的boss，每5秒一次即可），看到孤星 下冰女卡住，遇到 神龙和乌龟，上狂将。
     var isRunning = false
-    var heroDoing: ZhanNvHeroDoing3? = null
+    var heroDoing: ZhanXin5HeroDoing? = null
     var mJob: Job? = null
 
     var roomFind :IRoomFind?=null
@@ -102,7 +103,7 @@ class ZhanNvGameLaunch : IGameLaunch {
 //        log("识别车辆位置 $chePosition")
 //        heroDoing = ZhanNvHeroDoing(chePosition)
 //        heroDoing = ZhanNvHeroDoing2()
-        heroDoing = ZhanNvHeroDoing3()
+        heroDoing = ZhanXin5HeroDoing()
         heroDoing?.init()
         heroDoing?.start()
 

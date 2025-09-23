@@ -2,6 +2,7 @@ package tasks.huodong
 
 import androidx.compose.runtime.mutableStateOf
 import tasks.HeroDoing
+import tasks.huodong.fengbao.Fengbao1
 import tasks.huodong.qiuxiang.QiuXiangDay2
 import tasks.huodong.qiuxiang.QiuXiangDay3
 import tasks.huodong.qiuxiang.QiuXiangDay7
@@ -46,14 +47,14 @@ object HuodongUtil {
         shuamoHeroDoing?.stop()
     }
 
-    var huodongStartTime = LocalDate.of(2025, 7, 15)
+    var huodongStartTime = LocalDate.of(2025, 9, 23)
     var perCircleDate = 7// 7天一轮，担心不是七天
     private fun getHuodongDoing():HeroDoing?{
 
         var today = LocalDate.now()
         var dayDt = abs( ChronoUnit.DAYS.between(today, huodongStartTime).toInt())
         return when(dayDt%perCircleDate){
-            0->QiuXiang2Day1()
+            0-> Fengbao1()
             1-> QiuXiang3Day2()
             2-> QiuXiang3Day3()
             3-> QiuXiang3Day4()

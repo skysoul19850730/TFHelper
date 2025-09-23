@@ -75,6 +75,7 @@ object HeroCreator{
     val sishen = HeroBuilder("sishen")
     val sishen2 = HeroBuilder("sishen2")
     val tieqi = HeroBuilder("tieqi")
+    val tianshi = HeroBuilder("tianshi")
     val tuling = HeroBuilder("tuling")
     val tuqiu = HeroBuilder("tuqiu", needCar = false)
     val wawa = HeroBuilder("wawa", isGC = true)
@@ -94,6 +95,7 @@ object HeroCreator{
     val zhangjiangy = HeroBuilder("zhanjiangy")
     val zhanjiang = HeroBuilder("zhanjiang", isMohua = true)
     val zhanjiang2 = HeroBuilder("zhanjiang2", isMohua = true)
+    val zhanjiangb = HeroBuilder("zhanjiangb", isMohua = true)
     val zhongkui = HeroBuilder("zhongkui")
 
 }
