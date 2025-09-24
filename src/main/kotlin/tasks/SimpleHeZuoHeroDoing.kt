@@ -88,14 +88,41 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
     }
 
     class GuanDeal(
-        val startGuan: Int,
-        val isOver: () -> Boolean = { true },
-        val chooseHero: suspend List<HeroBean?>.() -> Int = { -1 },
-        val onGuanDealStart: (suspend () -> Unit)? = null,
-        val onGuanDealEnd: (suspend () -> Unit)? = null,
-        val onlyDoSomething: (suspend (() -> Unit))? = null,//遇到管卡做件事，比如开始截图，或者下个猴子之类的。不赋值管卡
+        var startGuan: Int,
+        var isOver: () -> Boolean = { true },
+        var chooseHero: suspend List<HeroBean?>.() -> Int = { -1 },
+        var onGuanDealStart: (suspend () -> Unit)? = null,
+        var onGuanDealEnd: (suspend () -> Unit)? = null,
+        var onlyDoSomething: (suspend (() -> Unit))? = null,//遇到管卡做件事，比如开始截图，或者下个猴子之类的。不赋值管卡
     ) {
         var des = ""
+
+        fun over(isOver: () -> Boolean){
+            this.isOver = isOver
+        }
+
+        fun chooseHero(chooseHero: suspend List<HeroBean?>.() -> Int) {
+            this.chooseHero = chooseHero
+        }
+
+        fun onStart(onGuanDealStart: suspend () -> Unit) {
+            this.onGuanDealStart = onGuanDealStart
+        }
+
+        fun onEnd(onGuanDealEnd: suspend () -> Unit) {
+            this.onGuanDealEnd = onGuanDealEnd
+        }
+
+        fun onlyDo(onlyDoSomething: suspend (() -> Unit)) {
+            this.onlyDoSomething = onlyDoSomething
+        }
+    }
+
+
+    fun addGuanDeal(guan: Int, guanDeal: GuanDeal.() -> Unit) {
+        guanDealList.add(GuanDeal(guan).apply(
+            guanDeal
+        ))
     }
 
     var curGuanDeal: GuanDeal? = null
@@ -111,7 +138,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
             if (changeTo.onlyDoSomething != null) {//only do的不改变关卡
                 log("guandeal :${changeTo.startGuan},onlyDo ")
                 GlobalScope.launch {
-                    changeTo.onlyDoSomething.invoke()
+                    changeTo.onlyDoSomething!!.invoke()
                 }
                 guanDealList.remove(changeTo)
                 throw Exception()
@@ -119,13 +146,13 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
             }
 
             curGuanDeal = changeTo
-            MainData.curGuanKaDes.value = curGuanDeal?.des?:""
+            MainData.curGuanKaDes.value = curGuanDeal?.des ?: ""
             log("curGuanDeal is ${curGuanDeal!!.startGuan}")
             GlobalScope.launch {
                 curGuanDeal?.onGuanDealStart?.invoke()
                 if (curGuanDeal?.isOver?.invoke() == true) {//start中判断不需要执行此deal，可以将waiting置true，这样直接触发end
                     curGuanDeal?.onGuanDealEnd?.invoke()
-                }else{
+                } else {
                     waiting = false
                 }
             }
@@ -137,7 +164,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
 
 
     fun isGkOver(g: GuanDeal?): Boolean {
-        if(g==null)return true
+        if (g == null) return true
         return g.isOver.invoke()
     }
 
@@ -169,14 +196,14 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
             delay(100)
         }
 
-        if(dropThisDeal){//特殊情况下，有时会保留上次的预选卡组，但有手动改变了卡组。导致再waiting变false后继续执行时，依然认为是之前卡组
+        if (dropThisDeal) {//特殊情况下，有时会保留上次的预选卡组，但有手动改变了卡组。导致再waiting变false后继续执行时，依然认为是之前卡组
             //所以这里有这个特殊情形时（比如爱神时要幻强袭，幻完后waiting变true，同时卡组里有木，这个木会计到船长那里，但爱神会手动上下圣骑
             //所以这个木已经没有了，但程序认为还在。）可以在改变waitting等false前，把drop设置true，这样deal就直接返回-1，会重新刷新想要的卡
             dropThisDeal = false
             return -1
         }
 
-        if(curGuanDeal?.isOver?.invoke() == true){
+        if (curGuanDeal?.isOver?.invoke() == true) {
             waiting = true
             return -1
         }
@@ -189,17 +216,17 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
     }
 
     var lastQiuTime = 0L
-    var qiuAutoBeginTime=Long.MAX_VALUE
+    var qiuAutoBeginTime = Long.MAX_VALUE
     var qiuStopFlag = false
     var qiuPlaying = false
-    fun gudingShuaQiuTask(name:String,startGuan: Int,timePer: Long, allTime:Long?=null,overGuan:Int?=null){
+    fun gudingShuaQiuTask(name: String, startGuan: Int, timePer: Long, allTime: Long? = null, overGuan: Int? = null) {
 
         guanDealList.add(GuanDeal(
             startGuan = startGuan,
             isOver = {
-                if(qiuStopFlag){
+                if (qiuStopFlag) {
                     true
-                }else {
+                } else {
                     if (overGuan != null) {
                         Guanka.currectGuan > overGuan
                     } else if (allTime != null) {
@@ -212,7 +239,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
                     it?.heroName == name
                 }
                 if (index > -1) {
-                    while(System.currentTimeMillis()-lastQiuTime<timePer && !qiuStopFlag){
+                    while (System.currentTimeMillis() - lastQiuTime < timePer && !qiuStopFlag) {
                         delay(100)
                     }
                     lastQiuTime = System.currentTimeMillis()
@@ -222,8 +249,8 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
             onGuanDealStart = {
                 qiuPlaying = true
                 qiuStopFlag = false
-                if(allTime!=null)
-                qiuAutoBeginTime = System.currentTimeMillis()
+                if (allTime != null)
+                    qiuAutoBeginTime = System.currentTimeMillis()
             },
             onGuanDealEnd = {
                 qiuPlaying = false
@@ -237,7 +264,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
 
     }
 
-    fun changeZhuangbei(guan:Int, zhuangbei: ()->Boolean){
+    fun changeZhuangbei(guan: Int, zhuangbei: () -> Boolean) {
         guanDealList.add(
             GuanDeal(
                 guan,
@@ -250,7 +277,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
     }
 
     override suspend fun onKeyDown(code: Int): Boolean {
-        if(code== KeyEvent.VK_NUMPAD3 && qiuPlaying){
+        if (code == KeyEvent.VK_NUMPAD3 && qiuPlaying) {
             qiuStopFlag = true
         }
 

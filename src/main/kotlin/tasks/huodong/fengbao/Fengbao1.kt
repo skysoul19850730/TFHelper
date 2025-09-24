@@ -17,6 +17,7 @@ class Fengbao1 : SimpleHeZuoHeroDoing() {
     val shexian = HeroCreator.shexian.create()
     override fun initHeroes() {
         super.initHeroes()
+        heros = arrayListOf(tieqi, tianshi, yuren, gugu, shengqi, saman2, wangjiang2, bingqiu, xiaoye, shexian)
         guanDealList.add(GuanDeal(
             0,
             isOver = {
