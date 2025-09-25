@@ -16,13 +16,17 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
     val isRenwu = false
 
     //xiongmao,xiaoye,saman,shexian,lvgong,zhanjiang,nvyao,niutou,kuangjiang,guangqiu
-    val zhanjiang = HeroCreator.zhangjiangy.create()
+    val zhanjiang = HeroCreator.zhangjiangy.create().apply {
+        isMohua = false
+    }
     val xiongmao = HeroCreator.xiongmao2.create()
     val xiaoye = HeroCreator.xiaoye.create()
     val saman = HeroCreator.saman2.create()
     val lvgong = HeroCreator.lvgong.create()
     val nvyao = HeroCreator.nvyao.create()
-    val niutou = HeroCreator.niutou2.create()
+    val niutou = HeroCreator.niutou2.create().apply {
+        isMohua = false
+    }
     val kuangjiang = HeroCreator.kuangjiang.create()
     val shexian = HeroCreator.shexian.create()
 

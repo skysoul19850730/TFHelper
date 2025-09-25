@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import tasks.HeroDoing
 import tasks.huodong.fengbao.Fengbao1
 import tasks.huodong.fengbao.Fengbao2
+import tasks.huodong.fengbao.Fengbao3
 import tasks.huodong.qiuxiang.QiuXiangDay2
 import tasks.huodong.qiuxiang.QiuXiangDay3
 import tasks.huodong.qiuxiang.QiuXiangDay7
@@ -57,7 +58,7 @@ object HuodongUtil {
         return when(dayDt%perCircleDate){
             0-> Fengbao1()
             1-> Fengbao2()
-            2-> QiuXiang3Day3()
+            2-> Fengbao3()
             3-> QiuXiang3Day4()
             else->QiuXiang3Day2()
         }
