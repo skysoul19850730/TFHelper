@@ -70,7 +70,7 @@ object Guanka {
     }
 
 
-    var currectGuan = 0
+//    var currectGuan = 0
 //    fun start() {
 //        if (running) return
 //        running = true

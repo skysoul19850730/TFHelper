@@ -228,7 +228,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
                     true
                 } else {
                     if (overGuan != null) {
-                        Guanka.currectGuan > overGuan
+                        curGuan > overGuan
                     } else if (allTime != null) {
                         System.currentTimeMillis() - qiuAutoBeginTime > allTime
                     } else qiuStopFlag
