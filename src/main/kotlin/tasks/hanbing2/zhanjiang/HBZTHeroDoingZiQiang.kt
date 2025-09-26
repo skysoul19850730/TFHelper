@@ -46,7 +46,7 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang, gugu, sishen, baoku)
+               zhanjiang.currentLevel==3
             }
             chooseHero {
                 upAny(zhanjiang, gugu, sishen, baoku)
@@ -151,6 +151,9 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                     } else ind
 //                checkHeroStarAndFull(this) { currentGuan() > 189 }
                 },
+                onGuanDealStart = {//废话时间
+                    delay(10000)
+                }
             )
         )
 
