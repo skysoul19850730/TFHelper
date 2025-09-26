@@ -46,7 +46,7 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
         addGuanDeal(0) {
             over {
-                zhanjiang.currentLevel==3
+               zhanjiang.currentLevel==3
             }
             chooseHero {
                 upAny(zhanjiang, gugu, sishen, baoku)
@@ -55,19 +55,25 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
         addGuanDeal(26) {
             over {
-                fulls(zhanjiang, gugu, sishen, tieqi, wangjiang,yuren, baoku) && longxin
+                fulls(zhanjiang, gugu, sishen, tieqi, wangjiang, baoku)
             }
             chooseHero {
-                upAny(zhanjiang, gugu, sishen, tieqi, wangjiang,yuren, baoku, zhuangbei = {longxin})
+                upAny(zhanjiang, gugu, sishen, tieqi, wangjiang, baoku)
             }
         }
 
-        var start = 50
-
-        for (i in start..180) {
+        addGuanDeal(60) {
+            over {
+                fulls(yuren)
+            }
+            chooseHero {
+                upAny(yuren)
+            }
+        }
+        for (i in 70..180) {
             var other: GuanDeal? = when (i) {
 
-                start -> GuanDeal(0, onGuanDealStart = { carDoing.downHero(wangjiang) })
+                70 -> GuanDeal(0, onGuanDealStart = { carDoing.downHero(wangjiang) })
 
                 100 -> GuanDeal(0, isOver = {
                     fullBaseWithoutTianshi() && yandou
@@ -79,8 +85,6 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                     fullBaseWithoutTianshi() && qiangxi
                 }, chooseHero = {
                     upBaseWithoutTianshi(zhuangbei = { qiangxi })
-                },onGuanDealStart = {
-                    carDoing.reCheckStars()
                 })
 
                 128 -> GuanDeal(0, isOver = {
@@ -112,11 +116,11 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                     zhuangbei { qiangxi }
                 })
 
-//                170 -> GuanDeal(0, isOver = {
-//                    longxin
-//                }, chooseHero = {
-//                    zhuangbei { longxin }
-//                })
+                170 -> GuanDeal(0, isOver = {
+                    longxin
+                }, chooseHero = {
+                    zhuangbei { longxin }
+                })
 
                 else -> null
             }
@@ -136,18 +140,20 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
             }
         }
 
-        changeZhuangbei(183){longxin}
 
         guanDealList.add(
             GuanDeal(189, isOver = { curGuan > 189 },
                 chooseHero = {
-                    delay(10000)
+                    delay(500)
                     val ind = upAny(tieqi, zhanjiang, yuren, sishen, tianshi, gugu, baoku)
                     if (ind < 0 && !isRenwu) {
                         upAny(guangqiu)
                     } else ind
 //                checkHeroStarAndFull(this) { currentGuan() > 189 }
                 },
+                onGuanDealStart = {//废话时间
+                    delay(10000)
+                }
             )
         )
 
@@ -190,7 +196,7 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
             }
 
             if (tieqi.currentLevel < 3 || tianshi.currentLevel<3) {
-                if(tieqi.currentLevel<3 && tianshi.currentLevel<3){
+                if(tieqi.currentLevel<3 && tieqi.currentLevel<3){
                     return heros.upAny(tieqi,tianshi)
                 }else if(tianshi.currentLevel<3){
                     return heros.indexOf(tianshi)
@@ -203,7 +209,7 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                 step199 = 2
                 delay(300)//怕不同步，延迟300，满上萨满
 
-                return heros.upAny(tieqi,tianshi)
+                return heros.upAny(tieqi)
             }
         } else if (step199 == 2) {
 
