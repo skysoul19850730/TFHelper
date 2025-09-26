@@ -120,9 +120,10 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
 
 
     fun addGuanDeal(guan: Int, guanDeal: GuanDeal.() -> Unit) {
-        guanDealList.add(GuanDeal(guan).apply(
-            guanDeal
-        ))
+
+        guanDealList.add(GuanDeal(guan).apply {
+            guanDeal.invoke(this)
+        })
     }
 
     var curGuanDeal: GuanDeal? = null

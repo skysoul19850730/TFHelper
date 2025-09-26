@@ -10,21 +10,23 @@ class Fengbao3 : SimpleHeZuoHeroDoing() {
     val yuren = HeroCreator.gugu.create()
     val daoke = HeroCreator.bingqi.create()
     val fuke = HeroCreator.kui.create()
-    val saman2 = HeroCreator.dasheng.create()
     val wangjiang2 = HeroCreator.haiyao.create()
-    val moqiu = HeroCreator.bingqiu.create()
-    val niutou2 = HeroCreator.huanqiu.create()
     val efei = HeroCreator.shexian.create()
+
+
+    val saman2 = HeroCreator.dasheng.create()
+    val niutou2 = HeroCreator.huanqiu.create()
+    val moqiu = HeroCreator.bingqiu.create()
     override fun initHeroes() {
         super.initHeroes()
         heros = arrayListOf(zhanjiangb, nvwang, yuren, daoke, fuke, saman2, wangjiang2, moqiu, niutou2, efei)
         addGuanDeal(0){
             over {
-               fulls(zhanjiangb,nvwang,yuren,fuke,wangjiang2,moqiu,efei) && longxin
+               fulls(zhanjiangb,nvwang,yuren,fuke,wangjiang2,daoke,efei) && longxin
             }
 
             chooseHero {
-                upAny(zhanjiangb,nvwang,yuren,fuke,wangjiang2,moqiu,efei,zhuangbei ={ longxin })
+                upAny(zhanjiangb,nvwang,yuren,fuke,wangjiang2,daoke,efei,zhuangbei ={ longxin })
             }
         }
 

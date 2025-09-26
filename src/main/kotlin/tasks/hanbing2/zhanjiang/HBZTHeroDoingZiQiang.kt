@@ -136,7 +136,7 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                     }))
                 }
             } else if (i % 10 == 8) {
-                change2Tianshi4(i)
+                change2Tianshi4(i, other)
             }
         }
 
@@ -145,27 +145,17 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
             GuanDeal(189, isOver = { curGuan > 189 },
                 chooseHero = {
                     delay(500)
-                    val ind = upAny(tieqi, zhanjiang, wangjiang, sishen, tianshi, gugu, baoku)
+                    val ind = upAny(tieqi, zhanjiang, yuren, sishen, tianshi, gugu, baoku)
                     if (ind < 0 && !isRenwu) {
                         upAny(guangqiu)
                     } else ind
 //                checkHeroStarAndFull(this) { currentGuan() > 189 }
                 },
-                onGuanDealStart = {
-                    carDoing.downHero(yuren)
-                }
             )
         )
 
         change2Tianshi3(
-            190, GuanDeal(0,
-                isOver = {
-                    fulls(yuren)
-                },
-                chooseHero = {
-                    upAny(yuren)
-                },
-                onGuanDealStart = { carDoing.downHero(wangjiang) })
+            190
         )
 
         guanDealList.add(GuanDeal(
@@ -183,7 +173,7 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                 "白球撞上后 按3 进入监听点名，期间可以按数字键盘进行下卡，点名结束后，可以按3重新进入白球卡阶段（下萨满补到3星）"
         })
 
-
+        curGuanDeal = guanDealList.first()
     }
 
 
@@ -307,9 +297,6 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
                 }
             }
-            onlyDo {
-                otherGuanDeal?.onlyDoSomething?.invoke()
-            }
             onStart {
                 if (tianshi.currentLevel > 3) {
                     carDoing.downHero(tianshi)
@@ -331,14 +318,11 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
             chooseHero {
                 val index = heros.indexOf(tianshi)
                 if (index > -1 && !tianshi.isFull()) {
-                    delay(4000)
+                    delay(5000)
                     upAny(tianshi)
                 } else {
                     otherGuanDeal?.chooseHero?.invoke(this) ?: -1
                 }
-            }
-            onlyDo {
-                otherGuanDeal?.onlyDoSomething?.invoke()
             }
             onStart {
                 otherGuanDeal?.onGuanDealStart?.invoke()
