@@ -59,6 +59,8 @@ object HuodongUtil {
             2-> Fengbao3()
             3-> Fengbao4()
             4-> Fengbao5()
+//            5-> Fengbao6()//强组，需要带别人，再让别人带一把小号
+            6-> Fengbao7()
             else->QiuXiang3Day2()
         }
     }
