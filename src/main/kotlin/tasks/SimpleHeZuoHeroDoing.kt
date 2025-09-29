@@ -276,13 +276,31 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
             )
         )
     }
-
     override suspend fun onKeyDown(code: Int): Boolean {
         if (code == KeyEvent.VK_NUMPAD3 && qiuPlaying) {
             qiuStopFlag = true
         }
+        if (code == KeyEvent.VK_NUMPAD9) {//9强制改变waitting，防止waiting有逻辑错误不上卡
+            waiting = !waiting
+            return true
+        }
 
 
         return super.onKeyDown(code)
+    }
+
+    fun changeHero(guan:Int, down:HeroBean, up:HeroBean){
+        addGuanDeal(guan){
+            over {
+                up.isFull()
+            }
+            chooseHero {
+                upAny(up)
+            }
+            onStart {
+                carDoing.downHero(down)
+            }
+        }
+
     }
 }

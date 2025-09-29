@@ -30,12 +30,12 @@ class Fengbao4 : SimpleHeZuoHeroDoing() {
             }
         }
 
-        changeZhuangbei(110){yandou}
-        changeZhuangbei(120){longxin}
-        changeZhuangbei(130){yandou}
-        changeZhuangbei(140){longxin}
-        changeZhuangbei(160){yandou}
-        changeZhuangbei(170){longxin}
+//        changeZhuangbei(110){yandou}
+//        changeZhuangbei(120){longxin}
+//        changeZhuangbei(130){yandou}
+//        changeZhuangbei(140){longxin}
+//        changeZhuangbei(160){yandou}
+//        changeZhuangbei(170){longxin}
 
         curGuanDeal = guanDealList.get(0)
     }

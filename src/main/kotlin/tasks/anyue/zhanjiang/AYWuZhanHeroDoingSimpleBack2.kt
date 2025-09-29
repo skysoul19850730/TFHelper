@@ -139,10 +139,10 @@ class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
 
 
         guanDealList.add(GuanDeal(120, isOver = {
-            fulls(shexian) && longxin
+            fulls(dianfa,shexian) && longxin
         }, chooseHero = {
-            upAny(shexian, zhuangbei = {longxin})
-        }
+            upAny(dianfa,shexian, zhuangbei = {longxin})
+        }, onGuanDealStart = {carDoing.downHero(yuren)}
         ))
 
         guanDealList.add(GuanDeal(129, isOver = { curGuan > 129 }, chooseHero = { g129Index(this) }, onGuanDealStart = {
