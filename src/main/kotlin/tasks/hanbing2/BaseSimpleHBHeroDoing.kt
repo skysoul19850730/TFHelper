@@ -193,6 +193,8 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                                 carDoing.downHero(hero)
                                 waiting = false
                             }
+                        }else{
+                            log("检测到被标记  位置另一辆车：$index ")
                         }
                         onChuanZhangPoint(img)
                     }else{
@@ -201,9 +203,9 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                             if (img.getRGB(x, y) == Config.Color_ChuangZhang.rgb) {
                                 fitCount++
                             }
-                            fitCount > 1000
+                            fitCount > 600
                         }
-                        if (fitCount > 1000) {
+                        if (fitCount > 600) {
                             onChuanZhangPoint(img)
                         }
                     }
@@ -215,7 +217,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     suspend fun onChuanZhangPoint(img2: BufferedImage? = null) {
         var img = img2 ?: getImage(App.rectWindow)
         logOnly("船长点名啦")
-//        img.saveTo(File(App.caijiPath, "${System.currentTimeMillis()}.png"))//目前稳定，不用再采集了
+        img.saveTo(File(App.caijiPath, "${System.currentTimeMillis()}.png"))//目前稳定，不用再采集了
         chuanzhangDownCount++
         var isSencodDianming = chuanzhangDownCount % 2 == 0
         if (!isSencodDianming) {//第一次点卡后等3秒再开始识别

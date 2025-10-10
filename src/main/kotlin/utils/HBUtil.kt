@@ -16,7 +16,8 @@ import kotlin.system.measureTimeMillis
 
 object HBUtil {
 
-
+//装备得位置不太准，因为整个上半部分都被挡在了血条和buff图标后面，可能导致上面得蓝色点会是中间得线条点
+    //要么这个位置单独计算是否被点，要么想办法把中间得横竖线条去掉，要么就把装备下掉，反正只船长这里处理。
     fun chuanzhang(img: BufferedImage): MPoint? {
         val allOutCirclePoints = arrayListOf<MPoint>()
         for (x in 0..400) {
@@ -80,7 +81,7 @@ object HBUtil {
                 ccc = u
             }
         }
-        log("max p count :${ccc}")
+        log("max p xy:${p?.x} ${p?.y} count :${ccc}")
         return p
     }
 

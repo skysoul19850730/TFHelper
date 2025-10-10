@@ -55,19 +55,19 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
         addGuanDeal(19) {
             over {
-                fulls(zhanjiang, gugu, sishen, tieqi, wangjiang, baoku)
+                fulls(zhanjiang, gugu, sishen, tieqi, wangjiang, baoku)&&longxin
             }
             chooseHero {
-                upAny(zhanjiang, gugu, sishen, tieqi, wangjiang, baoku)
+                upAny(zhanjiang, gugu, sishen, tieqi, wangjiang, baoku, zhuangbei = {longxin})
             }
         }
 
         addGuanDeal(29) {
             over {
-                fulls(yuren)
+                fulls(yuren)&&longxin
             }
             chooseHero {
-                upAny(yuren)
+                upAny(yuren, zhuangbei = {longxin})
             }
         }
         var start = 40
@@ -95,11 +95,11 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                 })
 
                 128 -> GuanDeal(0, isOver = {
-                    fulls(zhanjiang,gugu,tianshi,sishen,yuren,tianshi)
+                    fulls(zhanjiang,gugu,tianshi,sishen,yuren,tianshi,baoku)
                 }, chooseHero = {
-                    upAny(zhanjiang,gugu,tianshi,sishen,yuren,tianshi,zhuangbei = { qiangxi })
+                    upAny(zhanjiang,gugu,tianshi,sishen,yuren,tianshi,baoku,zhuangbei = { qiangxi })
                 }, onGuanDealStart = {
-                    carDoing.downHero(baoku)
+//                    carDoing.downHero(baoku)
                     startChuanZhangOberserver2()
                 })
 
@@ -137,10 +137,10 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
                 change2Tianshi3(i, other)
                 if (i == 130) {
                     guanDealList.add(GuanDeal(135, isOver = {
-                        wangjiang.isInCar()
+                        wangjiang.isFull()
                     }, chooseHero = {
                         carDoing.downHero(sishen)
-                        upAny(wangjiang)
+                        upAny(wangjiang, useGuang = false)
                     }))
                 }
             } else if (i % 10 == 8) {
@@ -204,7 +204,7 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
             }
 
             if (tieqi.currentLevel < 3 || tianshi.currentLevel<3) {
-                if(tieqi.currentLevel<3 && tieqi.currentLevel<3){
+                if(tieqi.currentLevel<3 && tianshi.currentLevel<3){
                     return heros.upAny(tieqi,tianshi)
                 }else if(tianshi.currentLevel<3){
                     return heros.indexOf(tianshi)
@@ -322,17 +322,19 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
     private fun change2Tianshi4(guan: Int, otherGuanDeal: GuanDeal? = null) {
 
+        var selfOver = false
         addGuanDeal(guan) {
             over {
                 tianshi.isFull() && otherGuanDeal?.isOver?.invoke() ?: true
             }
             chooseHero {
                 val index = indexOf(tianshi)
-                if (index > -1 && !tianshi.isFull()) {
+                if (index > -1 && !tianshi.isFull() && !selfOver) {
                     delay(5000)
+                    selfOver=true
                     upAny(tianshi)
                 } else {
-                    otherGuanDeal?.chooseHero?.invoke(this) ?: -1
+                    otherGuanDeal?.chooseHero?.invoke(this) ?: upAny(tianshi)
                 }
             }
             onStart {

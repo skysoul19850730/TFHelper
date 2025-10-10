@@ -30,7 +30,7 @@ class Fengbao3 : SimpleHeZuoHeroDoing() {
             }
         }
 
-       gudingShuaQiuTask("bingqiu",48,2500,null,50)
+       gudingShuaQiuTask("bingqiu",49,2500,null,50)
 
        gudingShuaQiuTask("bingqiu",80,2500,null,90)
 

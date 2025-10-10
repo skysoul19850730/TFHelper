@@ -20,20 +20,20 @@ class Fengbao2 : SimpleHeZuoHeroDoing() {
         heros = arrayListOf(zhanjiangb, nvwang, yuren, daoke, fuke, saman2, wangjiang2, moqiu, niutou2, efei)
         addGuanDeal(0){
             over {
-                fulls(zhanjiangb, saman2, niutou2) || curGuan>30
+                fulls(zhanjiangb, niutou2) || curGuan>30
             }
 
             chooseHero {
-                upAny(zhanjiangb, saman2, niutou2)
+                upAny(zhanjiangb, niutou2)
             }
         }
 
        addGuanDeal(32){
            over {
-               fulls(zhanjiangb, saman2, niutou2,wangjiang2, efei)
+               fulls(zhanjiangb, yuren, niutou2,wangjiang2, efei)
            }
            chooseHero {
-             upAny(zhanjiangb, saman2, niutou2,wangjiang2, efei)
+             upAny(zhanjiangb, yuren, niutou2,wangjiang2, efei)
            }
        }
 

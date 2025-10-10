@@ -20,7 +20,7 @@ class ZhanXin5HeroDoing : SimpleHeZuoHeroDoing() {//默认赋值0，左边，借
     val zhanjiang = HeroCreator.zhanjiangb.create()
     val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()
-    val yuren = HeroCreator.yuren.create()
+    val yuren = HeroCreator.shitou.create()
     val niutou2 = HeroCreator.niutou2.create()
     val gongjiang = HeroCreator.gongjiang.create()
     val maomi = HeroCreator.maomi.create()
@@ -32,18 +32,18 @@ class ZhanXin5HeroDoing : SimpleHeZuoHeroDoing() {//默认赋值0，左边，借
     override fun initHeroes() {
         heros = arrayListOf(zhanjiang, tieqi, gugu, yuren, niutou2, gongjiang, maomi, guangqiu, huanqiu, baoku)
 
-        guanDealList.add(GuanDeal(0, { fulls(zhanjiang, tieqi, gugu, niutou2, gongjiang, baoku) }, {
+        guanDealList.add(GuanDeal(0, { fulls(zhanjiang, tieqi, gugu, niutou2, gongjiang, baoku, yuren) }, {
 //            if (!zhanjiang.isInCar()) {
 //                upAny(zhanjiang, baoku)
 //            } else {//新战将，漏就漏点兵，尽量避免出现刷不到战将的情况
-                upAny(zhanjiang, tieqi, gugu, niutou2, gongjiang, baoku,yuren)
+            upAny(zhanjiang, tieqi, gugu, niutou2, gongjiang, baoku, yuren)
 //            }
         }))
-        
-        changeZhuangbei(250,{longxin})
+
+        changeZhuangbei(200, { longxin })
 
         guanDealList.add(GuanDeal(301, {
-           fulls(maomi)
+            fulls(maomi)
         }, {
             upAny(maomi)
         }, onGuanDealStart = {
