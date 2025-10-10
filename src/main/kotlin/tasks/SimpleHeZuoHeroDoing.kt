@@ -24,14 +24,19 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
         }
     }
 
+    val noHuanqiu:Boolean
+        get() = !(heros.any {
+            it.heroName == "huanqiu"
+        })
+
     val longxin: Boolean
-        get() = Zhuangbei.isLongxin() && Zhuangbei.hasZhuangbei()
+        get() = (Zhuangbei.isLongxin() && Zhuangbei.hasZhuangbei())|| noHuanqiu
     val qiangxi: Boolean
-        get() = Zhuangbei.isQiangxi() && Zhuangbei.hasZhuangbei()
+        get() = (Zhuangbei.isQiangxi() && Zhuangbei.hasZhuangbei())|| noHuanqiu
     val yandou: Boolean
-        get() = Zhuangbei.isYandou() && Zhuangbei.hasZhuangbei()
+        get() = (Zhuangbei.isYandou() && Zhuangbei.hasZhuangbei())|| noHuanqiu
     val shengjian: Boolean
-        get() = Zhuangbei.isShengjian() && Zhuangbei.hasZhuangbei()
+        get() = (Zhuangbei.isShengjian() && Zhuangbei.hasZhuangbei())|| noHuanqiu
 
     suspend fun Int.notOk(block: suspend () -> Int): Int {
         if (this < 0) return block()
@@ -61,7 +66,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
             }
         }
 
-        if (zhuangbei != null) {
+        if (zhuangbei != null && !noHuanqiu) {
             var index = zhuangbei { zhuangbei() }
             if (index > -1) {
                 return index
