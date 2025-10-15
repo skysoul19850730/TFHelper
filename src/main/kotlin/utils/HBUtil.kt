@@ -43,9 +43,14 @@ object HBUtil {
                 allOutCirclePoints.add(it)
             }
         }
-
+        logOnly("chuanzhang allOutCirclePoints count:${allOutCirclePoints.size} ")
         val list = allOutCirclePoints.groupBy { it -> it.y }
-            .filter { it.value.size < 10 }
+            .filter {
+                if(it.value.size>10){
+                    log("more same y is ${it.value.get(0).y},count is ${it.value.size}")
+                }
+                it.value.size < 10
+            }
             .flatMap {
                 it.value
             }
@@ -53,8 +58,10 @@ object HBUtil {
         allOutCirclePoints.clear()
         allOutCirclePoints.addAll(list)
 
+        logOnly("chuanzhang allOutCirclePoints count after filter:${allOutCirclePoints.size} ")
+
         if (allOutCirclePoints.size < 150) return null//防止全屏就几十个点，根本不是圆圈的点，比如鲨鱼的颜色接近等等
-        logOnly("chuanzhang allOutCirclePoints count:${allOutCirclePoints.size} ")
+
         val listP = arrayListOf<MPoint>()
         val map = hashMapOf<MPoint, Int>()
 
