@@ -16,7 +16,7 @@ import kotlin.system.measureTimeMillis
 
 object HBUtil {
 
-//装备得位置不太准，因为整个上半部分都被挡在了血条和buff图标后面，可能导致上面得蓝色点会是中间得线条点
+    //装备得位置不太准，因为整个上半部分都被挡在了血条和buff图标后面，可能导致上面得蓝色点会是中间得线条点
     //要么这个位置单独计算是否被点，要么想办法把中间得横竖线条去掉，要么就把装备下掉，反正只船长这里处理。
     fun chuanzhang(img: BufferedImage): MPoint? {
         val allOutCirclePoints = arrayListOf<MPoint>()
@@ -43,7 +43,17 @@ object HBUtil {
                 allOutCirclePoints.add(it)
             }
         }
-        if(allOutCirclePoints.size<150)return null//防止全屏就几十个点，根本不是圆圈的点，比如鲨鱼的颜色接近等等
+
+        val list = allOutCirclePoints.groupBy { it -> it.y }
+            .filter { it.value.size < 10 }
+            .flatMap {
+                it.value
+            }
+
+        allOutCirclePoints.clear()
+        allOutCirclePoints.addAll(list)
+
+        if (allOutCirclePoints.size < 150) return null//防止全屏就几十个点，根本不是圆圈的点，比如鲨鱼的颜色接近等等
         logOnly("chuanzhang allOutCirclePoints count:${allOutCirclePoints.size} ")
         val listP = arrayListOf<MPoint>()
         val map = hashMapOf<MPoint, Int>()
@@ -165,19 +175,19 @@ object HBUtil {
     private fun is199BaiDo(image: BufferedImage?): Boolean {
         //再补一个没有黑，或黑的count小于500，这里会把战将斧子的认定为打白，一片斧子都是白的，这条粗线上某个60，60的块都是斧子白，所以加个黑色很少来确定球白了
         val img = image ?: getImage(App.rectWindow)
-        var allWhite= false
+        var allWhite = false
         for (x in 700 downTo 400) {
             if (isRectAllBai(img, MRect.createWH(x, 300, 60, 60))) {
                 allWhite = true
                 break
             }
         }
-        if(allWhite){
+        if (allWhite) {
             logOnly("检测到区域白块，继续检测是否还存在黑洞")
             for (x in 700 downTo 400) {
                 val rect = MRect.createWH(x, 300, 60, 60)
 
-                if(rect.hasColorCount(Color.BLACK,0,img)>500){
+                if (rect.hasColorCount(Color.BLACK, 0, img) > 500) {
                     //并且不存在大区块黑色
                     allWhite = false
                     logOnly("检测到黑洞，白区可能是其他因素，比如战将斧子！！")
@@ -185,7 +195,7 @@ object HBUtil {
                 }
             }
         }
-        if(allWhite){
+        if (allWhite) {
             logOnly("没有黑洞，可以认定黑洞被打白了")
             log(img)
         }
