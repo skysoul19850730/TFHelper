@@ -22,6 +22,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.timerTask
 import kotlin.coroutines.resume
+import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
 abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing, GuankaTask.ChangeListener,
@@ -63,8 +64,8 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
         }
     }
 
-    val curGuan:Int
-        get() = guankaTask?.currentGuanIndex?:0
+    val curGuan: Int
+        get() = guankaTask?.currentGuanIndex ?: 0
 
 
     abstract fun initHeroes()
@@ -330,7 +331,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 //                    clickShuaxinAndWaitYuxuanChanged()
 //                    hs = getPreHeros(200)
 //                } else {
-                    hs = clickShuaxinAndWaitYuxuanChanged2()
+                hs = clickShuaxinAndWaitYuxuanChanged2()
 //                }
             }
         }
@@ -389,12 +390,12 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
                 while (shuaxinClicked) {
                     hs = doGetPreHeros()
 
-                    var noChanged = if(lastHeroPres!=null){
+                    var noChanged = if (lastHeroPres != null) {
                         (hs?.getOrNull(0) == null || hs?.getOrNull(0) == lastHeroPres?.getOrNull(0))
                                 && (hs?.getOrNull(1) == null || hs?.getOrNull(1) == lastHeroPres?.getOrNull(1))
                                 && (hs?.getOrNull(2) == null || hs?.getOrNull(2) == lastHeroPres?.getOrNull(2))
-                    }else{
-                       hs?.getOrNull(0)== null && hs?.getOrNull(1)== null && hs?.getOrNull(2)== null
+                    } else {
+                        hs?.getOrNull(0) == null && hs?.getOrNull(1) == null && hs?.getOrNull(2) == null
                     }
 
                     if (noChanged) {//变了之后立马识别，会从上次的消失动画里继续识别到即将消失的上一组预选。这里就一直识别到和上一次不一样为止
@@ -406,7 +407,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
                 }
             }
 
-            if(shuaxinClicked){
+            if (shuaxinClicked) {
                 log("刷新点击没成功，再点一次2")
 
 //                log( getImage(
@@ -417,10 +418,10 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 //                        Config.zhandou_hero1CheckRect.bottom
 //                    )
 //                ))
-            }else{
+            } else {
                 //刷到一个不一样的，就代表刷新了,但可能 比如  只有第三个识别到女王，前两个还没识别到呢，但可以确认已经ok了，那么就用之前方式获取
                 //但如果hs本身就3个都有，且和之前不同，那么就可以直接用了，就不用再识别一次
-                if(hs?.contains(null) == true) {
+                if (hs?.contains(null) == true) {
                     hs = getPreHeros(700)
                 }
             }
@@ -526,7 +527,12 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
                     carDoing.reInitPos0ForQianche(carPosOffset)
                 }
             }
-            MRobot.singleClick(MPoint(rect.clickPoint.x, rect.clickPoint.y + 25))
+            MRobot.singleClick(
+                MPoint(
+                    rect.clickPoint.x + Random.nextInt(5),
+                    rect.clickPoint.y + 25 + Random.nextInt(5)
+                )
+            )
             //点击上卡后，如果都空了，代表确实上去了
             uped = withTimeoutOrNull(300) {
                 while (doGetPreHeros() != null) {
@@ -792,7 +798,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     open override fun onGuanChange(guan: Int) {
     }
 
-    open suspend fun isKeyDownNeed(code: Int):Boolean{
+    open suspend fun isKeyDownNeed(code: Int): Boolean {
         return false
     }
 
@@ -801,11 +807,12 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     var lastKeyPressTime = 0L
     private var clickTimer: Timer? = null
 
-    override suspend fun onKeyDownOri(keyCode: Int):Boolean{
+    override suspend fun onKeyDownOri(keyCode: Int): Boolean {
         val currentTime = System.currentTimeMillis()
         // 判断是否为同一按键的快速连续按下
         if (keyCode == lastKeyCode &&
-            currentTime - lastKeyPressTime <= doubleClickDelay) {
+            currentTime - lastKeyPressTime <= doubleClickDelay
+        ) {
             logOnly("双击耗时:${currentTime - lastKeyPressTime}")
             // 双击事件
             GlobalScope.launch {
@@ -821,6 +828,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 
         return isKeyDownNeed(keyCode)
     }
+
     /**
      * 安排单击事件的执行
      */
@@ -842,6 +850,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
             resetClickState()
         }, doubleClickDelay)
     }
+
     /**
      * 重置点击状态
      */
@@ -855,7 +864,8 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     open suspend fun onKeyDown(code: Int): Boolean {
         return false
     }
-    open suspend fun onKeyDoubleDown(code: Int){
+
+    open suspend fun onKeyDoubleDown(code: Int) {
 
     }
 
