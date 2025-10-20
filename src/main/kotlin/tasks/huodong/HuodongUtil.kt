@@ -1,6 +1,7 @@
 package tasks.huodong
 
 import androidx.compose.runtime.mutableStateOf
+import tasks.CustomHeroDoing
 import tasks.HeroDoing
 import tasks.huodong.fengbao.*
 import tasks.huodong.qiuxiang.QiuXiangDay2
@@ -25,7 +26,10 @@ object HuodongUtil {
     var state = mutableStateOf(false)
     var shuamoHeroDoing :HeroDoing?=null
 
+    var mModel = 0
+
     fun start(model:Int) {
+        mModel = model
         state.value = true
         shuamoHeroDoing?.stop()
 //        shuamoHeroDoing = when(model){
@@ -47,9 +51,16 @@ object HuodongUtil {
         shuamoHeroDoing?.stop()
     }
 
+
+
     var huodongStartTime = LocalDate.of(2025, 9, 23)
     var perCircleDate = 7// 7天一轮，担心不是七天
     private fun getHuodongDoing():HeroDoing?{
+        if(mModel == 1002){
+            return CustomHeroDoing(-1)
+        }else if(mModel == 1003){
+            return CustomHeroDoing(0)
+        }
 
         var today = LocalDate.now()
         var dayDt = abs( ChronoUnit.DAYS.between(today, huodongStartTime).toInt())

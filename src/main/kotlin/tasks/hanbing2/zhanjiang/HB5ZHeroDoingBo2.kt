@@ -3,6 +3,7 @@ package tasks.hanbing2.zhanjiang
 import data.HeroBean
 import data.HeroCreator
 import kotlinx.coroutines.delay
+import tasks.Zhuangbei
 import tasks.hanbing2.BaseSimpleHBHeroDoing
 import java.awt.event.KeyEvent
 
@@ -14,10 +15,10 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
     val tianshi = HeroCreator.tianshi.create()
     val xiaoye = HeroCreator.xiaoye.create()
     val sishen = HeroCreator.sishen2.create()
-    val wangjiang2 = HeroCreator.wangjiang2.create()
+    val wangjiang2 = HeroCreator.dianfa.create()
     val huanqiu = HeroCreator.huanqiu.create()
-    val muqiu = HeroCreator.muqiu.create()
-    val baoku = HeroCreator.dapao.create()
+    val muqiu = HeroCreator.dijing.create()
+    val baoku = HeroCreator.feiting.create()
     val guangqiu = HeroCreator.guangqiu.create()
 
     override fun initHeroes() {
@@ -72,7 +73,28 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
             upBase { yandou }
         }, onGuanDealStart = { stopChuanZhangOberserver() }))
 
-        changeZhuangbei(150) { qiangxi }
+        addGuanDeal(159){
+            over {
+                currentGuan() > 159 ||
+                        (if(needZhuangbei == Zhuangbei.QIANGXI) qiangxi  else true)
+            }
+
+            chooseHero {
+                while(needZhuangbei != Zhuangbei.QIANGXI && curGuan<160) {
+                    delay(100)
+                }
+                if(curGuan<160) {
+                    zhuangbei { qiangxi }
+                }else -1
+            }
+
+            onlyDo {
+                startChuanZhangOberserver2()
+            }
+        }
+
+        changeZhuangbei(160) { qiangxi }
+
         changeZhuangbei(181) { longxin }
 
 
@@ -84,7 +106,11 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
                     if (ind < 0) {
                         upAny(guangqiu)
                     } else ind
-                })
+                },
+                onGuanDealStart = {//废话时间
+                    delay(10000)
+                }
+            )
         )
 
         guanDealList.add(GuanDeal(191, isOver = {
@@ -128,6 +154,16 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
         })
 
         curGuanDeal = guanDealList.first()
+    }
+
+    var needZhuangbei = Zhuangbei.QIANGXI
+    override fun onXiongMaoQiuGot(qiu: String) {
+        super.onXiongMaoQiuGot(qiu)
+        if (qiu == "fs") {
+            needZhuangbei = Zhuangbei.YANDOU
+
+            waiting = false
+        }
     }
 
     private var step199 = 2  // 1打白球阶段， 2点名阶段，

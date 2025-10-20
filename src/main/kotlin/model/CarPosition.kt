@@ -96,8 +96,8 @@ data class CarPosition(
     }
 
 
-    suspend fun downHero() {
-        if (mHeroBean != null) {
+    suspend fun downHero(downEvey:Boolean = false) {
+        if (mHeroBean != null || downEvey) {
             withContext(Dispatchers.Main) {
                 log("车位:$mPos 下卡开始 ${mHeroBean?.heroName}")
                 var start = System.currentTimeMillis()

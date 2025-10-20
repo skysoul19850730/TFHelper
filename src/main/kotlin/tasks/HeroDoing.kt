@@ -18,6 +18,9 @@ import utils.MRobot
 import java.awt.Color
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.concurrent.timerTask
 import kotlin.coroutines.resume
 import kotlin.system.measureTimeMillis
 
@@ -192,7 +195,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     }
 
 
-    private suspend fun checkCar() {
+    protected suspend fun checkCar() {
         log("开始检测车")
         carDoing.carps.get(0).click()
         delay(1000)
@@ -789,8 +792,71 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     open override fun onGuanChange(guan: Int) {
     }
 
-    override suspend fun onKeyDown(code: Int): Boolean {
+    open suspend fun isKeyDownNeed(code: Int):Boolean{
         return false
+    }
+
+    val doubleClickDelay = 200L
+    var lastKeyCode = -1
+    var lastKeyPressTime = 0L
+    private var clickTimer: Timer? = null
+
+    override suspend fun onKeyDownOri(keyCode: Int):Boolean{
+        val currentTime = System.currentTimeMillis()
+        // 判断是否为同一按键的快速连续按下
+        if (keyCode == lastKeyCode &&
+            currentTime - lastKeyPressTime <= doubleClickDelay) {
+            logOnly("双击耗时:${currentTime - lastKeyPressTime}")
+            // 双击事件
+            GlobalScope.launch {
+                onKeyDoubleDown(keyCode)
+            }
+            // 重置状态
+            resetClickState()
+        } else {
+            // 单击事件 - 延迟执行，等待可能的第二次点击
+            scheduleSingleClick(keyCode, currentTime)
+        }
+
+
+        return isKeyDownNeed(keyCode)
+    }
+    /**
+     * 安排单击事件的执行
+     */
+    private fun scheduleSingleClick(keyCode: Int, pressTime: Long) {
+        // 取消之前的单击定时器
+        clickTimer?.cancel()
+
+        // 更新按键状态
+        lastKeyCode = keyCode
+        lastKeyPressTime = pressTime
+
+        // 创建新的定时器检测是否为单击
+        clickTimer = Timer()
+        clickTimer?.schedule(timerTask {
+            // 时间到了仍未收到第二次点击，判定为单击
+            GlobalScope.launch {
+                onKeyDown(keyCode)
+            }
+            resetClickState()
+        }, doubleClickDelay)
+    }
+    /**
+     * 重置点击状态
+     */
+    private fun resetClickState() {
+        lastKeyCode = -1
+        lastKeyPressTime = 0L
+        clickTimer?.cancel()
+        clickTimer = null
+    }
+
+    open suspend fun onKeyDown(code: Int): Boolean {
+        return false
+    }
+    open suspend fun onKeyDoubleDown(code: Int){
+
     }
 
     suspend fun keyDownHero(code: Int): Boolean {

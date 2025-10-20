@@ -10,6 +10,7 @@ import data.MRect
 import data.Recognize
 import database.DataManager
 import kotlinx.coroutines.*
+import model.CarDoing
 import tasks.Hero
 import tasks.IGameLaunch
 import tasks.anyue.zhanjiang.AyZhanNvGameLaunch
@@ -89,7 +90,7 @@ object App {
 
 
     interface KeyListener {
-        suspend fun onKeyDown(code: Int): Boolean
+        suspend fun onKeyDownOri(code: Int): Boolean
     }
 
     var closeCallBack: (() -> Unit)? = null
@@ -387,10 +388,13 @@ object App {
                     log("lparm: ${msg.lParam} ,wparm:${msg.wParam},msg: ${msg.message}")
 
 
-                    if (keyListeners.isNotEmpty()) {
+                    val keyCode = msg.wParam.toInt()
+                    if(keyCode in listOf(WindowClose,WindowOpen,fuckHoutai)){
+
+                    }else if (keyListeners.isNotEmpty()) {
                         var handle = false
                         keyListeners.forEach {
-                            if (it.onKeyDown(msg.wParam.toInt())) {
+                            if (it.onKeyDownOri(msg.wParam.toInt())) {
                                 handle = true
                             }
                         }
@@ -451,6 +455,10 @@ object App {
 
                             VK_NUMPAD6 -> {
                                 MRobot.singleClickPc(Config.zhandou_hero3CheckRect.clickPoint)
+                            }
+
+                            VK_NUMPAD8 -> {
+                                MRobot.singleClickPc(CarDoing.salePoint)
                             }
 
                             else -> {

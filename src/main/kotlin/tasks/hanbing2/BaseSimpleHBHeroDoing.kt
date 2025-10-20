@@ -467,6 +467,57 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         waiting = !waiting
     }
 
+
+
+    open fun onXiongMaoQiuGot(qiu: String) {
+        log("熊猫识别到球：$qiu")
+        hasQiu = true
+    }
+
+    var xiongmaoOberserver = false
+    var hasQiu = false
+    fun startXiongMaoOberser() {
+        if (xiongmaoOberserver) return
+        xiongmaoOberserver = true
+        var leishenStart = System.currentTimeMillis()
+        var checkCount = 0
+        GlobalScope.launch {
+            //按截图算，大约10秒一个球（9.5）
+            while (xiongmaoOberserver) {
+
+                var img = getImage(App.rectWindow)
+                hasQiu = false
+                if (Config.xiongmaoQiuRect.hasColorCount(
+                        Config.xiongmaoFS, testImg = img
+                    ) > 50
+                ) {
+                    onXiongMaoQiuGot("fs")
+                } else if (Config.xiongmaoQiuRect.hasColorCount(
+                        Config.xiongmaoGJ, testImg = img
+                    ) > 50
+                ) {
+                    onXiongMaoQiuGot("gj")
+                } else if (Config.xiongmaoQiuRect.hasColorCount(
+                        Config.xiongmaoZS, testImg = img
+                    ) > 50
+                ) {
+                    onXiongMaoQiuGot("zs")
+                } else if (Config.xiongmaoQiuRect.hasColorCount(
+                        Config.xiongmaoSS, testImg = img
+                    ) > 50
+                ) {
+                    onXiongMaoQiuGot("ss")
+                }
+
+                if (hasQiu) {//识别到一个球后，延迟5秒再识别，节省
+                    delay(7000)
+                }
+            }
+        }
+    }
+
+
+
     override fun onStart() {
         super.onStart()
         UIKeyListenerManager.addKeyListener(this)

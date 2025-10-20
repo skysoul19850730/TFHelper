@@ -33,8 +33,8 @@ import java.awt.image.BufferedImage
 
 class TianKongModel() : ZhanDouModel("活动") {
     //    override var subModels = arrayListOf("1","2")
-    override var subModels: SnapshotStateList<String> = mutableStateListOf("Day1","Day2","Day3","Day4","Day7")
-    override var subSelected: MutableState<String> = mutableStateOf("Day7")
+    override var subModels: SnapshotStateList<String> = mutableStateListOf("当前活动","自由单车","自由合作")
+    override var subSelected: MutableState<String> = mutableStateOf("当前活动")
 
     companion object {
         val imgs = mutableStateListOf<BufferedImage>()
@@ -103,22 +103,16 @@ class TianKongModel() : ZhanDouModel("活动") {
         } else {
             var model =  when (subSelected.value) {
 
-                "Day1" -> {
+                "当前活动" -> {
                     1001
                 }
-                "Day2" -> {
+                "自由单车" -> {
                     1002
                 }
-                "Day3" ->{
+                "自由合作" ->{
                     1003
                 }
 
-                "Day4"->{
-                    1004
-                }
-                "Day7"->{
-                    1007
-                }
                 else -> 0
             }
             HuodongUtil.start(model)

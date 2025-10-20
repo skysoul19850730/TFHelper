@@ -497,10 +497,14 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
         }
     }
 
-    suspend fun downPosition(position: Int) {
+    suspend fun downPosition(position: Int,downEvey:Boolean = false) {
         if(position<0||position>6)return
-        carps.get(position).mHeroBean?.let {
-            downHero(it)
+        if(downEvey){
+            carps.get(position).downHero(true)
+        }else {
+            carps.get(position).mHeroBean?.let {
+                downHero(it)
+            }
         }
     }
 
