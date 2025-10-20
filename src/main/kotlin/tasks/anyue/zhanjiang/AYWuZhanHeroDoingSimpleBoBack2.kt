@@ -16,9 +16,9 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
     val sishen = HeroCreator.sishen2.create()
     val dijing = HeroCreator.dijing.create()
     val huanqiu = HeroCreator.huanqiu.create()
-    val shexian = HeroCreator.shexian.create()
+    val shexian = HeroCreator.feiting.create()
     val yuren = HeroCreator.yuren.create()
-    val guangqiu = HeroCreator.guangqiu.create()
+    val guangqiu = HeroCreator.houzi3.create()
 
     override fun initHeroes() {
         heros = arrayListOf(zhanjiang, tieqi, shuiling, yuren, sishen, shexian, dianfa, dijing, guangqiu, huanqiu)
