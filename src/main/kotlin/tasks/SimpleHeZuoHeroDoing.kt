@@ -225,7 +225,10 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
     var qiuAutoBeginTime = Long.MAX_VALUE
     var qiuStopFlag = false
     var qiuPlaying = false
-    fun gudingShuaQiuTask(name: String, startGuan: Int, timePer: Long, allTime: Long? = null, overGuan: Int? = null) {
+    fun gudingShuaQiuTask(name: String, startGuan: Int, timePer: Long, allTime: Long? = null, overGuan: Int? = null
+    ,dealTime :Long = 0L,sholudPasue:(suspend ()->Unit)?=null,customOverJudge:(()->Boolean)?=null) {
+
+        var delayed = false
 
         guanDealList.add(GuanDeal(
             startGuan = startGuan,
@@ -233,7 +236,9 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
                 if (qiuStopFlag) {
                     true
                 } else {
-                    if (overGuan != null) {
+                    if(customOverJudge!=null){
+                        customOverJudge.invoke()
+                    }else if (overGuan != null) {
                         curGuan > overGuan
                     } else if (allTime != null) {
                         System.currentTimeMillis() - qiuAutoBeginTime > allTime
@@ -245,9 +250,14 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
                     it?.heroName == name
                 }
                 if (index > -1) {
+                    if(dealTime>0 && !delayed){
+                        delay(dealTime)
+                        delayed = true
+                    }
                     while (System.currentTimeMillis() - lastQiuTime < timePer && !qiuStopFlag) {
                         delay(100)
                     }
+                    sholudPasue?.invoke()
                     lastQiuTime = System.currentTimeMillis()
                 }
                 index
