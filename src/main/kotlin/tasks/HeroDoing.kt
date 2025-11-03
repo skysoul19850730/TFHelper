@@ -65,7 +65,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     }
 
     val curGuan: Int
-        get() = guankaTask?.currentGuanIndex ?: 0
+        get() = (guankaTask?.currentGuanIndex ?: 0)+1
 
 
     abstract fun initHeroes()

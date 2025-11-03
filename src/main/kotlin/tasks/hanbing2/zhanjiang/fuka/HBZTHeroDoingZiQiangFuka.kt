@@ -20,7 +20,7 @@ class HBZTHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
     val dianfa = HeroCreator.dianfa.create().apply {
         isMohua = false
     }
-    val bingnv = HeroCreator.bingnv.create()
+    val bingnv = HeroCreator.bingnv2.create()
     val nvyao = HeroCreator.nvyao.create()
     val xiaoye = HeroCreator.xiaoye.create()
     val niutou = HeroCreator.niutou2.create().apply {
@@ -45,7 +45,7 @@ class HBZTHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
         }, chooseHero = {
             val index = indexOf(bingnv)
             if (index > -1) {
-                while (currentGuan() < 9) {
+                while (curGuan < 9) {
                     delay(500)
                 }
                 index
@@ -196,6 +196,7 @@ class HBZTHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
                 }
             }
             onStart {
+                carDoing.downHero(kuangjiang)
                 startTime = System.currentTimeMillis()
                 otherGuanDeal?.onGuanDealStart?.invoke()
             }
