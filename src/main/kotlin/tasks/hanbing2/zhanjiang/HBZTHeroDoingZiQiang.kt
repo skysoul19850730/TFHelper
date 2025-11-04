@@ -202,13 +202,21 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
             if(tianshi.isFull()){
                 carDoing.downHero(tianshi)
             }
+            if(yuren.isFull()){
+                carDoing.downHero(yuren)
+            }
 
-            if (tieqi.currentLevel < 3 || tianshi.currentLevel<3) {
-                if(tieqi.currentLevel<3 && tianshi.currentLevel<3){
-                    return heros.upAny(tieqi,tianshi)
-                }else if(tianshi.currentLevel<3){
-                    return heros.indexOf(tianshi)
-                }else return heros.indexOf(tieqi)
+            if (tieqi.currentLevel < 3 || tianshi.currentLevel<3 || yuren.currentLevel<3) {
+                if(tieqi.currentLevel<3 && tianshi.currentLevel<3 && yuren.currentLevel<3){
+                    return heros.upAny(tieqi,tianshi,yuren)
+                }else {
+
+                    val level3Lowers = arrayListOf(tieqi,tianshi,yuren).filter {
+                        it.currentLevel<3
+                    }
+                    return heros.upAny(*level3Lowers.toTypedArray(),useGuang = false)
+
+                }
 
             } else {
                 //等点名
