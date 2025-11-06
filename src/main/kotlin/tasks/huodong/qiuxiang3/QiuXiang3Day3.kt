@@ -8,7 +8,7 @@ class QiuXiang3Day3:BaseQiuxiang3() {
             HeroCreator.shuiling.create(),
             HeroCreator.gugu.create(),
             HeroCreator.huoling.create(),
-            HeroCreator.saman2.create(),
+            HeroCreator.saman.create(),
             HeroCreator.huofa.create(),
 
             HeroCreator.feiji.create(),

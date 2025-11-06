@@ -8,7 +8,7 @@ class Fengbao5 : SimpleHeZuoHeroDoing() {
     val zhanjiangb = HeroCreator.shuiling.create()
     val nvwang = HeroCreator.huoling.create()
     val yuren = HeroCreator.gugu.create()
-    val daoke = HeroCreator.xiongmao2.create()
+    val daoke = HeroCreator.xiongmao.create()
     val fuke = HeroCreator.daoke.create()
     val wangjiang2 = HeroCreator.bingqi.create()
     val efei = HeroCreator.shexian.create()

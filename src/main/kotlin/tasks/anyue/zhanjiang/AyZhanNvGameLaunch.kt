@@ -10,7 +10,6 @@ import log
 import logOnly
 import tasks.HeroDoing
 import tasks.IGameLaunch
-import tasks.anyue.zhanjiang.deprecated.AYZhanNvHeroDoing5
 
 class AyZhanNvGameLaunch : IGameLaunch {
 
@@ -58,8 +57,8 @@ class AyZhanNvGameLaunch : IGameLaunch {
             model_anyue_5zhan ->AYWuZhanHeroDoingSimpleBack3()
 //            model_anyue_5zhan ->AYWuZhanHeroDoingSimpleBack()
 //            model_anyue_5zhan ->AYWuZhanHeroDoingCopy()
-            model_anyue_bo -> AYHeroDoingBoNo19()
-            else -> AYZhanNvHeroDoing5()
+//            model_anyue_bo -> AYHeroDoingBoNo19()
+            else -> AYWuZhanHeroDoingSimpleBoBack2()
         }
 //        heroDoing = AYZhanNvHeroDoing5()
         heroDoing?.init()

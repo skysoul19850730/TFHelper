@@ -13,11 +13,11 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
     val isRenwu = false
 
 
-    val zhanjiang = HeroCreator.zhanjiangb.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()
-    val wangjiang = HeroCreator.wangjiang2.create()
-    val sishen = HeroCreator.sishen2.create()
+    val wangjiang = HeroCreator.wangjiang.create()
+    val sishen = HeroCreator.sishen.create()
     val yuren = HeroCreator.yuren.create()
     val baoku = HeroCreator.baoku.create()
     val tianshi = HeroCreator.tianshi.create()

@@ -10,7 +10,6 @@ import tasks.XueLiang
 import tasks.hanbing2.BaseSimpleHBHeroDoing
 import ui.zhandou.hanbing.HanBingModel
 import utils.HBUtil
-import java.awt.event.KeyEvent
 
 class HBZTHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
 
@@ -20,10 +19,10 @@ class HBZTHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
     val dianfa = HeroCreator.dianfa.create().apply {
         isMohua = false
     }
-    val bingnv = HeroCreator.bingnv2.create()
+    val bingnv = HeroCreator.bingnv.create()
     val nvyao = HeroCreator.nvyao.create()
     val xiaoye = HeroCreator.xiaoye.create()
-    val niutou = HeroCreator.niutou2.create().apply {
+    val niutou = HeroCreator.niutou.create().apply {
         isMohua = false
     }
     val shengqi = HeroCreator.shengqi.create()

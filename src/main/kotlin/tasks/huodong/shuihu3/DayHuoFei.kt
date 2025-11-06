@@ -2,7 +2,6 @@ package tasks.huodong.shuihu3
 
 import data.HeroBean
 import data.HeroCreator
-import tasks.SimpleHeZuoHeroDoing
 
 class DayHuoFei:BaseDay() {
     val houzi3 = HeroCreator.dianfa.create()
@@ -11,7 +10,7 @@ class DayHuoFei:BaseDay() {
     val huofa = HeroCreator.feiji.create()
     val nvyao = HeroCreator.yanmo.create()
     val guangqiu = HeroCreator.guangqiu.create()
-    val maomi = HeroCreator.saman2.create()
+    val maomi = HeroCreator.saman.create()
     val shexian = HeroCreator.dapao.create()
     val moqiu = HeroCreator.xiaoye.create()
 

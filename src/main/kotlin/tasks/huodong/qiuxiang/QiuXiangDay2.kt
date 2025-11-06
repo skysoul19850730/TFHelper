@@ -15,7 +15,7 @@ class QiuXiangDay2 : BaseQiuxiang() {
 
     val maomi = HeroCreator.guangqiu.create()
     val shexian = HeroCreator.moqiu.create()
-    val aishen = HeroCreator.saman2.create()
+    val aishen = HeroCreator.saman.create()
 
     override var downUpHero: HeroBean = moqiu
 

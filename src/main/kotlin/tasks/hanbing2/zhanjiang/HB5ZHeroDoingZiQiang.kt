@@ -12,11 +12,11 @@ class HB5ZHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
     val isRenwu = false
 
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
-    val saman = HeroCreator.saman2.create()
-    val wangjiang = HeroCreator.wangjiang2.create()
-    val sishen = HeroCreator.sishen2.create()
+    val saman = HeroCreator.saman.create()
+    val wangjiang = HeroCreator.wangjiang.create()
+    val sishen = HeroCreator.sishen.create()
     val yuren = HeroCreator.yuren.create()
     val muqiu = HeroBean(if (isRenwu) HanBingModel.renwuKa.value else "muqiu", 40, needCar = false, compareRate = 0.95)
     val bingqi = HeroCreator.bingqi.create()

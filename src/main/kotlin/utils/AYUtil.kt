@@ -221,7 +221,7 @@ object AYUtil {
     }
     val zhanjiang = HeroBean("zhanjiang", 100)
     val tieqi = HeroBean("tieqi", 90)
-    val saman = HeroBean("saman2", 80)
+    val saman = HeroBean("saman", 80)
     val sishen = HeroBean("sishen", 70)
     val yuren = HeroBean("yuren", 60, compareRate = 0.9)
     val baoku = HeroBean("shexian", 30, needCar = true, isGongCheng = true, compareRate = 0.9)

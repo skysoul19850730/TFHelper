@@ -3,9 +3,9 @@ package tasks.huodong.qiuxiang2
 import data.HeroCreator
 
 class QiuXiang2Day1 : BaseQiuxiang2() {
-    val zhanjiang = HeroCreator.zhanjiang2.create()
-    val niutou = HeroCreator.niutou2.create()
-    val saman2 = HeroCreator.saman2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
+    val niutou = HeroCreator.niutou.create()
+    val saman2 = HeroCreator.saman.create()
     val efei = HeroCreator.efei.create()
     val nvwang = HeroCreator.nvwang.create()
     val maomi = HeroCreator.maomi.create()

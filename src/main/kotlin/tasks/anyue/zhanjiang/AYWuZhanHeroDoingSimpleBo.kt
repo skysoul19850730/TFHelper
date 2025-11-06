@@ -4,18 +4,15 @@ import MainData
 import data.HeroBean
 import data.HeroCreator
 import kotlinx.coroutines.delay
-import log
-import tasks.XueLiang
-import utils.GuDingShuaKaUtil
 import java.awt.event.KeyEvent
 
 class AYWuZhanHeroDoingSimpleBo : BaseSimpleAnYueHeroDoing() {
 
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val shuiling = HeroCreator.shuiling.create()
     val tuling = HeroCreator.tuling.create()
-    val niutou2 = HeroCreator.niutou2.create()
+    val niutou2 = HeroCreator.niutou.create()
     val baoku = HeroCreator.baoku.create()
     val dianfa = HeroCreator.dianfa.create()
     val dijing = HeroCreator.dijing.create()

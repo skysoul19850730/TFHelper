@@ -30,6 +30,10 @@ class HeroBean(
 //    val img: BufferedImage = getImageFromRes(imgPath + ".png")
 //    val img: BufferedImage = ImageIO.read(File(imgPath+".png"))
 
+    val imgList
+        get() = (curHeroFinder?: heroFinders.first()).imgList
+
+
     var trueFull4Duizhan = false
 
     var currentLevel = 0
@@ -43,11 +47,9 @@ class HeroBean(
             }
         }
 
-    val imgList = arrayListOf<BufferedImage>()
-    val imgList2 = arrayListOf<BufferedImage>()
-    val imgList3 = arrayListOf<BufferedImage>()
 
-    var is3Files = false
+    val heroFinders = arrayListOf<HeroFinder>()
+    var curHeroFinder: HeroFinder? = null
 
     init {
         var subFoler = "${Config.platName}/heros/${heroName}"
@@ -55,39 +57,13 @@ class HeroBean(
 
         var childs = heroFolder.listFiles()
 
-        if(childs.size>0){
-
-            if(childs.get(0).isDirectory){
-                is3Files = true
-                childs.forEachIndexed { index, file ->
-                    var list = when(index){
-                        0->imgList
-                        1->imgList2
-                        else->imgList3
-                    }
-                    file.listFiles().forEach {
-
-                        list.add(getImageFromRes("$subFoler${File.separator}${file.name}${File.separator}${it.name}"))
-                    }
-
+        childs.forEach {
+            heroFinders.add(
+                HeroFinder(it).apply {
+                    init()
                 }
-            }else{
-                childs.forEach {
-                    imgList.  add(getImageFromRes("$subFoler${File.separator}${it.name}"))
-                }
-            }
-
+            )
         }
-
-//        add(getImageFromRes(heroName + ".png"))
-//        for (i in 1..9) {
-//            try {
-//
-//                add(getImageFromRes(heroName + "$i" + ".png"))
-//            } catch (e: Exception) {
-//                println(e.message)
-//            }
-//        }
     }
 
     suspend fun checkStarMix(carDoing: CarDoing): Boolean {
@@ -191,19 +167,17 @@ class HeroBean(
 
     fun fitImage(oImg: BufferedImage,position: Int): Boolean {
 
-        var list = if(!is3Files) imgList else  when(position){
-            0->imgList
-            1->imgList2
-            else->imgList3
+        if(curHeroFinder!=null){
+            return curHeroFinder!!.fitImage(oImg,position,compareRate)
         }
 
-        list.forEach {
-            if (ImgUtil.isImageSim(it, oImg,if(is3Files) 0.97 else compareRate,heroName)) {
-//                log(it)
-                return true
-            }
+        curHeroFinder = heroFinders.firstOrNull {
+            it.fitImage(oImg, position, compareRate)
         }
-        return false
+
+        //不等null代表找到了合适的finder，以后就用这个皮的去找
+        return curHeroFinder!=null
+
     }
 
     fun isInCar() = position > -1

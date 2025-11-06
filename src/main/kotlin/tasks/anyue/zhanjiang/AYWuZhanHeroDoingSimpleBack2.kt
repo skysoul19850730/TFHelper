@@ -11,10 +11,10 @@ import java.awt.event.KeyEvent
 
 class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {
 
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val tuling = HeroCreator.tuling.create()
-    val sishen = HeroCreator.sishen2.create()
+    val sishen = HeroCreator.sishen.create()
     val dijing = HeroCreator.dijing.create()
     val yuren = HeroCreator.yuren.create()
     val huanqiu = HeroCreator.huanqiu.create()

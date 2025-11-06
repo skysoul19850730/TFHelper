@@ -19,19 +19,11 @@ import java.awt.image.BufferedImage
 class DaMoHeroDoing(val heroName: String) : HeroDoing() {
     val moqiu = HeroBean(heroName, 50, needCar = false)
 
-
     var count = 0
 
     //葫芦活动，注释的都在车上，所以刷木时不会出现
     val otherHeros = arrayListOf<HeroBean>().apply {
-//        add(HeroBean("zhanjiang"))
-//        add(HeroBean("xiongmao"))//
-//        add(HeroBean("ganglie"))
-//        add(HeroBean("guangqiu"))//
-//        add(HeroBean("saman2"))
-//        add(HeroBean("bingnv"))
         addBoAn()
-//        add(HeroBean("wangjiang"))//
     }
 
     fun ArrayList<HeroBean>.addBoAn() {

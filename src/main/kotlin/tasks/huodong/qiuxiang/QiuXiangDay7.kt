@@ -6,7 +6,7 @@ import data.HeroCreator
 class QiuXiangDay7 : BaseQiuxiang() {
     val tieqi = HeroCreator.nvwang.create()
     val yuren = HeroCreator.feiji.create()
-    val kuangjiang = HeroCreator.saman2.create()
+    val kuangjiang = HeroCreator.saman.create()
     val nvyao = HeroCreator.yuren.create()
     val guangqiu = HeroCreator.shahuang.create()
     val moqiu = HeroCreator.haiyao.create()

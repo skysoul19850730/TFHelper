@@ -2,10 +2,7 @@ package tasks.hanbing2.zhanjiang.fuka
 
 import data.HeroBean
 import data.HeroCreator
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import log
 import tasks.XueLiang
 import tasks.hanbing2.BaseSimpleHBHeroDoing
 import ui.zhandou.hanbing.HanBingModel
@@ -16,15 +13,15 @@ class HB5ZGGHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
     val isRenwu = false
 
     //xiongmao,xiaoye,saman,shexian,lvgong,zhanjiang,nvyao,niutou,kuangjiang,guangqiu
-    val zhanjiang = HeroCreator.zhangjiangy.create().apply {
+    val zhanjiang = HeroCreator.zhanjiang.create().apply {
         isMohua = false
     }
-    val xiongmao = HeroCreator.xiongmao2.create()
+    val xiongmao = HeroCreator.xiongmao.create()
     val xiaoye = HeroCreator.xiaoye.create()
-    val saman = HeroCreator.saman2.create()
+    val saman = HeroCreator.saman.create()
     val lvgong = HeroCreator.lvgong.create()
     val nvyao = HeroCreator.nvyao.create()
-    val niutou = HeroCreator.niutou2.create().apply {
+    val niutou = HeroCreator.niutou.create().apply {
         isMohua = false
     }
     val kuangjiang = HeroCreator.kuangjiang.create()

@@ -5,15 +5,15 @@ import tasks.SimpleHeZuoHeroDoing
 
 class Fengbao2 : SimpleHeZuoHeroDoing() {
 
-    val zhanjiangb = HeroCreator.zhanjiangb.create()
+    val zhanjiangb = HeroCreator.zhanjiang.create()
     val nvwang = HeroCreator.nvwang.create()
     val yuren = HeroCreator.yuren.create()
     val daoke = HeroCreator.daoke.create()
     val fuke = HeroCreator.fuke.create()
-    val saman2 = HeroCreator.saman2.create()
-    val wangjiang2 = HeroCreator.wangjiang2.create()
+    val saman2 = HeroCreator.saman.create()
+    val wangjiang2 = HeroCreator.wangjiang.create()
     val moqiu = HeroCreator.moqiu.create()
-    val niutou2 = HeroCreator.niutou2.create()
+    val niutou2 = HeroCreator.niutou.create()
     val efei = HeroCreator.efei.create()
     override fun initHeroes() {
         super.initHeroes()

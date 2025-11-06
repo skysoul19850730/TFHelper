@@ -4,12 +4,12 @@ import data.HeroCreator
 import tasks.SimpleHeZuoHeroDoing
 
 class Day1:SimpleHeZuoHeroDoing() {
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val nvwang = HeroCreator.nvwang.create()
     val shahuang = HeroCreator.shahuang.create()
     val dasheng = HeroCreator.dasheng.create()
     val jiaonv = HeroCreator.jiaonv.create()
-    val wangjiang2 = HeroCreator.wangjiang2.create()
+    val wangjiang2 = HeroCreator.wangjiang.create()
     val ganglie = HeroCreator.ganglie.create()
     val muqiu = HeroCreator.muqiu.create()
     val huanqiu = HeroCreator.huanqiu.create()

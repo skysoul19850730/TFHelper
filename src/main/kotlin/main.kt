@@ -1011,7 +1011,7 @@ fun testHerosUI() {
         initPositions()
         attchToMain()
     }
-    var hero = HeroBean("zhanjiang")
+    var hero = HeroCreator.zhanjiang.create()
     GlobalScope.launch {
         carDoing.addHero(hero)
         delay(3000)
@@ -1175,14 +1175,15 @@ fun test() {
 
     GlobalScope.launch {
         measureTimeMillis {
-
+testHerosUI()
 
 //    val img = getImageFromRes("ttttest22.png")
 //
 //    val text = Tess.getText(img)
 //    text.log(text)
 //    ExcelUtil().test()
-        ChuanZhangTest.startChuanZhangOberserver()
+//        ChuanZhangTest.startChuanZhangOberserver()
+//            freshHeros()
 //    setBrightness(50)
 //    HBUtil.test199Bai()
 

@@ -5,16 +5,15 @@ import data.HeroCreator
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import log
 import tasks.XueLiang
 import java.awt.event.KeyEvent
 
 class AYWuZhanHeroDoingSimpleBack3 : BaseSimpleAnYueHeroDoing() {
 
-    val zhanjiang = HeroCreator.zhanjiangb.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()
-    val sishen = HeroCreator.sishen2.create()
+    val sishen = HeroCreator.sishen.create()
     val dijing = HeroCreator.dijing.create()
     val yuren = HeroCreator.yuren.create()
     val tianshi = HeroCreator.tianshi.create()

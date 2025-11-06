@@ -3,7 +3,6 @@ package tasks.hanbing2.zhanjiang
 import data.HeroBean
 import data.HeroCreator
 import kotlinx.coroutines.delay
-import tasks.XueLiang
 import tasks.hanbing2.BaseSimpleHBHeroDoing
 import java.awt.event.KeyEvent
 
@@ -11,11 +10,11 @@ class HB5ZHeroDoingBo : BaseSimpleHBHeroDoing() {
 
     val isRenwu = false
 
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
-    val saman = HeroCreator.saman2.create()
-    val wangjiang = HeroCreator.wangjiang2.create()
-    val sishen = HeroCreator.sishen2.create()
+    val saman = HeroCreator.saman.create()
+    val wangjiang = HeroCreator.wangjiang.create()
+    val sishen = HeroCreator.sishen.create()
     val kuangjiang = HeroCreator.kuangjiang.create()
     val moqiu = HeroCreator.moqiu.create()
     val dianfa = HeroCreator.dianfa.create()

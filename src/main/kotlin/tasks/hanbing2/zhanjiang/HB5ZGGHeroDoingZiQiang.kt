@@ -2,9 +2,7 @@ package tasks.hanbing2.zhanjiang
 
 import data.HeroBean
 import data.HeroCreator
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import log
 import tasks.XueLiang
 import tasks.hanbing2.BaseSimpleHBHeroDoing
@@ -15,14 +13,14 @@ class HB5ZGGHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
 
     val isRenwu = true
 
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()
-    val wangjiang = HeroCreator.wangjiang2.create()
-    val sishen = HeroCreator.sishen2.create()
+    val wangjiang = HeroCreator.wangjiang.create()
+    val sishen = HeroCreator.sishen.create()
     val yuren = HeroCreator.yuren.create()
     val dianfa = HeroCreator.dianfa.create()
-    val haiyao = HeroCreator.haiyaoy.create()
+    val haiyao = HeroCreator.haiyao.create()
     val huanqiu = HeroCreator.huanqiu.create()
 
     val guangqiu = HeroBean(if(isRenwu) HanBingModel.renwuKa.value else "guangqiu", 40, needCar = false, compareRate = 0.95)

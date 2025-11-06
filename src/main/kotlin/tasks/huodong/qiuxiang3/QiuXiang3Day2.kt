@@ -7,7 +7,7 @@ class QiuXiang3Day2:BaseQiuxiang3() {
         heros = arrayListOf(
             HeroCreator.dianfa.create(),
             HeroCreator.gugu.create(),
-            HeroCreator.xiongmao2.create(),
+            HeroCreator.xiongmao.create(),
             HeroCreator.feiji.create(),
             HeroCreator.longwang.create(),
             HeroCreator.yanmo.create(),

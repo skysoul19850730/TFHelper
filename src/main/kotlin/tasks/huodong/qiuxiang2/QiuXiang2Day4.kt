@@ -4,10 +4,10 @@ import data.HeroCreator
 
 class QiuXiang2Day4 : BaseQiuxiang2() {
     val yuren = HeroCreator.yuren.create()
-    val zhanjiang2 = HeroCreator.zhanjiang2.create()
-    val saman2 = HeroCreator.saman2.create()
-    val niutou2 = HeroCreator.niutou2.create()
-    val wangjiang2 = HeroCreator.wangjiang2.create()
+    val zhanjiang2 = HeroCreator.zhanjiang.create()
+    val saman2 = HeroCreator.saman.create()
+    val niutou2 = HeroCreator.niutou.create()
+    val wangjiang2 = HeroCreator.wangjiang.create()
     val maomi = HeroCreator.maomi.create()
     val bingqi = HeroCreator.bingqi.create()
     val guangqiu = HeroCreator.guangqiu.create()

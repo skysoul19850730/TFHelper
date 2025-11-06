@@ -17,11 +17,11 @@ import java.awt.image.BufferedImage
 class ZhanXin5HeroDoing : SimpleHeZuoHeroDoing() {//默认赋值0，左边，借用左边第一个position得点击，去识别车位置后再更改
 
 
-    val zhanjiang = HeroCreator.zhanjiangb.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()
     val yuren = HeroCreator.shitou.create()
-    val niutou2 = HeroCreator.niutou2.create()
+    val niutou2 = HeroCreator.niutou.create()
     val gongjiang = HeroCreator.gongjiang.create()
     val maomi = HeroCreator.maomi.create()
     val guangqiu = HeroCreator.guangqiu.create()

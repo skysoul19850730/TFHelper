@@ -10,11 +10,11 @@ import java.awt.event.KeyEvent
 class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
 
 
-    val niutou2 = HeroCreator.niutou2.create()
+    val niutou2 = HeroCreator.niutou.create()
     val tieqi = HeroCreator.tieqi.create()
     val tianshi = HeroCreator.tianshi.create()
     val xiaoye = HeroCreator.xiaoye.create()
-    val sishen = HeroCreator.sishen2.create()
+    val sishen = HeroCreator.sishen.create()
     val wangjiang2 = HeroCreator.dianfa.create()
     val huanqiu = HeroCreator.huanqiu.create()
     val muqiu = HeroCreator.dijing.create()

@@ -10,11 +10,11 @@ class AYWuZhanHeroDoingSimpleBoBack : BaseSimpleAnYueHeroDoing() {
 
     val shuiling = HeroCreator.shuiling.create()
     val tieqi = HeroCreator.tieqi.create()
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val gugu = HeroCreator.gugu.create()
     val dianfa = HeroCreator.dianfa.create()
     val kuangjiang = HeroCreator.kuangjiang.create()
-    val sishen = HeroCreator.sishen2.create()
+    val sishen = HeroCreator.sishen.create()
     val huanqiu = HeroCreator.huanqiu.create()
     val dijing = HeroCreator.dijing.create()
     val shexian = HeroCreator.shexian.create()

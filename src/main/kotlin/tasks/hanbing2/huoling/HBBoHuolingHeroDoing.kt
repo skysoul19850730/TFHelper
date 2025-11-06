@@ -2,16 +2,12 @@ package tasks.hanbing2.huoling
 
 import data.HeroBean
 import data.HeroCreator
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import log
-import tasks.XueLiang
 import tasks.hanbing2.BaseSimpleHBHeroDoing
 
 class HBBoHuolingHeroDoing : BaseSimpleHBHeroDoing() {
 
-    val xiongmao = HeroCreator.xiongmao2.create()
+    val xiongmao = HeroCreator.xiongmao.create()
     val shuiling = HeroCreator.shuiling.create()
     val huoling = HeroCreator.huoling.create()
     val gugong = HeroCreator.gugong.create()

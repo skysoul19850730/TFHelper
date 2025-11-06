@@ -19,11 +19,11 @@ class HB5LRHeroDoingRW : BaseSimpleHBHeroDoing() {
     val tianshi = HeroCreator.tianshi.create()
 
     val gugu = HeroCreator.gugu.create()
-    val sishen = HeroCreator.sishen2.create()
+    val sishen = HeroCreator.sishen.create()
 
     val gugong = HeroCreator.gugong.create()
 
-    val niutou2 = HeroCreator.niutou2.create()
+    val niutou2 = HeroCreator.niutou.create()
 
     val haiyao = HeroCreator.haiyao.create()
 

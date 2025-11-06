@@ -1,18 +1,15 @@
 package tasks.anyue.zhanjiang
 
-import App
 import data.HeroBean
 import data.HeroCreator
 import log
-import utils.GuDingShuaKaUtil
-import java.awt.event.KeyEvent
 
 class AYWuZhanHeroDoingSimpleBack : BaseSimpleAnYueHeroDoing() {
 
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
-    val saman = HeroCreator.saman2.create()
-    val sishen = HeroCreator.sishen2.create()
+    val saman = HeroCreator.saman.create()
+    val sishen = HeroCreator.sishen.create()
     val dijing = HeroCreator.dijing.create()
     val guangqiu = HeroCreator.guangqiu.create()
     val huanqiu = HeroCreator.huanqiu.create()

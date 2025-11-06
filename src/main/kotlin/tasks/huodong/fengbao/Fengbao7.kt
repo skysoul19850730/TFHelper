@@ -5,7 +5,7 @@ import tasks.SimpleHeZuoHeroDoing
 
 class Fengbao7 : SimpleHeZuoHeroDoing() {
 
-    val zhanjiangb = HeroCreator.houzi3.create()
+    val zhanjiangb = HeroCreator.houzi.create()
     val nvwang = HeroCreator.longwang.create()
     val yuren = HeroCreator.gugu.create()
     val daoke = HeroCreator.xiaoye.create()

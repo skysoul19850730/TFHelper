@@ -15,7 +15,7 @@ class SGHero2:BaseSanguoHeroDoing() {
     val shexian = HeroCreator.dapao.create()
 
 
-    val bingqiu = HeroCreator.saman2.create()
+    val bingqiu = HeroCreator.saman.create()
     val houyi = HeroCreator.shenv.create()
 
     override fun initHeroes() {
