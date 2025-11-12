@@ -1190,7 +1190,7 @@ fun test() {
 //    text.log(text)
 //    ExcelUtil().test()
 //        ChuanZhangTest.startChuanZhangOberserver()
-            MRobot.moveFullScreen(MPoint(0,0), MPoint(1000,600))
+            MRobot.moveFullScreen()
 //    setBrightness(50)
 //    HBUtil.test199Bai()
 

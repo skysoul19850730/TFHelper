@@ -39,6 +39,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 GlobalScope.launch {
                     MRobot.moveFullScreen()
                 }
+                return true
             }
 
         }
