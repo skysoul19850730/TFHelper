@@ -19,7 +19,7 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
     val sishen = HeroCreator.sishen2.create()
     val dijing = HeroCreator.dijing.create()
     val huanqiu = HeroCreator.huanqiu.create()
-    val shexian = HeroCreator.shexian.create()
+    val shexian = HeroCreator.feiting.create()
     val yuren = HeroCreator.yuren.create()
     val guangqiu = HeroCreator.guangqiu.create()
 
@@ -103,19 +103,19 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
             carDoing.downHero(tieqi)
         }))
         guanDealList.add(GuanDeal(90, isOver = {
-            fulls(zhanjiang,tieqi, sishen, dijing, yuren, tuling, shexian)
+            fulls(zhanjiang,tieqi, sishen, shuiling, yuren, tuling, shexian)
         }, chooseHero = {
-            upAny(tieqi,dijing)
+            upAny(tieqi,shuiling)
         }, onGuanDealStart = {
-            carDoing.downHero(shuiling)
+            carDoing.downHero(dijing)
         }))
-        guanDealList.add(GuanDeal(99, isOver = {
-            tieqi.isInCar()
-        }, chooseHero = {
-            upAny(tieqi)
-        }, onGuanDealStart = {
-            carDoing.downHero(tieqi)
-        }))
+//        guanDealList.add(GuanDeal(99, isOver = {
+//            tieqi.isInCar()
+//        }, chooseHero = {
+//            upAny(tieqi)
+//        }, onGuanDealStart = {
+//            carDoing.downHero(tieqi)
+//        }))
 
 
 
