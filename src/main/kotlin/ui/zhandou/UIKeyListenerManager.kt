@@ -15,17 +15,17 @@ object UIKeyListenerManager {
     interface UIKeyListener {
         fun onWaitingClick()
 //        fun onMuClick()
-        fun onLongWangZsClick()
-        fun onLongWangFsClick()
+        fun onLongWangZsClick(){}
+        fun onLongWangFsClick(){}
 
-        fun onChuanzhangClick(position:Int)
+        fun onChuanzhangClick(position:Int){}
 
         /**
          * 键3,防止快捷键 失效时，可以点击面板上的按键3.
          */
-        fun onKey3Down()
+        fun onKey3Down(){}
 
-        fun onGuanFix(guan:Int)
+        fun onGuanFix(guan:Int){}
     }
 
     fun onWaitingClick() {
