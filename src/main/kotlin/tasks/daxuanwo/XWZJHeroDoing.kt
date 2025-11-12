@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent
 class XWZJHeroDoing : BaseSimpleXWHeroDoing() {
     val kuangjiang = HeroCreator.kuangjiang.create()
     val tieqi = HeroCreator.tieqi.create()
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiangb.create()
     val shitou = HeroCreator.shitou.create()
     val niutou = HeroCreator.niutou2.create()
     val yuren = HeroCreator.yuren.create()

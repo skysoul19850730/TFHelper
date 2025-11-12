@@ -9,6 +9,7 @@ import logOnly
 import tasks.HeroDoing
 import tasks.IGameLaunch
 import tasks.daxuanwo.XWZJHeroDoing
+import tasks.daxuanwo.XWZJHeroDoingZiQiang
 import tasks.hanbing2.huoling.HBBoHuolingHeroDoing
 import tasks.hanbing2.renwu.HB5LRHeroDoingRW
 import tasks.hanbing2.zhanjiang.*
@@ -77,7 +78,12 @@ class HBZhanNvGameLaunch : IGameLaunch {
 //            App.model_hanbing_5zhan_ziqiang ->HBZhanNvHeroDoingZiQiang5zs()
 //            App.model_hanbing_5zhan_boer ->HBHeroDoingBo5zs()
             App.model_hanbing_5zhan_boer -> HB5ZHeroDoingBo2()
-            App.model_hanbing_huoling_boer -> XWZJHeroDoing()
+            App.model_hanbing_huoling_boer -> HBHuolingHeroDoingBo()
+
+
+
+            App.model_xuanwo_wawangbo -> XWZJHeroDoing()
+            App.model_xuanwo_wawangziqiang -> XWZJHeroDoingZiQiang()
             else ->HBZhanNvHeroDoingRenwu()
         }
         heroDoing?.init()
