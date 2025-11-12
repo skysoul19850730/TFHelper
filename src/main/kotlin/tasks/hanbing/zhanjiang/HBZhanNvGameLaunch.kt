@@ -81,7 +81,7 @@ class HBZhanNvGameLaunch : IGameLaunch {
 
             App.model_xuanwo_wawangbo -> XWZJHeroDoing()
             App.model_xuanwo_wawangziqiang -> XWZJHeroDoingZiQiang()
-            else ->HBZhanNvHeroDoingRenwu()
+            else ->HBZTHeroDoingZiQiang()
         }
         heroDoing?.init()
         heroDoing?.start()

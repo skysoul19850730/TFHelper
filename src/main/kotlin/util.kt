@@ -143,4 +143,9 @@ fun updateDimenValue(originalLine: String, newValue: String): String {
         "$startTag$newValue$unit$endTag"
     }
 }
-
+//675,210,54,30
+fun cropImgs(folder:File,rect: MRect){
+    folder.listFiles().forEachIndexed { index, it ->
+        getImageFromFile(it).getSubImage(rect).saveTo(File(it.parentFile,"${index}.png"))
+    }
+}

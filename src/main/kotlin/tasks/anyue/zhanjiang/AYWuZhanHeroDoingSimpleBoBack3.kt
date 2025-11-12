@@ -14,14 +14,14 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
 
     val shuiling = HeroCreator.shuiling.create()
     val tieqi = HeroCreator.tieqi.create()
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val tuling = HeroCreator.tuling.create()
-    val sishen = HeroCreator.sishen2.create()
+    val sishen = HeroCreator.sishen.create()
     val dijing = HeroCreator.dijing.create()
     val huanqiu = HeroCreator.huanqiu.create()
     val shexian = HeroCreator.feiting.create()
     val kuangjiang = HeroCreator.kuangjiang.create()
-    val houzi3 = HeroCreator.houzi3.create()
+    val houzi3 = HeroCreator.xiaoye.create()
 
     override fun initHeroes() {
         heros = arrayListOf(zhanjiang, tieqi, shuiling, kuangjiang, sishen, shexian, tuling, dijing, houzi3, huanqiu)

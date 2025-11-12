@@ -1181,9 +1181,14 @@ private fun setBrightness(value: Int) {
 fun test() {
 
     GlobalScope.launch {
-        measureTimeMillis {
-testHerosUI()
 
+        measureTimeMillis {
+//testHerosUI()
+//            var subFoler = "${Config.platName}/xuanwo/"
+//            val xw_pangxie = getImageFromRes("${subFoler}xw_pangxie.png")
+//            val xw_shaoyu = getImageFromRes("${subFoler}xw_shaoyu.png")
+//           val a = ImgUtil.isImageSim(xw_shaoyu,xw_pangxie,0.95)
+//            log(a)
 //    val img = getImageFromRes("ttttest22.png")
 //
 //    val text = Tess.getText(img)
@@ -1191,6 +1196,7 @@ testHerosUI()
 //    ExcelUtil().test()
 //        ChuanZhangTest.startChuanZhangOberserver()
             MRobot.moveFullScreen()
+//            cropImgs(File("C:\\Users\\sqc\\Desktop\\新建文件夹 (3)"), MRect.createWH(675,210,54,30))
 //    setBrightness(50)
 //    HBUtil.test199Bai()
 

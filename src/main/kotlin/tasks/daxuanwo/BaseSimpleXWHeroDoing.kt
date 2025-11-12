@@ -5,6 +5,7 @@ import data.HeroBean
 import data.MPoint
 import data.MRect
 import getImage
+import getImageFromRes
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,6 +18,7 @@ import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
 import ui.zhandou.UIKeyListenerManager
 import utils.HBUtil
+import utils.ImgUtil
 import utils.ImgUtil.forEach4Result
 import utils.MRobot
 import java.awt.event.KeyEvent
@@ -50,11 +52,19 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
-        if(guan%10==9){
-            App.startAutoSave(200)
-        }else{
-            App.stopAutoSave()
+
+        if(guan == 9){
+            GlobalScope.launch {
+                delay(1000)
+                MRobot.moveFullScreen()
+            }
         }
+
+//        if(guan%10==9){
+//            App.startAutoSave(200)
+//        }else{
+//            App.stopAutoSave()
+//        }
     }
 
 
@@ -85,5 +95,46 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         super.onStop()
         UIKeyListenerManager.removeKeyListener(this)
         App.stopAutoSave()
+    }
+
+
+    var job29:Job?=null
+    fun start29(){
+        var subFoler = "${Config.platName}/xuanwo/"
+        val daxia = getImageFromRes("${subFoler}xw_daxia.png")
+        val xw_pangxie = getImageFromRes("${subFoler}xw_pangxie.png")
+        val xw_shaoji = getImageFromRes("${subFoler}xw_shaoji.png")
+        val xw_shaoyu = getImageFromRes("${subFoler}xw_shaoyu.png")
+        val xw_zhutou = getImageFromRes("${subFoler}xw_zhutou.png")
+
+        job29?.cancel()
+        job29 = GlobalScope.launch {
+            while(curGuan==29){
+                val img = getImage(MRect.createWH(675,210,54,30))
+                val sim = 0.95
+              val point =   if(ImgUtil.isImageSim(img,daxia,sim)){
+                    MPoint(650,300)
+                }else  if(ImgUtil.isImageSim(img,xw_pangxie,sim)){
+                  MPoint(410,310)
+              }else if(ImgUtil.isImageSim(img,xw_shaoji,sim)){
+                  MPoint(470,410)
+              }else if(ImgUtil.isImageSim(img,xw_shaoyu,sim)){
+                  MPoint(580,410)
+              }else if(ImgUtil.isImageSim(img,xw_zhutou,sim)){
+                  MPoint(530,270)
+              }else{
+                  null
+              }
+                if(point!=null){
+                    point.clickPc()
+                    delay(5000)
+                }else{
+                    delay(100)
+                }
+            }
+        }
+    }
+    fun stop29(){
+        job29?.cancel()
     }
 }

@@ -6,13 +6,13 @@ import java.awt.event.KeyEvent
 
 class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
     val tieqi = HeroCreator.tieqi.create()
-    val zhanjiang = HeroCreator.zhanjiang2.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
     val yuren = HeroCreator.yuren.create()
     val feiting = HeroCreator.feiting.create()
     val gugu = HeroCreator.gugu.create()
 
     val xiaoye = HeroCreator.xiaoye.create()
-    val sishen = HeroCreator.sishen2.create()
+    val sishen = HeroCreator.sishen.create()
 
     val muqiu = HeroCreator.muqiu.create()
     val guangqiu = HeroCreator.guangqiu.create()
@@ -41,6 +41,17 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
             }
         }
 
+        addGuanDeal(29){
+            onlyDo {
+                start29()
+            }
+        }
+
+        addGuanDeal(30){
+            onlyDo { stop29() }
+        }
+
+        curGuanDeal = guanDealList.get(0)
     }
     var g49 = 0
 
