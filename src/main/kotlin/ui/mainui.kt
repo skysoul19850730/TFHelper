@@ -57,6 +57,7 @@ import ui.zhandou.duizhan.DuiZhanModel
 import ui.zhandou.hanbing.HanBingModel
 import ui.zhandou.hezuo.HeZuoModel
 import ui.zhandou.tiankong.TianKongModel
+import ui.zhandou.xuanwo.XuanWoModel
 import zdBasePage
 import java.awt.image.BufferedImage
 
@@ -68,6 +69,7 @@ object MainUIData {
         add(MainMenu(zdModel = HeZuoModel()))
         add(MainMenu(zdModel = HanBingModel()))
         add(MainMenu(zdModel = TianKongModel()))
+        add(MainMenu(zdModel = XuanWoModel()))
         add(MainMenu(zdModel = AnYueModel()))
         add(MainMenu("工具"))
     }
