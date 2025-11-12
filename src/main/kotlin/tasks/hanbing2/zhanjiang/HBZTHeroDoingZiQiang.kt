@@ -19,7 +19,7 @@ class HBZTHeroDoingZiQiang : BaseSimpleHBHeroDoing() {
     val wangjiang = HeroCreator.wangjiang.create()
     val sishen = HeroCreator.sishen.create()
     val yuren = HeroCreator.yuren.create()
-    val baoku = HeroCreator.baoku.create()
+    val baoku = HeroCreator.feiting.create()
     val tianshi = HeroCreator.tianshi.create()
 
     val huanqiu = HeroCreator.huanqiu.create()

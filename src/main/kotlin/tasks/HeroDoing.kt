@@ -799,7 +799,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     }
 
     open suspend fun isKeyDownNeed(code: Int): Boolean {
-        return false
+        return true
     }
 
     val doubleClickDelay = 200L

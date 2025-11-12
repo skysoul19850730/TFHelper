@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.toPainter
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.isPrimaryPressed
@@ -734,6 +735,12 @@ private fun customScreenDialog(window: ComposeWindow, customScreen: MutableState
                     }
                 }.onPointerEvent(PointerEventType.Move) {
                     movePoint.value = it.awtEvent.point!!
+                    try {
+                        img.setRGB(movePoint.value!!.x, movePoint.value!!.y, Color.Red.toArgb())
+                    }catch (e:Exception){
+
+                    }
+
 //                    text = "x:${curPoint.value.x} y:${curPoint.value.y}"
                 }, alignment = Alignment.TopStart
             )
@@ -1183,7 +1190,7 @@ testHerosUI()
 //    text.log(text)
 //    ExcelUtil().test()
 //        ChuanZhangTest.startChuanZhangOberserver()
-//            freshHeros()
+            MRobot.moveFullScreen()
 //    setBrightness(50)
 //    HBUtil.test199Bai()
 

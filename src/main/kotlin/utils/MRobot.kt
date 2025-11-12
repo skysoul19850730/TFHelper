@@ -68,6 +68,40 @@ object MRobot {
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK)
     }
 
+    suspend fun moveFullScreen() {
+        // 移动到起始点
+        robot.mouseMove(10, 100)
+        delay(50) // 稍微延迟确保移动到位
+
+        // 按下鼠标左键
+        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK)
+        delay(50)
+
+        // 计算步长，使移动更平滑
+        val steps = 10
+//        val deltaX = (endPoint.x - startPoint.x).toFloat() / steps
+//        val deltaY = (endPoint.y - startPoint.y).toFloat() / steps
+//
+//        // 在两点之间逐步移动
+//        for (i in 1..steps) {
+//            val newX = startPoint.x + (deltaX * i).toInt()
+//            val newY = startPoint.y + (deltaY * i).toInt()
+//            robot.mouseMove(newX, newY)
+//            delay(10) // 控制移动速度
+//        }
+        for(y in 100..600 step 10){
+            for(x in 10..990 step 10){
+                robot.mouseMove(x,y)
+            }
+            delay(10)
+        }
+
+
+        // 释放鼠标按键
+        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK)
+    }
+
+
     suspend fun singleClickPc(point: MPoint, window: WinDef.HWND? = App.tfWindow) {
         if (houtai && window != null && window != WxUtil.wxWindow) {
             if(Config.platform.value == Config.platform_moniqi){
