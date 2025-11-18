@@ -4,7 +4,7 @@ import data.HeroCreator
 import kotlinx.coroutines.delay
 import java.awt.event.KeyEvent
 
-class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
+class XWZJHeroDoingDairen : BaseSimpleXWHeroDoing() {
     val tieqi = HeroCreator.tieqi.create()
     val zhanjiang = HeroCreator.zhanjiang.create()
     val yuren = HeroCreator.yuren.create()

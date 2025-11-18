@@ -25,8 +25,10 @@ import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
 import java.io.File
 
+// 9  29 都自动执行
 abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {
 
+    var heroDown49:HeroBean?=null
 
     override suspend fun onKeyDown(code: Int): Boolean {
         //如果龙王识别出错可以按快捷下对应卡牌，但不知道快捷键按下得时间，所以不能延时进行上卡，只能快捷键9来恢复上卡
@@ -43,11 +45,53 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 }
                 return true
             }
+            if(curGuan==49){
+                g49 = 1
+                return true
+            }
 
         }
         return false
 
 
+    }
+
+    var g49 = 0
+    fun add49(heroBean: HeroBean){
+        heroDown49 = heroBean
+
+        addGuanDeal(48){
+            over {
+                heroDown49!!.isInCar()
+            }
+            chooseHero {
+                upAny(heroDown49!!)
+            }
+            onStart {
+                carDoing.downHero(heroDown49!!)
+            }
+        }
+
+        addGuanDeal(49){
+            over {
+                curGuan>49
+            }
+            chooseHero {
+                val index = indexOf(heroDown49)
+                if(index>-1){
+                    while(g49 == 0){
+                        delay(100)
+                    }
+                    carDoing.downHero(heroDown49!!)
+                    g49 = 0
+                    delay(300)
+                    index
+                }else{
+                    -1
+                }
+            }
+            des = "需要切的时候按0，会自动下卡再上卡"
+        }
     }
 
     override fun onGuanChange(guan: Int) {
@@ -58,6 +102,11 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 delay(1000)
                 MRobot.moveFullScreen()
             }
+        }
+        if(guan == 29){
+            start29()
+        }else{
+            stop29()
         }
 
 //        if(guan%10==9){

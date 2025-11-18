@@ -76,7 +76,6 @@ class XWZJHeroDoing : BaseSimpleXWHeroDoing() {
         }
         curGuanDeal = guanDealList.get(0)
     }
-    var g49 = 0
 
     override suspend fun onKeyDown(code: Int): Boolean {
 
