@@ -73,33 +73,31 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
         }, chooseHero = {
             upAny(zhanjiang, sishen, tieqi, shuiling, yuren, tuling, shexian, zhuangbei = { longxin })
         }))
-        guanDealList.add(GuanDeal(70, isOver = {
-            fulls(zhanjiang,tieqi, sishen, dijing, yuren, tuling, shexian)
-        }, chooseHero = {
-            upAny(tieqi,dijing)
-        }, onGuanDealStart = {
-            carDoing.downHero(shuiling)
-        }))
+//        guanDealList.add(GuanDeal(70, isOver = {
+//            fulls(zhanjiang,tieqi, sishen, dijing, yuren, tuling, shexian)
+//        }, chooseHero = {
+//            upAny(tieqi,dijing)
+//        }, onGuanDealStart = {
+//            carDoing.downHero(shuiling)
+//        }))
         guanDealList.add(GuanDeal(79, isOver = {
-            tieqi.isInCar()
+            tuling.isInCar()
         }, chooseHero = {
-            upAny(tieqi)
+            upAny(tuling)
         }, onGuanDealStart = {
-            carDoing.downHero(tieqi)
+            carDoing.downHero(tuling)
         }))
         guanDealList.add(GuanDeal(80, isOver = {
-            fulls(zhanjiang,tieqi, sishen, dijing, yuren, tuling, shexian)
+            fulls(tuling)
         }, chooseHero = {
-            upAny(tieqi,dijing)
-        }, onGuanDealStart = {
-            carDoing.downHero(shuiling)
+            upAny(tuling)
         }))
         guanDealList.add(GuanDeal(89, isOver = {
-            tieqi.isInCar()
+            tuling.isInCar()
         }, chooseHero = {
-            upAny(tieqi)
+            upAny(tuling)
         }, onGuanDealStart = {
-            carDoing.downHero(tieqi)
+            carDoing.downHero(tuling)
         }))
         guanDealList.add(GuanDeal(90, isOver = {
             fulls(zhanjiang,tieqi, sishen, shuiling, yuren, tuling, shexian)
@@ -231,7 +229,7 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
                 g129XueCount = 0
                 g129State = if (g129State == 0) 1 else 0
             }
-            delay(2000)
+            delay(1500)
         }
 
     }
