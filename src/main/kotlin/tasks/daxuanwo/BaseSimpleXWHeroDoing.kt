@@ -51,6 +51,12 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             }
 
         }
+        if(code == KeyEvent.VK_NUMPAD3){
+            if(curGuan == 49){
+                g49 = 2
+                return true
+            }
+        }
         return false
 
 
@@ -74,7 +80,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
         addGuanDeal(49){
             over {
-                curGuan>49
+                curGuan>49 || (g49==2 && heroDown49!!.isFull())
             }
             chooseHero {
                 val index = indexOf(heroDown49)
@@ -82,15 +88,17 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     while(g49 == 0){
                         delay(100)
                     }
-                    carDoing.downHero(heroDown49!!)
-                    g49 = 0
-                    delay(300)
+                    if(g49!=2) {
+                        carDoing.downHero(heroDown49!!)
+                        g49 = 0
+                        delay(300)
+                    }
                     index
                 }else{
                     -1
                 }
             }
-            des = "需要切的时候按0，会自动下卡再上卡"
+            des = "需要切的时候按0，会自动下卡再上卡，收集完成后按3，切换的卡会上满"
         }
     }
 

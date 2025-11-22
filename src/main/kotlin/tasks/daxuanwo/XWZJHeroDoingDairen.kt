@@ -41,28 +41,8 @@ class XWZJHeroDoingDairen : BaseSimpleXWHeroDoing() {
             }
         }
 
-        addGuanDeal(29){
-            onlyDo {
-                start29()
-            }
-        }
-
-        addGuanDeal(30){
-            onlyDo { stop29() }
-        }
-
+        add49(sishen)
         curGuanDeal = guanDealList.get(0)
     }
 
-    override suspend fun onKeyDown(code: Int): Boolean {
-
-        if(code == KeyEvent.VK_NUMPAD0){
-            if(curGuan==49){
-                g49 = 1
-                return true
-            }
-        }
-
-        return super.onKeyDown(code)
-    }
 }
