@@ -7,32 +7,42 @@ import tasks.Zhuangbei
 import tasks.hanbing2.BaseSimpleHBHeroDoing
 import java.awt.event.KeyEvent
 
-class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
+class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
 
 
-    val niutou2 = HeroCreator.niutou.create()
+    val niutou = HeroCreator.niutou.create()
     val tieqi = HeroCreator.tieqi.create()
     val tianshi = HeroCreator.tianshi.create()
-    val xiaoye = HeroCreator.xiaoye.create()
-    val sishen = HeroCreator.sishen.create()
-    val wangjiang2 = HeroCreator.dianfa.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
+    val dianfa = HeroCreator.dianfa.create()
+    val jiaonv = HeroCreator.jiaonv.create()
+
+    val feiting = HeroCreator.feiting.create()
+
+    val wangjiang = HeroCreator.wangjiang.create()
     val huanqiu = HeroCreator.huanqiu.create()
-    val muqiu = HeroCreator.dijing.create()
-    val baoku = HeroCreator.feiting.create()
     val guangqiu = HeroCreator.guangqiu.create()
 
     override fun initHeroes() {
         super.initHeroes()
-        heros = arrayListOf(niutou2, tieqi, tianshi, xiaoye, sishen, wangjiang2, huanqiu, muqiu, baoku, guangqiu)
+        heros = arrayListOf(niutou, tieqi, tianshi, zhanjiang, dianfa, wangjiang, huanqiu, jiaonv, feiting, guangqiu)
 
         guanDealList.add(GuanDeal(0, isOver = {
-            fullBase() && longxin
+            fulls(zhanjiang, niutou, jiaonv, feiting)
         }, chooseHero = {
-            upBase(zhuangbei = { longxin })
+            if (zhanjiang.isInCar()) {
+                upAny(zhanjiang, niutou, jiaonv, feiting)
+            } else upAny(zhanjiang)
         }))
 
+        addGuanDeal(25) {
+            over { fulls(zhanjiang, niutou, jiaonv, feiting, tieqi, dianfa, wangjiang) && longxin }
+            chooseHero {
+                upAny(zhanjiang, niutou, jiaonv, feiting, tieqi, dianfa, wangjiang, zhuangbei = {longxin})
+            }
+        }
 
-        guanDealList.add(GuanDeal(100, isOver = {
+        guanDealList.add(GuanDeal(95, isOver = {
             fullBase() && yandou
         }, chooseHero = {
             upBase(zhuangbei = { yandou })
@@ -64,7 +74,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
 
         guanDealList.add(
             GuanDeal(129, onlyDoSomething = {
-                startChuanZhangOberserver()
+                startChuanZhangOberserver2()
             })
         )
         guanDealList.add(GuanDeal(130, isOver = {
@@ -73,23 +83,47 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
             upBase { yandou }
         }, onGuanDealStart = { stopChuanZhangOberserver() }))
 
-        addGuanDeal(159){
+        addGuanDeal(133){
             over {
-                currentGuan() > 159 ||
-                        (if(needZhuangbei == Zhuangbei.QIANGXI) qiangxi  else true)
+                wangjiang.isInCar()
+            }
+            chooseHero {
+                carDoing.downHero(tianshi)
+                upAny(wangjiang)
+            }
+        }
+
+        addGuanDeal(140){
+            over {
+                fullBase()
+            }
+            chooseHero{
+                carDoing.downHero(wangjiang)
+                upBase()
+            }
+        }
+
+        changeZhuangbei(150){qiangxi}
+
+        addGuanDeal(159) {
+            over {
+                curGuan > 159
             }
 
             chooseHero {
-                while(needZhuangbei != Zhuangbei.QIANGXI && curGuan<160) {
+                while (needZhuangbei == Zhuangbei.curZhuangBei && curGuan < 160) {
                     delay(100)
                 }
-                if(curGuan<160) {
-                    zhuangbei { qiangxi }
-                }else -1
+                if (curGuan < 160) {
+                    zhuangbei { yandou }
+                } else -1
             }
 
-            onlyDo {
-                startChuanZhangOberserver2()
+            onStart {
+                startXiongMaoOberser()
+            }
+            onEnd {
+                xiongmaoOberserver = false
             }
         }
 
@@ -99,7 +133,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
 
 
         guanDealList.add(
-            GuanDeal(189, isOver = { currentGuan() > 189 },
+            GuanDeal(189, isOver = { curGuan > 189 },
                 chooseHero = {
                     delay(500)
                     val ind = upBase()
@@ -125,11 +159,22 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
             needReCheckStar = true
         }))
 
+        addGuanDeal(195){
+            over {
+                tianshi.currentLevel == 3
+            }
+            chooseHero {
+                if(tianshi.isFull()){
+                    carDoing.downHero(tianshi)
+                }
+                upAny(tianshi)
+            }
+        }
 
         guanDealList.add(GuanDeal(
             199,
             isOver = {
-                currentGuan() > 200
+                curGuan > 200
             },
             chooseHero = {
                 deal199(this)
@@ -140,7 +185,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
                         "如果不小心按3进了打白球的话，就再按3进点名补满卡即可，更新后，这里只需要白球后点一次3进点名就可以了，不会出第二个白球了，直接进入崩坏"
         })
 
-        addGuan210( arrayListOf(niutou2, sishen, tieqi, xiaoye, tianshi, wangjiang2))
+        addGuan210(arrayListOf( jiaonv, tieqi, zhanjiang,niutou, tianshi, dianfa))
 
         curGuanDeal = guanDealList.first()
     }
@@ -155,13 +200,14 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
         }
     }
 
-    private var step199 = 2  // 1打白球阶段， 2点名阶段，
+    private var step199 = 1  // 1打白球阶段， 2点名阶段，
     private var count199 = 0
 
     private suspend fun deal199(heros: List<HeroBean?>): Int {
-        while (step199 == 0 && currentGuan() < 200) {
+        while (step199 == 0 && curGuan < 200) {
             delay(200)
         }
+
 
         var dianmingIndex = carDoing.getHB199Selected()
         if (position199 > -1 || dianmingIndex > -1) {
@@ -173,7 +219,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
         if (carDoing.hasAllOpenSpace() || carDoing.hasNotFull()) {
             return heros.upBase()
         } else {
-            while (step199 == 2 && currentGuan() < 200) {
+            while (step199 == 2 && curGuan < 200) {
                 var dianmingIndex = carDoing.getHB199Selected()
                 if (position199 > -1 || dianmingIndex > -1) {
                     carDoing.downPosition(position199)
@@ -191,15 +237,7 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
         return -1
     }
 
-
-    var zs99Clicked = 0
     override suspend fun onKeyDown(code: Int): Boolean {
-        if (guankaTask?.currentGuanIndex == 98 || guankaTask?.currentGuanIndex == 99) {
-            if (code == KeyEvent.VK_NUMPAD3) {
-                zs99Clicked = 1
-                return true
-            }
-        }
         if (code == KeyEvent.VK_NUMPAD3) {//9强制改变waitting，防止waiting有逻辑错误不上卡
             if (guankaTask?.currentGuanIndex == 199 || guankaTask?.currentGuanIndex == 198) {
 
@@ -215,17 +253,12 @@ class HB5ZHeroDoingBo2 : BaseSimpleHBHeroDoing() {
     }
 
 
-    private fun currentGuan(): Int {
-        return guankaTask?.currentGuanIndex ?: 0
-    }
-
-
     fun fullBase(): Boolean {
-        return fulls(niutou2, tieqi, tianshi, wangjiang2, sishen, xiaoye, baoku)
+        return fulls(niutou, tieqi, tianshi, jiaonv, dianfa, zhanjiang, feiting)
     }
 
     fun List<HeroBean?>.upBase(zhuangbei: (() -> Boolean)? = null): Int {
-        return upAny(niutou2, tieqi, tianshi, sishen, wangjiang2, xiaoye, baoku, zhuangbei = zhuangbei)
+        return upAny(niutou, tieqi, tianshi, dianfa, jiaonv, zhanjiang, feiting, zhuangbei = zhuangbei)
     }
 
     private suspend fun checkHeroStarAndFull(heros: List<HeroBean?>, over: () -> Boolean): Int {

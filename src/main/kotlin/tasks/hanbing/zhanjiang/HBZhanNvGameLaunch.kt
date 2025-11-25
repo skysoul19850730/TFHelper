@@ -71,13 +71,14 @@ class HBZhanNvGameLaunch : IGameLaunch {
         heroDoing =when(App.mLaunchModel){
 //            App.model_hanbing_zhannv4 ->HBZhanNvHeroDoingZiQiang3()
 //            App.model_hanbing_5zhan_ziqiang ->HB5ZGGHeroDoingZiQiang()
-            App.model_hanbing_5zhan_ziqiang -> HBZTHeroDoingZiQiang()
+//            App.model_hanbing_5zhan_ziqiang -> HBZTHeroDoingZiQiang()
+            App.model_hanbing_5zhan_ziqiang -> HBZTHeroDoingZiQiang2()
 //            App.model_hanbing_5zhan_ziqiang_fuka -> HB5ZGGHeroDoingZiQiangFuka()
             App.model_hanbing_5zhan_ziqiang_fuka -> HBZTHeroDoingZiQiangFuka()
 //            App.model_hanbing_5zhan_ziqiang_fuka -> HBZTHeroDoingZiQiang()
 //            App.model_hanbing_5zhan_ziqiang ->HBZhanNvHeroDoingZiQiang5zs()
 //            App.model_hanbing_5zhan_boer ->HBHeroDoingBo5zs()
-            App.model_hanbing_5zhan_boer -> HB5ZHeroDoingBo2()
+            App.model_hanbing_5zhan_boer -> HB5ZHeroDoingBo3()
             App.model_hanbing_huoling_boer -> HBBoHuolingHeroDoing()
 
             App.model_xuanwo_wawangbo -> XWZJHeroDoingDairen()
