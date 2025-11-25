@@ -29,6 +29,9 @@ import java.io.File
 abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {
 
     var heroDown49:HeroBean?=null
+    var midHeros69:List<HeroBean>? = null
+
+    var auto59 = true
 
     override suspend fun onKeyDown(code: Int): Boolean {
         //如果龙王识别出错可以按快捷下对应卡牌，但不知道快捷键按下得时间，所以不能延时进行上卡，只能快捷键9来恢复上卡
@@ -62,6 +65,69 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
     }
 
+
+    fun add50(fullsHeros:List<HeroBean>, midHeros:List<HeroBean>){
+        midHeros69 = midHeros
+        addGuanDeal(50){
+            over {
+                fulls(*fullsHeros.toTypedArray())
+            }
+            chooseHero{
+                val otherHeros = fullsHeros.filter { !midHeros.contains(it)}
+                if(!carDoing.carps.get(0).hasHero() || !carDoing.carps.get(1).hasHero()){
+                    //如果01位置空着，就上其他的
+                    upAny(*otherHeros.toTypedArray())
+                }else if(!carDoing.carps.get(2).hasHero() || !carDoing.carps.get(3).hasHero()){
+                    //如果01都上好后，2，3有空的，则上mids
+                   var index = upAny(*midHeros.toTypedArray())
+                    if(index>-1){
+                        index
+                    }else{
+                        //如果没有mids预选，可以上 0，1位置的英雄
+                        val list = carDoing.carps.take(2).map {
+                            it.mHeroBean!!
+                        }
+                        upAny(*list.toTypedArray())
+                    }
+                }else{
+                    //如果0123都不空了，就开始全部上满
+                    upAny(*fullsHeros.toTypedArray())
+                }
+            }
+
+            onStart {
+
+                //如果不在fulls里，就下掉
+                carDoing.carps.forEach {
+                    if(it.mHeroBean!=null && !fullsHeros.contains(it.mHeroBean)){
+                        carDoing.downHero(it.mHeroBean!!)
+                    }
+                }
+
+                //如果要摆中间的两个 不在中间，就下掉要重上
+                midHeros.forEach {
+                    if(it.position!=2 && it.position!=3){
+                        carDoing.downHero(it)
+                    }
+                }
+
+                //看中间的两个是不是要摆放的，不是的话，要下掉
+                var hero2 = carDoing.carps.get(2).mHeroBean
+                if(hero2!=null && !midHeros.contains(hero2)){
+                    carDoing.downPosition(2)
+                }
+                hero2 = carDoing.carps.get(3).mHeroBean
+                if(hero2!=null && !midHeros.contains(hero2)){
+                    carDoing.downPosition(3)
+                }
+
+
+
+            }
+
+        }
+    }
+
     var g49 = 0
     fun add49(heroBean: HeroBean){
         heroDown49 = heroBean
@@ -80,25 +146,67 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
         addGuanDeal(49){
             over {
-                curGuan>49 || (g49==2 && heroDown49!!.isFull())
+                curGuan>49 || (g49==2 && heroDown49!!.isFull() && g49StartBoss == null)
             }
             chooseHero {
-                val index = indexOf(heroDown49)
-                if(index>-1){
-                    while(g49 == 0){
-                        delay(100)
+                if(heroDown49!!.isFull() && g49StartBoss!=null){
+                    g49 =3
+                }
+
+                if(g49 == 3){
+                      g49StartBoss?.invoke(this)?:-1
+                }else {
+
+                    val index = indexOf(heroDown49)
+                    if (index > -1) {
+                        while (g49 == 0) {
+                            delay(100)
+                        }
+                        if (g49 != 2) {
+                            carDoing.downHero(heroDown49!!)
+                            g49 = 0
+                            delay(100)
+                        }
+                        index
+                    } else {
+                        -1
                     }
-                    if(g49!=2) {
-                        carDoing.downHero(heroDown49!!)
-                        g49 = 0
-                        delay(300)
-                    }
-                    index
-                }else{
-                    -1
                 }
             }
             des = "需要切的时候按0，会自动下卡再上卡，收集完成后按3，切换的卡会上满"
+        }
+    }
+
+    var g49StartBoss : (suspend (List<HeroBean?>)->Int)?=null
+
+
+    var g69State = 0 //0:全上，1 下中间俩
+    fun add69(){
+        addGuanDeal(69){
+            over {
+                curGuan>69
+            }
+
+            chooseHero {
+                if(g69State==0){
+                    if(midHeros69?.all { it.isFull() }==true){
+                        while(g69State == 0){
+                            delay(200)
+                        }
+                    }else{
+                        upAny(*midHeros69!!.toTypedArray())
+                    }
+                }
+                if(g69State == 1){
+                    midHeros69?.forEach {
+                        carDoing.downHero(it)
+                    }
+                    while(g69State == 1){
+                        delay(100)
+                    }
+                }
+                -1
+            }
         }
     }
 
@@ -117,6 +225,13 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             stop29()
         }
 
+        if(auto59){
+            if(guan == 59){
+                start59()
+            }else {
+                stop59()
+            }
+        }
 
 
         if(guan in listOf(49)){
@@ -195,5 +310,12 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     }
     fun stop29(){
         job29?.cancel()
+    }
+
+    fun start59(){
+
+    }
+    fun stop59(){
+
     }
 }
