@@ -77,7 +77,7 @@ class HBZhanNvGameLaunch : IGameLaunch {
 //            App.model_hanbing_5zhan_ziqiang_fuka -> HBZTHeroDoingZiQiang()
 //            App.model_hanbing_5zhan_ziqiang ->HBZhanNvHeroDoingZiQiang5zs()
 //            App.model_hanbing_5zhan_boer ->HBHeroDoingBo5zs()
-            App.model_hanbing_5zhan_boer -> HB5ZHeroDoingBo2()
+            App.model_hanbing_5zhan_boer -> HB5ZHeroDoingBo3()
             App.model_hanbing_huoling_boer -> HBBoHuolingHeroDoing()
 
             App.model_xuanwo_wawangbo -> XWZJHeroDoing()
