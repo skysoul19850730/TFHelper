@@ -117,11 +117,13 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             stop29()
         }
 
-//        if(guan%10==9){
-//            App.startAutoSave(200)
-//        }else{
-//            App.stopAutoSave()
-//        }
+
+
+        if(guan in listOf(49)){
+            App.startAutoSave(200)
+        }else{
+            App.stopAutoSave()
+        }
     }
 
 
