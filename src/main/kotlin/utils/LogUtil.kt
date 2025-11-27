@@ -64,6 +64,12 @@ object LogUtil {
         if (App.mLaunchModel and App.model_hanbing != 0) {
             return "hanbing"
         }
+        if (App.mLaunchModel and App.model_anyue != 0) {
+            return "anyue"
+        }
+        if (App.mLaunchModel and App.model_xuanwo != 0) {
+            return "xuanwo"
+        }
         return "others"
     }
 

@@ -131,6 +131,27 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
         })
     }
 
+    fun addGuanDealWithHerosFull(guan:Int,fullHeros:List<HeroBean>, downHeros:List<HeroBean>?=null,zhuangbei: (() -> Boolean)? = null,delay:Long = 0L){
+        addGuanDeal(guan){
+            over {
+                fulls(*fullHeros.toTypedArray()) && zhuangbei?.invoke()?:true
+            }
+            chooseHero {
+                upAny(*fullHeros.toTypedArray(),zhuangbei=zhuangbei)
+            }
+            onStart {
+                downHeros?.forEach {
+                    carDoing.downHero(it)
+                }
+                if(delay>0){
+                    delay(delay)
+                }
+            }
+        }
+    }
+
+
+
     var curGuanDeal: GuanDeal? = null
 
     private fun changeGuanKa(guan: Int, changeTo: GuanDeal) {

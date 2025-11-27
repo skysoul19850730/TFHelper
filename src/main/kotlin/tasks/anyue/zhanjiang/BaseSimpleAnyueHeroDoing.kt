@@ -312,7 +312,7 @@ abstract class BaseSimpleAnYueHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListene
             if (carDoing.hasNotFull() || carDoing.hasOpenSpace()) {
                 return defaultDealHero(heros, heros39Up4)
             } else {//都满了就等点名（第一次也走这里，因为status39默认赋值为2）
-                while (status39 != 1 && (guankaTask?.currentGuanIndex ?: 0) < 40) {
+                while (status39 != 1 && curGuan < 40) {
                     delay(100)
                     freshStatus39()
                 }
@@ -327,7 +327,7 @@ abstract class BaseSimpleAnYueHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListene
                 }.map { it.mHeroBean!! })
                 return defaultDealHero(heros, listtt)
             } else {//如果车上都满了，监听掉血,过程中也在继续监听下卡，监听到就下，反正多下了，也比少下了强
-                while (status39 != 2 && (guankaTask?.currentGuanIndex ?: 0) < 40) {
+                while (status39 != 2 && curGuan < 40) {
                     delay(100)
                     freshStatus39()
                 }

@@ -13,7 +13,7 @@ import utils.HBUtil
 
 class HBZTHeroDoingZiQiangFuka : BaseSimpleHBHeroDoing() {
 
-    val isRenwu = false
+    val isRenwu = true
 
     //bingnv,xiaoye,shengqi,shexian,bingqiu,zhanjiang,nvyao,niutou,kuangjiang,guangqiu
     val dianfa = HeroCreator.dianfa.create().apply {

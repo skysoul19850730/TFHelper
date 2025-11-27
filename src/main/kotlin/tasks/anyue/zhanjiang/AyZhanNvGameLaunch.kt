@@ -5,6 +5,7 @@ import App.model_anyue_bo
 import data.Config
 import data.Config.delayLong
 import data.Recognize
+import getImage
 import kotlinx.coroutines.*
 import log
 import logOnly
@@ -70,6 +71,7 @@ class AyZhanNvGameLaunch : IGameLaunch {
         logOnly("checkIfEnd")
         if (Recognize.BtnOk.isFit()) {
             log("checkIfEnd ok")
+            log(getImage(App.rectWindow))
             stopOneGame()
             delay(100)
             Recognize.BtnOk.click()

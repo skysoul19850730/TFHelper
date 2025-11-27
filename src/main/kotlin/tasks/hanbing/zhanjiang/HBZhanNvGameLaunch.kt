@@ -3,6 +3,7 @@ package tasks.hanbing.zhanjiang
 import data.Config
 import data.Config.delayLong
 import data.Recognize
+import getImage
 import kotlinx.coroutines.*
 import log
 import logOnly
@@ -92,8 +93,8 @@ class HBZhanNvGameLaunch : IGameLaunch {
         logOnly("checkIfEnd")
         if (Recognize.BtnOk.isFit()) {
             log("checkIfEnd ok")
+            log(getImage(App.rectWindow))
             stopOneGame()
-            App.save()
             delay(100)
             Recognize.BtnOk.click()
             delay(delayLong)
