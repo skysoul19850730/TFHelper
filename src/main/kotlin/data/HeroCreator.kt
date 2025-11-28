@@ -33,7 +33,7 @@ object HeroCreator{
     val guangqiu = HeroBuilder("guangqiu", needCar = false)
     val gugong = HeroBuilder("gugong")
     val gugu = HeroBuilder("gugu")
-    val haiyao = HeroBuilder("haiyao")
+    val haiyao = HeroBuilder("haiyao", isMohua = true)
     val houyi = HeroBuilder("houyi")
     val houzi = HeroBuilder("houzi")
     val huanqiu = HeroBuilder("huanqiu", needCar = false)

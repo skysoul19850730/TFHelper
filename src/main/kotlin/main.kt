@@ -52,6 +52,8 @@ import ui.MainUIData
 import ui.launcher
 import ui.weights.MCheckBox
 import tasks.xiaka.XiaKaUtil
+import tesshelper.Tess
+import test.Utils
 import test.WindowTest
 import ui.weights.MRadioBUtton
 import utils.*
@@ -1196,12 +1198,14 @@ fun test() {
 //    ExcelUtil().test()
 //        ChuanZhangTest.startChuanZhangOberserver()
             MRobot.moveFullScreen()
+//         val tt =   Tess.getText(Utils.getWindowFolderImg("12_33_43_618.png").getSubImage(MRect.createWH(620,200,80,40)))
+//            log(tt)
 //            cropImgs(File("C:\\Users\\sqc\\Desktop\\新建文件夹 (3)"), MRect.createWH(675,210,54,30))
 //    setBrightness(50)
 //    HBUtil.test199Bai()
 
 //    val img = getImageFromRes("1753245924065.png")
-
+//620，200，80，40
 
 //    GlobalScope.launch {
 ////        var img = WindowTest.getLongPic()

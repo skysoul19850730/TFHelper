@@ -80,32 +80,32 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
 //        }, onGuanDealStart = {
 //            carDoing.downHero(shuiling)
 //        }))
-        guanDealList.add(GuanDeal(79, isOver = {
-            tuling.isInCar()
-        }, chooseHero = {
-            upAny(tuling)
-        }, onGuanDealStart = {
-            carDoing.downHero(tuling)
-        }))
-        guanDealList.add(GuanDeal(80, isOver = {
-            fulls(tuling)
-        }, chooseHero = {
-            upAny(tuling)
-        }))
-        guanDealList.add(GuanDeal(89, isOver = {
-            tuling.isInCar()
-        }, chooseHero = {
-            upAny(tuling)
-        }, onGuanDealStart = {
-            carDoing.downHero(tuling)
-        }))
-        guanDealList.add(GuanDeal(90, isOver = {
-            fulls(zhanjiang,tieqi, sishen, shuiling, yuren, tuling, shexian)
-        }, chooseHero = {
-            upAny(tieqi,shuiling)
-        }, onGuanDealStart = {
-            carDoing.downHero(dijing)
-        }))
+//        guanDealList.add(GuanDeal(79, isOver = {
+//            tuling.isInCar()
+//        }, chooseHero = {
+//            upAny(tuling)
+//        }, onGuanDealStart = {
+//            carDoing.downHero(tuling)
+//        }))
+//        guanDealList.add(GuanDeal(80, isOver = {
+//            fulls(tuling)
+//        }, chooseHero = {
+//            upAny(tuling)
+//        }))
+//        guanDealList.add(GuanDeal(89, isOver = {
+//            tuling.isInCar()
+//        }, chooseHero = {
+//            upAny(tuling)
+//        }, onGuanDealStart = {
+//            carDoing.downHero(tuling)
+//        }))
+//        guanDealList.add(GuanDeal(90, isOver = {
+//            fulls(zhanjiang,tieqi, sishen, shuiling, yuren, tuling, shexian)
+//        }, chooseHero = {
+//            upAny(tieqi,shuiling)
+//        }, onGuanDealStart = {
+//            carDoing.downHero(dijing)
+//        }))
 //        guanDealList.add(GuanDeal(99, isOver = {
 //            tieqi.isInCar()
 //        }, chooseHero = {
@@ -225,7 +225,7 @@ class AYWuZhanHeroDoingSimpleBoBack2 : BaseSimpleAnYueHeroDoing() {
             XueLiang.observerXueDown(xueRate = 0.1f, over = { curGuan > 129 })
             g129XueCount++
             if (g129XueCount == 2) {
-                delay(1500)
+                delay(500)
                 g129XueCount = 0
                 g129State = if (g129State == 0) 1 else 0
             }
