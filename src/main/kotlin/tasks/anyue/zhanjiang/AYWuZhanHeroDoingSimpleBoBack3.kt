@@ -1,6 +1,5 @@
 package tasks.anyue.zhanjiang
 
-import MainData
 import data.HeroBean
 import data.HeroCreator
 import kotlinx.coroutines.GlobalScope
@@ -12,134 +11,78 @@ import kotlin.math.abs
 
 class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
 
-    val shuiling = HeroCreator.shuiling.create()
     val tieqi = HeroCreator.tieqi.create()
     val zhanjiang = HeroCreator.zhanjiang.create()
     val tuling = HeroCreator.tuling.create()
     val sishen = HeroCreator.sishen.create()
-    val dijing = HeroCreator.dijing.create()
+    val feiting = HeroCreator.feiting.create()
+    val tianshi = HeroCreator.tianshi.create()
+    val guangqiu = HeroCreator.guangqiu.create()
+    val niutou = HeroCreator.niutou.create()
     val huanqiu = HeroCreator.huanqiu.create()
-    val shexian = HeroCreator.feiting.create()
-    val kuangjiang = HeroCreator.kuangjiang.create()
-    val houzi3 = HeroCreator.xiaoye.create()
+    val jiaonv = HeroCreator.jiaonv.create()
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, tieqi, shuiling, kuangjiang, sishen, shexian, tuling, dijing, houzi3, huanqiu)
-        heros39Up4 = arrayListOf(sishen, shuiling, kuangjiang, tuling)
+        heros = arrayListOf(zhanjiang, tieqi, tianshi, jiaonv, sishen, feiting, tuling, niutou, guangqiu, huanqiu)
 
-        guanDealList.add(GuanDeal(0, isOver = {
-            zhanjiang.isGold()
-        }, chooseHero = {
-            upAny(zhanjiang)
-        }))
-//        guanDealList.add(GuanDeal(19, isOver = { false }, chooseHero = {
-//            deal19(this)
-//        }, onGuanDealStart = {
-//            start19Oberserver(true)
-//        }))
-        guanDealList.add(GuanDeal(9, isOver = {
-            fulls(zhanjiang, tieqi, dijing, shuiling, tuling, shexian, kuangjiang) && yandou
-        }, chooseHero = {
-            if (!tieqi.isInCar()) {
-                this.indexOf(tieqi)
-            } else {
-                upAny(zhanjiang, shexian, dijing, tieqi, shuiling, tuling, kuangjiang, zhuangbei = { yandou })
+        addGuanDeal(0) {
+            over {
+                fulls(zhanjiang, sishen, jiaonv, niutou, feiting)
             }
-        }))
+            chooseHero {
+                if (zhanjiang.isInCar()) {
+                    upAny(zhanjiang, jiaonv, niutou, sishen, feiting)
+                } else {
+                    upAny(zhanjiang)
+                }
+            }
+        }
 
+        addGuanDealWithHerosFull(25, listOf(tieqi))
 
-        guanDealList.add(GuanDeal(21, isOver = {
-            fulls(zhanjiang, sishen, tieqi, shuiling, kuangjiang, tuling, shexian) && yandou
-        }, chooseHero = {
-            upAny(zhanjiang, sishen, tieqi, shuiling, kuangjiang, tuling, shexian, zhuangbei = { yandou })
-        }, onGuanDealStart = {
-            carDoing.downHero(dijing)
-        }))
+        changeZhuangbei(30) { qiangxi }
+
+        addGuanDealWithHerosFull(38, listOf(tianshi), delay = 2000)
+
 
         guanDealList.add(
             GuanDeal(39, isOver = { false },
                 chooseHero = {
                     deal39(this)
+                }, onGuanDealStart = {
+                    heros39Up4.clear()
+                    heros39Up4.addAll(carDoing.carps.subList(2, 5).map { it.mHeroBean!! })
                 })
         )
+        addGuanDealWithHerosFull(
+            40,
+            listOf(zhanjiang, tieqi, sishen, niutou, jiaonv, tuling, feiting),
+            downHeros = listOf(tianshi),
+            { yandou })
 
-        guanDealList.add(GuanDeal(40, isOver = {
-            fulls(zhanjiang, sishen, tieqi, shuiling, kuangjiang, tuling, shexian)
-        }, chooseHero = {
-            upAny(zhanjiang, sishen, tieqi, shuiling, kuangjiang, tuling, shexian)
-        }
-        ))
-        guanDealList.add(GuanDeal(51, isOver = {
-            fulls(zhanjiang, tieqi, shuiling, kuangjiang, tuling, sishen, shexian) && longxin
-        }, chooseHero = {
-            upAny(zhanjiang, sishen, tieqi, shuiling, kuangjiang, tuling, shexian, zhuangbei = { longxin })
-        }))
-        guanDealList.add(GuanDeal(70, isOver = {
-            fulls(zhanjiang,tieqi, sishen, dijing, kuangjiang, tuling, shexian)
-        }, chooseHero = {
-            upAny(tieqi,dijing)
-        }, onGuanDealStart = {
-            carDoing.downHero(shuiling)
-        }))
-        guanDealList.add(GuanDeal(79, isOver = {
-            tieqi.isInCar()
-        }, chooseHero = {
-            upAny(tieqi)
-        }, onGuanDealStart = {
-            carDoing.downHero(tieqi)
-        }))
-        guanDealList.add(GuanDeal(80, isOver = {
-            fulls(zhanjiang,tieqi, sishen, dijing, kuangjiang, tuling, shexian)
-        }, chooseHero = {
-            upAny(tieqi,dijing)
-        }, onGuanDealStart = {
-            carDoing.downHero(shuiling)
-        }))
-        guanDealList.add(GuanDeal(89, isOver = {
-            tieqi.isInCar()
-        }, chooseHero = {
-            upAny(tieqi)
-        }, onGuanDealStart = {
-            carDoing.downHero(tieqi)
-        }))
-        guanDealList.add(GuanDeal(90, isOver = {
-            fulls(zhanjiang,tieqi, sishen, dijing, kuangjiang, tuling, shexian)
-        }, chooseHero = {
-            upAny(tieqi,dijing)
-        }, onGuanDealStart = {
-            carDoing.downHero(shuiling)
-        }))
-        guanDealList.add(GuanDeal(99, isOver = {
-            tieqi.isInCar()
-        }, chooseHero = {
-            upAny(tieqi)
-        }, onGuanDealStart = {
-            carDoing.downHero(tieqi)
-        }))
+        changeZhuangbei(50) { qiangxi }
+
+        addGuanDealWithHerosFull(70, listOf(tianshi), listOf(niutou))
 
 
-
-        guanDealList.add(GuanDeal(100, isOver = {
-            fulls(shuiling,tieqi) && shengjian
-        }, chooseHero = {
-            carDoing.downHero(dijing)
-            upAny(tieqi,shuiling,zhuangbei = { shengjian })
-        }))
 
         guanDealList.add(GuanDeal(111, onlyDoSomething = {
-            carDoing.downHero(shexian)
+            carDoing.downHero(feiting)
         }).apply { des = "下射线" })
 
 
         guanDealList.add(GuanDeal(120, isOver = {
-            fulls(shexian) && longxin
+            fulls(feiting) && longxin
         }, chooseHero = {
-            upAny(shexian, zhuangbei = {longxin})
+            upAny(feiting, zhuangbei = { longxin })
         }
         ))
 
-        guanDealList.add(GuanDeal(129, isOver = { currentGuan() > 129 }, chooseHero = { g129Index(this) }
-            , onGuanDealStart = {
+        guanDealList.add(GuanDeal(
+            129,
+            isOver = { currentGuan() > 129 },
+            chooseHero = { g129Index(this) },
+            onGuanDealStart = {
                 g129State = 0
                 GlobalScope.launch {
                     check129Xue()
@@ -147,90 +90,53 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
             })
             .apply { des = "按0下射线，再按0上射线" })
 
-
         guanDealList.add(
             GuanDeal(
                 130,
-                isOver = { shexian.isFull() },
+                isOver = { feiting.isFull() },
                 chooseHero = {
-                    upAny(shexian)
+                    upAny(feiting)
                 })
         )
 
 
-
-        addGuanDeal(169){
-            over { 
-                houzi3.isFull()
-            }
-            chooseHero { 
-                var index = indexOf(houzi3)
-                if(index>-1){
-                    while(g169State==0){
-                        delay(100)
-                    }
-                }
-                carDoing.downHero(kuangjiang)
-                index
-            }
-            des = "按0 鱼人切猴子，在第9个球后 切"
-        }
-        
+        addGuanDealWithHerosFull(150, listOf(niutou), listOf(tuling))
 
         guanDealList.add(GuanDeal(179, isOver = {
-            currentGuan()>179
+            curGuan > 179
         }, chooseHero = {
             this.deal179()
+        }, onGuanDealStart = {
+            carDoing.downHero(tianshi)
         }
         ).apply {
-            des= "按0 回规初始（下土灵），按1-7对应处理1-7的牌,大王啥也不按，大于7的牌按9打死，按7时要等球快撞上再按，上太早会打死，无法释放冰球"
+            des =
+                "按0 满天使"
         }
         )
 
-        
-        addGuanDeal(189){
-            over { curGuan>189 }
-            chooseHero { 
-                if(state189==0){
-                    var index = indexOf(kuangjiang)
-                    if(index>-1) {
-                        XueLiang.observerXueDown(xueRate = 0.1f, over = { curGuan > 189 })
-                        carDoing.downHero(houzi3)
-                        state189 = 1
-                        index
-                    }else index
-                }else{
-                    var index = indexOf(houzi3)
-                    if(index>-1) {
-                        while (state189 == 1) {
-                            delay(100)
-                        }
-                        carDoing.downHero(kuangjiang)
-                        index
-                    }else index
-                }
+        addGuanDeal(180) {
+            over {
+                jiaonv.currentLevel == 3
             }
-            des = "打死牌后按0切猴子，掉血后会自动切狂将，所以如果这个不需要打死，也按0切回猴子就行，副卡会打冰这里"
-        }
-        
-        addGuanDeal(190){
-            over { 
-                houzi3.isFull()
+            chooseHero {
+                upAny(jiaonv)
             }
-            chooseHero { 
-                carDoing.downHero(kuangjiang)
-                upAny(houzi3)
+            onStart {
+                carDoing.downHero(feiting)
+                carDoing.downHero(jiaonv)
             }
         }
+//        addGuanDeal(180){
+//            over {
+//                tuling.currentLevel==2 &&
+//            }
+//        }
+
 
         curGuanDeal = guanDealList.get(0)
     }
 
-    /**
-     * 掉血后，改1，切狂将输出，手按0，切猴子抗伤害
-     */
-    var state189 = 0
-    
     /**
      * //179  0初始态（其他都满，下土灵得状态，到boss就按0）。1，杀敌状态，不要的牌都按1（杀死后按0回初始态）。
      *     //2 特殊态5，下 射线土灵，鱼人（遇到牌5按2，撞车后按0回初始态）
@@ -239,28 +145,16 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
     var state179 = 0
 
     //179  0初始态（其他都满，下土灵得状态，到boss就按0）。1，杀敌状态，不要的牌都按1（杀死后按0回初始态）。
+    //2 特殊态5，下 射线土灵，鱼人（遇到牌5按2，撞车后按0回初始态）
     //3  特殊态7，冰球触发后按7上土灵，下一轮前按0回初始态。
-    suspend fun List<HeroBean?>.deal179():Int{
-        if(state179==0){
-            carDoing.downHero(tuling)
-            if(!shexian.isFull() || !houzi3.isFull()){
-                return upAny(shexian,houzi3)
-            }
-        }
-        while (state179==0){
-            delay(200)
-        }
-        if(state179==1){
-            while(tuling.isInCar() && state179==1){
+    suspend fun List<HeroBean?>.deal179(): Int {
+        if (tianshi.currentLevel == 3) {
+            while (state179 == 0 && curGuan < 180) {
                 delay(200)
             }
-            if(!tuling.isInCar()){
-                return this.indexOf(tuling)
-            }
+
         }
-
-
-        return -1
+        return indexOf(tianshi)
     }
 
 
@@ -271,27 +165,28 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
     var g149Type = -1;  //0 石柱，切强袭，死神换狂将； 1 火灵boss，狂将切咕咕，切回 满咕咕尽量；2是月亮boss，暂时打不过
 
 
-    var g169State = 0
     var g139State = 0
 
     var g129State = 0//0等待,1 下宝库 备宝库，2上宝库 //回到了初始态，等1再下宝库循环
-
     var g129XueCount = 1//0,1 下射线，2，3上射线
+    var checkXue = true
     suspend fun check129Xue() {
 
-        while (curGuan <= 129) {
+        while (curGuan <= 129 && checkXue) {
             XueLiang.observerXueDown(xueRate = 0.1f, over = { curGuan > 129 })
             g129XueCount++
             if (g129XueCount == 2) {
-                delay(1500)
+                delay(700)
                 g129XueCount = 0
-                g129State = if (g129State == 0) 1 else 0
+                if (checkXue) {
+                    g129State = if (g129State == 0) 1 else 0
+                }
             }
-            delay(2000)
+            delay(1500)
         }
 
     }
-    
+
     suspend fun g129Index(heros: List<HeroBean?>): Int {
         if (currentGuan() > 129) return -1
         while (g129State == 0) {
@@ -300,8 +195,8 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
         }
         when (g129State) {
             1 -> {
-                carDoing.downHero(shexian)
-                var index = heros.indexOf(shexian)
+                carDoing.downHero(feiting)
+                var index = heros.indexOf(feiting)
                 if (index > -1) {
                     while (g129State == 1) {
                         delay(100)
@@ -318,112 +213,26 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
 
     override suspend fun doAfterHeroBeforeWaiting(heroBean: HeroBean) {
 
-        if (heroBean == houzi3 && (guankaTask?.currentGuanIndex == 139 || guankaTask?.currentGuanIndex == 138
+        if (heroBean == guangqiu && (guankaTask?.currentGuanIndex == 139 || guankaTask?.currentGuanIndex == 138
                     || guankaTask?.currentGuanIndex == 149 || guankaTask?.currentGuanIndex == 148
                     || guankaTask?.currentGuanIndex == 159 || guankaTask?.currentGuanIndex == 158
                     )
         ) {
             delay(500)
-            carDoing.downHero(houzi3)
+            carDoing.downHero(guangqiu)
         }
 
         super.doAfterHeroBeforeWaiting(heroBean)
     }
 
-    var puked179 = arrayListOf<Int>()
-
-    fun addPuke(puke: Int){
-
-        var add = false
-
-        if(puked179.size==0){
-            puked179.add(puke)
-            add = true
-        }else if(puked179.size==1){
-            val one = puked179.get(0)
-            if(puke!=one && abs(puke-one)<5){
-                puked179.add(puke)
-                add = true
-            }
-        }else{
-            var min = puked179.minOrNull()!!
-            var max = puked179.maxOrNull()!!
-
-            if(!puked179.contains(puke)
-                && ((puke>min && puke-min<5) || (puke<max && max-puke<5)          )
-                ){
-                puked179.add(puke)
-                add = true
-            }
-
-
-        }
-
-        if(!add){
-            state179 = 1
-        }
-
-    }
-
     override suspend fun onKeyDown(code: Int): Boolean {
-        if (guankaTask?.currentGuanIndex == 189 || guankaTask?.currentGuanIndex == 188
-        ) {//按0 下射线，备射线，再按0，上射线
+
+        if (curGuan == 179) {
             when (code) {
                 KeyEvent.VK_NUMPAD0 -> {
-                    state189 = 0
-                }
-            }
-
-            return true
-        }
-        if (guankaTask?.currentGuanIndex == 169 || guankaTask?.currentGuanIndex == 168
-        ) {//按0 下射线，备射线，再按0，上射线
-            when (code) {
-                KeyEvent.VK_NUMPAD0 -> {
-                   g169State = 1
-                }
-            }
-
-            return true
-        }
-        
-
-        if(currentGuan()== 179 || currentGuan() == 178){
-            when(code){
-                KeyEvent.VK_NUMPAD0->{
-                    state179 = 0
-                }
-                KeyEvent.VK_NUMPAD1->{
-                    addPuke(1)
-                }
-                KeyEvent.VK_NUMPAD2->{
-                    addPuke(2)
-                }
-                KeyEvent.VK_NUMPAD3->{
-                    addPuke(3)
-                }
-                KeyEvent.VK_NUMPAD4->{
-                    addPuke(4)
-                }
-                KeyEvent.VK_NUMPAD5->{//5不要，下卡太多上不回去可能
                     state179 = 1
                 }
-                KeyEvent.VK_NUMPAD6->{
-                    addPuke(6)
-                }
-                KeyEvent.VK_NUMPAD7->{
-                    addPuke(7)
-                }
-                KeyEvent.VK_NUMPAD8->{//8 攻击时猴子切鱼人
-                    state179 = 1
-                }
-                KeyEvent.VK_NUMPAD9->{ //按9就杀
-                    state179 = 1
-                }
-
             }
-
-
             return true
         }
 
@@ -432,6 +241,8 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
         ) {//按0 下射线，备射线，再按0，上射线
             when (code) {
                 KeyEvent.VK_NUMPAD0 -> {
+                    //如果按键了，就取消看血自动了，避免二者冲突
+                    checkXue = false
                     g129State = if (g129State == 0) 1 else 0
                 }
             }
