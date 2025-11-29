@@ -10,20 +10,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import log
-import logOnly
-import saveTo
-import tasks.HeroDoing
 import tasks.SimpleHeZuoHeroDoing
-import tasks.XueLiang
 import ui.zhandou.UIKeyListenerManager
-import utils.HBUtil
 import utils.ImgUtil
-import utils.ImgUtil.forEach4Result
 import utils.MRobot
 import java.awt.event.KeyEvent
-import java.awt.image.BufferedImage
-import java.io.File
 
 // 9  29 都自动执行
 abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {

@@ -2,7 +2,6 @@ package tasks.huodong.shuihu3
 
 import data.HeroBean
 import data.HeroCreator
-import tasks.SimpleHeZuoHeroDoing
 
 class Day11:BaseDay() {
     val houzi3 = HeroCreator.dianfa.create()

@@ -54,6 +54,11 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
         }
     }
 
+    fun List<HeroBean?>.upAny(heros:List<HeroBean>, zhuangbei: (() -> Boolean)? = null,
+                              useGuang: Boolean = true
+    ): Int {
+       return upAny(*heros.toTypedArray(), zhuangbei = zhuangbei, useGuang = useGuang)
+    }
     fun List<HeroBean?>.upAny(
         vararg heros: HeroBean,
         zhuangbei: (() -> Boolean)? = null,

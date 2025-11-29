@@ -4,9 +4,6 @@ import data.HeroBean
 import data.HeroCreator
 import kotlinx.coroutines.delay
 import tasks.SimpleHeZuoHeroDoing
-import tasks.XueLiang
-import javax.naming.InitialContext
-import kotlin.math.max
 
 class Day4 : SimpleHeZuoHeroDoing() {
     val dianfa = HeroCreator.dianfa.create()

@@ -3,7 +3,6 @@ package tasks.gameUtils
 import data.Config
 import data.HeroBean
 import data.HeroCreator
-import data.MRect
 import getImage
 import getSubImage
 import kotlinx.coroutines.*
@@ -11,7 +10,6 @@ import tasks.HeroDoing
 import kotlin.coroutines.resume
 import log
 import logOnly
-import tasks.XueLiang
 import utils.MRobot
 import java.awt.image.BufferedImage
 

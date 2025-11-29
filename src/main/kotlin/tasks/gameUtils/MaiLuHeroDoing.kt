@@ -2,14 +2,12 @@ package tasks.gameUtils
 
 import data.*
 import getImage
-import getSubImage
 import kotlinx.coroutines.*
 import tasks.HeroDoing
 import kotlin.coroutines.resume
 import log
 import logOnly
 import model.CarDoing
-import tasks.XueLiang
 import utils.MRobot
 import java.awt.image.BufferedImage
 

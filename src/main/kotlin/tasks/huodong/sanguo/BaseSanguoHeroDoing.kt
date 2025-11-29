@@ -1,15 +1,10 @@
 package tasks.huodong.sanguo
 
 import data.HeroBean
-import data.MRect
-import getImage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import log
 import tasks.HeroDoing
-import tasks.XueLiang
-import java.awt.Color
 import java.awt.event.KeyEvent
 
 abstract class BaseSanguoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT), App.KeyListener {

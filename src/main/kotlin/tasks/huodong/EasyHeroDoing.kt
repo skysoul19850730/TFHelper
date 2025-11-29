@@ -3,12 +3,6 @@ package tasks.huodong
 import App
 import data.Config
 import data.HeroBean
-import data.Recognize
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import log
-import model.CarDoing
 import tasks.HeroDoing
 import utils.MRobot
 import java.awt.event.KeyEvent

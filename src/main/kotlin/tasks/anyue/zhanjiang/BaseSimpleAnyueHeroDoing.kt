@@ -6,15 +6,12 @@ import getImage
 import kotlinx.coroutines.*
 import log
 import logOnly
-import saveTo
-import tasks.HeroDoing
 import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
 import ui.zhandou.UIKeyListenerManager
 import utils.AYUtil
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
-import java.io.File
 import kotlin.math.abs
 
 abstract class BaseSimpleAnYueHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {

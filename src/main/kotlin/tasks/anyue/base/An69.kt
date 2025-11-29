@@ -11,7 +11,7 @@ class An69(val heroDoing: BaseAnYueHeroDoing,val qius:List<HeroBean>):AnSub {
     override fun addToHeroDoing(){
         heroDoing.apply {
             addGuanDeal(69){
-                over { curGuan>69 }
+                over { curGuan>69 || status==2}
                 chooseHero {
                     var bossXue = XueLiang.getBossXueliang()
                     while(status==0 && curGuan<70){
@@ -24,7 +24,7 @@ class An69(val heroDoing: BaseAnYueHeroDoing,val qius:List<HeroBean>):AnSub {
                                 delay(300)
                                 xue = XueLiang.getBossXueliang()
                                 if(xue==bossXue){
-                                    qiu69 = true
+                                    status = 1
                                 }else{
                                     bossXue = xue
                                 }
@@ -37,10 +37,10 @@ class An69(val heroDoing: BaseAnYueHeroDoing,val qius:List<HeroBean>):AnSub {
                         }
 
                     }
-                    if(qiu69 && XueLiang.getBossXueliang()<0.9f){
-                        upAny(huanqiu)
+                    if(status==1 && XueLiang.getBossXueliang()<1f){
+                        upAny(qius)
                     }else {
-                        qiu69 = false
+                        status=2
                         -1
                     }
                 }

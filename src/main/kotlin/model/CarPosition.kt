@@ -15,7 +15,6 @@ import loges
 import model.CarDoing.Companion.salePoint
 import utils.AYUtil
 import utils.ImgUtil.forEach
-import utils.ImgUtil.sim
 import utils.MRobot
 import java.awt.Color
 import java.awt.image.BufferedImage

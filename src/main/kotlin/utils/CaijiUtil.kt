@@ -1,8 +1,10 @@
 package utils
 
 import data.Config
+import data.MRect
 import getImageFromFile
 import model.CarDoing
+import saveSubTo
 import saveTo
 import utils.ImgUtil.copyWithColor
 import java.awt.Color
@@ -10,6 +12,14 @@ import java.awt.image.BufferedImage
 import java.io.File
 
 object CaijiUtil {
+
+    fun saveRectByFolder(folderName:String,rect:MRect){
+        File(folderName).listFiles().forEach {
+            getImageFromFile(it).saveSubTo(rect,File(folderName,"ic_${it.nameWithoutExtension}.png"))
+        }
+    }
+
+//    596，256，20，30
 
     object Anyue{
 

@@ -3,15 +3,8 @@ package tasks
 import data.Config
 import data.HeroBean
 import data.MPoint
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
-import tasks.SimpleHeZuoHeroDoing
 import utils.MRobot
 import java.awt.event.KeyEvent
-import java.util.*
-import kotlin.concurrent.timerTask
 
 class CustomHeroDoing(chePos: Int) : HeroDoing(chePos, FLAG_GUANKA or FLAG_KEYEVENT) {
     override fun initHeroes() {

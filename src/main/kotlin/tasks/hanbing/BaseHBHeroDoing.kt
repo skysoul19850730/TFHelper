@@ -11,14 +11,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import log
 import logOnly
-import model.CarDoing
-import saveTo
 import tasks.HeroDoing
-import tasks.guankatask.GuankaTask
 import utils.ImgUtil.forEach4Result
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
-import java.io.File
 
 abstract class BaseHBHeroDoing() : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
 

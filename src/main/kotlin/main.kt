@@ -39,7 +39,6 @@ import model.CarDoing
 import model.CarPosition
 import tasks.*
 import tasks.gameUtils.GameUtil
-import tasks.hanbing.deprecated.mengyan.ChuanZhangTest
 import tasks.hezuo.zhannvsha.ZhanNvGameLaunch
 import java.awt.Point
 import java.awt.image.BufferedImage
@@ -52,9 +51,6 @@ import ui.MainUIData
 import ui.launcher
 import ui.weights.MCheckBox
 import tasks.xiaka.XiaKaUtil
-import tesshelper.Tess
-import test.Utils
-import test.WindowTest
 import ui.weights.MRadioBUtton
 import utils.*
 import java.text.SimpleDateFormat
@@ -1185,6 +1181,7 @@ fun test() {
     GlobalScope.launch {
 
         measureTimeMillis {
+            TestUtil.test()
 //testHerosUI()
 //            var subFoler = "${Config.platName}/xuanwo/"
 //            val xw_pangxie = getImageFromRes("${subFoler}xw_pangxie.png")
@@ -1197,7 +1194,7 @@ fun test() {
 //    text.log(text)
 //    ExcelUtil().test()
 //        ChuanZhangTest.startChuanZhangOberserver()
-            MRobot.moveFullScreen()
+//            MRobot.moveFullScreen()
 //         val tt =   Tess.getText(Utils.getWindowFolderImg("12_33_43_618.png").getSubImage(MRect.createWH(620,200,80,40)))
 //            log(tt)
 //            cropImgs(File("C:\\Users\\sqc\\Desktop\\新建文件夹 (3)"), MRect.createWH(675,210,54,30))

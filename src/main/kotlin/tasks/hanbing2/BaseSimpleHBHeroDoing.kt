@@ -2,7 +2,6 @@ package tasks.hanbing2
 
 import data.Config
 import data.HeroBean
-import data.MPoint
 import data.MRect
 import getImage
 import kotlinx.coroutines.GlobalScope
@@ -12,7 +11,6 @@ import kotlinx.coroutines.launch
 import log
 import logOnly
 import saveTo
-import tasks.HeroDoing
 import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
 import ui.zhandou.UIKeyListenerManager

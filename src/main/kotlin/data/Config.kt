@@ -192,4 +192,7 @@ object Config {
 
 
     val changtuRect = MRect.create4P(30,223,978,548)
+
+    val AY_Puke_rect = MRect.createWH(596,256,20,30)
+    val AyPukeXuePoint = MPoint(693,232, Color(212,71,71))
 }

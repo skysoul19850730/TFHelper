@@ -1,11 +1,7 @@
 package tasks.huodong.shuihu2
 
-import data.HeroBean
 import data.HeroCreator
-import kotlinx.coroutines.delay
 import tasks.SimpleHeZuoHeroDoing
-import tasks.XueLiang
-import kotlin.math.max
 
 class Day7 : SimpleHeZuoHeroDoing() {
     val dianfa = HeroCreator.dianfa.create()

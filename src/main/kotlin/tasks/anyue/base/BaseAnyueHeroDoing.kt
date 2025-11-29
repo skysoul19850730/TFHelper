@@ -1,26 +1,10 @@
 package tasks.anyue.base
 
-import MainData.job79TimeDt
 import data.HeroBean
-import getImage
-import kotlinx.coroutines.*
-import log
-import logOnly
-import saveTo
-import tasks.HeroDoing
 import tasks.SimpleHeZuoHeroDoing
-import tasks.XueLiang
-import ui.zhandou.UIKeyListenerManager
-import utils.AYUtil
 import java.awt.event.KeyEvent
-import java.awt.image.BufferedImage
-import java.io.File
-import kotlin.math.abs
 
 abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
-
-    //69可以扔的球
-    private var qiu69 = arrayListOf<HeroBean>()
 
     override suspend fun onKeyDown(code: Int): Boolean {
         if (code == KeyEvent.VK_NUMPAD9) {//9强制改变waitting，防止waiting有逻辑错误不上卡
@@ -32,16 +16,23 @@ abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
     }
 
 
-    fun add39(heros39Up4: List<HeroBean>) {
-        An39(this,heros39Up4).addToHeroDoing()
+    fun add39() {
+
+        An39(this).addToHeroDoing()
     }
 
     fun add69(qius69: List<HeroBean>){
-        qiu69.addAll(qius69)
-        addGuanDeal(69){
-            ov
-        }
+        An69(this,qius69).addToHeroDoing()
+    }
 
+    fun add79(){
+        Ay79(this).addToHeroDoing()
+    }
+    fun add89(){
+        Ay89(this).addToHeroDoing()
+    }
+    fun add99(){
+        Ay99(this).addToHeroDoing()
     }
 
 

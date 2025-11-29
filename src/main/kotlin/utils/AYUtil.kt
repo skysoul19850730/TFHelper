@@ -1,6 +1,5 @@
 package utils
 
-import androidx.compose.ui.graphics.toArgb
 import colorCompare
 import data.Config
 import data.HeroBean
@@ -16,10 +15,6 @@ import log
 import logOnly
 import model.CarDoing
 import resFile
-import saveTo
-import tesshelper.Tess
-import utils.ImgUtil.forEach
-import utils.ImgUtil.forEach4Result
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
@@ -219,6 +214,7 @@ object AYUtil {
         log("识别图片${list.size}张， 识别到的点名有：${count} 总耗时:${allTimes}")
 
     }
+
     val zhanjiang = HeroBean("zhanjiang", 100)
     val tieqi = HeroBean("tieqi", 90)
     val saman = HeroBean("saman", 80)
@@ -229,53 +225,54 @@ object AYUtil {
     val dijing = HeroBean("dijing", 30)
     val huanqiu = HeroBean("huanqiu", 20, needCar = false, compareRate = 0.95)
     val guangqiu = HeroBean("guangqiu", 0, needCar = false)
-    var heros = arrayListOf(zhanjiang,tieqi,saman,sishen,yuren,baoku,xiaoye,dijing,huanqiu,guangqiu)
-    private fun testHeroRec(img:BufferedImage){
-        var heros = arrayListOf(dijing,huanqiu,zhanjiang,tieqi,saman,sishen,yuren,baoku,xiaoye,guangqiu)
+    var heros = arrayListOf(zhanjiang, tieqi, saman, sishen, yuren, baoku, xiaoye, dijing, huanqiu, guangqiu)
+    private fun testHeroRec(img: BufferedImage) {
+        var heros = arrayListOf(dijing, huanqiu, zhanjiang, tieqi, saman, sishen, yuren, baoku, xiaoye, guangqiu)
         GlobalScope.launch {
             getPreHeros(img, heros)
         }
     }
 
 
-    open suspend fun getPreHeros(img:BufferedImage,heros: List<HeroBean>, timeout: Long = 2300) = suspendCancellableCoroutine<List<HeroBean?>?> {
-        val startTime = System.currentTimeMillis()
-        GlobalScope.launch {
-            var h1: HeroBean? = null
-            var h2: HeroBean? = null
-            var h3: HeroBean? = null
+    open suspend fun getPreHeros(img: BufferedImage, heros: List<HeroBean>, timeout: Long = 2300) =
+        suspendCancellableCoroutine<List<HeroBean?>?> {
+            val startTime = System.currentTimeMillis()
+            GlobalScope.launch {
+                var h1: HeroBean? = null
+                var h2: HeroBean? = null
+                var h3: HeroBean? = null
 
-            try {
-                withTimeout(timeout) {
-                    while (h1 == null || h2 == null || h3 == null) {
-                        val hero1 = if (h1 == null) {
-                            async { getHeroAtRect(heros, img.getSubImage(Config.zhandou_hero1CheckRect),0) }
-                        } else null
-                        val hero2 = if (h2 == null) {
-                            async { getHeroAtRect(heros, img.getSubImage(Config.zhandou_hero2CheckRect),1) }
-                        } else null
-                        val hero3 = if (h3 == null) {
-                            async { getHeroAtRect(heros, img.getSubImage(Config.zhandou_hero3CheckRect),2) }
-                        } else null
+                try {
+                    withTimeout(timeout) {
+                        while (h1 == null || h2 == null || h3 == null) {
+                            val hero1 = if (h1 == null) {
+                                async { getHeroAtRect(heros, img.getSubImage(Config.zhandou_hero1CheckRect), 0) }
+                            } else null
+                            val hero2 = if (h2 == null) {
+                                async { getHeroAtRect(heros, img.getSubImage(Config.zhandou_hero2CheckRect), 1) }
+                            } else null
+                            val hero3 = if (h3 == null) {
+                                async { getHeroAtRect(heros, img.getSubImage(Config.zhandou_hero3CheckRect), 2) }
+                            } else null
 
-                        if (h1 == null) {
-                            h1 = hero1?.await()
-                            if (h1 != null) {
-                                log("识别到英雄:${h1?.heroName} 耗时：${System.currentTimeMillis() - startTime}")
+                            if (h1 == null) {
+                                h1 = hero1?.await()
+                                if (h1 != null) {
+                                    log("识别到英雄:${h1?.heroName} 耗时：${System.currentTimeMillis() - startTime}")
+                                }
                             }
-                        }
-                        if (h2 == null) {
-                            h2 = hero2?.await()
-                            if (h2 != null) {
-                                log("识别到英雄:${h2?.heroName} 耗时：${System.currentTimeMillis() - startTime}")
+                            if (h2 == null) {
+                                h2 = hero2?.await()
+                                if (h2 != null) {
+                                    log("识别到英雄:${h2?.heroName} 耗时：${System.currentTimeMillis() - startTime}")
+                                }
                             }
-                        }
-                        if (h3 == null) {
-                            h3 = hero3?.await()
-                            if (h3 != null) {
-                                log("识别到英雄:${h3?.heroName} 耗时：${System.currentTimeMillis() - startTime}")
+                            if (h3 == null) {
+                                h3 = hero3?.await()
+                                if (h3 != null) {
+                                    log("识别到英雄:${h3?.heroName} 耗时：${System.currentTimeMillis() - startTime}")
+                                }
                             }
-                        }
 //                        var i=0;
 //                        if(h1!=null)i++
 //                        if(h2!=null)i++
@@ -284,44 +281,45 @@ object AYUtil {
 //                        if (h1 == null || h2 == null || h3 == null) {//省去最后的100ms
 //                            delay(50)
 //                        }
-                    }
-                    logOnly("getPreHeros cost time:${System.currentTimeMillis() - startTime}")
-                    it.resume(arrayListOf(h1, h2, h3))
+                        }
+                        logOnly("getPreHeros cost time:${System.currentTimeMillis() - startTime}")
+                        it.resume(arrayListOf(h1, h2, h3))
 //                    return@withTimeout arrayListOf(h1, h2, h3)
-                }
-            } catch (e: Exception) {
-                if (h1 == null && h2 == null && h3 == null) {
-                    it.resume(null)
+                    }
+                } catch (e: Exception) {
+                    if (h1 == null && h2 == null && h3 == null) {
+                        it.resume(null)
 //                    return null
-                } else {
-                    it.resume(arrayListOf(h1, h2, h3))
+                    } else {
+                        it.resume(arrayListOf(h1, h2, h3))
 //                    return arrayListOf(h1, h2, h3)
+                    }
                 }
             }
         }
-    }
 
     //原来上卡判断是否上去了，耗时189ms，识别手卡200ms-500ms不等，日志大部分在400ms左右，
     //更改3卡分别截图到只截图一张大图后（截图的api内部是同步的,所以即使使用时加了async和await，但截图的耗时还是线性想加的，只不过对比hero的时候是并行的)，
     // 等待测试结果。像上面189，单次识别就要40多ms，里面还有个delay30ms的。所以两轮过去（一般两三轮比较就差不多知道上去没有了），大约就是3个40+2个30，大约就是180左右
     //所以日志大部分上卡耗时都是189左右，剩下的就是比较的时间，可见比较耗时贼少，主要还是截图浪费了时间。
-    open suspend fun getHeroAtRect(heros: List<HeroBean>, img: BufferedImage,position:Int) = suspendCancellableCoroutine<HeroBean?> {
-        val hero = heros.filter {//满了就不会出现在预选卡里，减少比较
-            !it.isFull()
-        }.firstOrNull {
+    open suspend fun getHeroAtRect(heros: List<HeroBean>, img: BufferedImage, position: Int) =
+        suspendCancellableCoroutine<HeroBean?> {
+            val hero = heros.filter {//满了就不会出现在预选卡里，减少比较
+                !it.isFull()
+            }.firstOrNull {
 //            ImgUtil.isImageSim(img, it.img)
 //            ImgUtil.isHeroSim(img,it.img)
-            it.fitImage(img,position)
-        }
-        if (Config.debug) {
-            log(img)
-        }
-        if (hero != null) {
-            logOnly("getHeroAtRect ${hero?.heroName ?: "无结果"}")
-        } else logOnly("getHeroAtRect null")
-        it.resume(hero)
+                it.fitImage(img, position)
+            }
+            if (Config.debug) {
+                log(img)
+            }
+            if (hero != null) {
+                logOnly("getHeroAtRect ${hero?.heroName ?: "无结果"}")
+            } else logOnly("getHeroAtRect null")
+            it.resume(hero)
 
-    }
+        }
 
     fun getAy39SelectedPositions(chePos: Int, img: BufferedImage? = null): List<Int> {
         var list = getAy39SelectedPositions(img)
@@ -355,14 +353,14 @@ object AYUtil {
             25, img
         )
 //        return count > rect.width * rect.height * 0.2
-        return count>30
+        return count > 30
     }
 
-    var imgAy39Clear:BufferedImage?=null
+    var imgAy39Clear: BufferedImage? = null
 
     fun getAy39SelectedPositions(img2: BufferedImage? = null): List<List<Int>> {
         log("ay39,getAy39SelectedPositions start")
-        if(imgAy39Clear==null){
+        if (imgAy39Clear == null) {
             imgAy39Clear = getImageFromRes("ay39clear.png")
         }
         val img = img2 ?: getImage(App.rectWindow)
@@ -388,17 +386,17 @@ object AYUtil {
             var colorList = arrayListOf<Color>()
             var count = (blackRect.left..blackRect.right).count {
                 var color = Color(img.getRGB(it, 262))
-                if(color.equals(Color(imgAy39Clear!!.getRGB(it,262)))){
+                if (color.equals(Color(imgAy39Clear!!.getRGB(it, 262)))) {
                     allBlack = false
                 }
-                var s = is39BlackNull(color) && !color.equals(Color(imgAy39Clear!!.getRGB(it,262)))
+                var s = is39BlackNull(color) && !color.equals(Color(imgAy39Clear!!.getRGB(it, 262)))
                 if (!s) {
                     colorList.add(color)
 //                    log("x :$it color is ")
                 }
                 s
             }
-            if(allBlack) {
+            if (allBlack) {
                 allBlack = count > (checkBlackWidth * 0.9)
             }
 
@@ -418,7 +416,7 @@ object AYUtil {
 
                 var check1 = MRect.createPointR(MPoint(left0, line1Y), r)
 
-                if(check1.hasSimColor(img,Config.Color_AY39_Right,sim)){
+                if (check1.hasSimColor(img, Config.Color_AY39_Right, sim)) {
                     continue
                 }
 
@@ -431,7 +429,7 @@ object AYUtil {
                 }
 
                 check1 = MRect.createPointR(MPoint(left1, line1Y), r)
-                if(check1.hasSimColor(img,Config.Color_AY39_Right,sim)){
+                if (check1.hasSimColor(img, Config.Color_AY39_Right, sim)) {
                     continue
                 }
                 if ((!check1.hasSimColor(img, color, sim) || isBlack(
@@ -443,7 +441,7 @@ object AYUtil {
                 }
 
                 check1 = MRect.createPointR(MPoint(left0, line2Y), r)
-                if(check1.hasSimColor(img,Config.Color_AY39_Right,sim)){
+                if (check1.hasSimColor(img, Config.Color_AY39_Right, sim)) {
                     continue
                 }
                 if ((!check1.hasSimColor(img, color, sim) || isBlack(
@@ -456,7 +454,7 @@ object AYUtil {
                 }
 
                 check1 = MRect.createPointR(MPoint(left1, line2Y), r)
-                if(check1.hasSimColor(img,Config.Color_AY39_Right,sim)){
+                if (check1.hasSimColor(img, Config.Color_AY39_Right, sim)) {
                     continue
                 }
                 if ((!check1.hasSimColor(img, color, sim) || isBlack(
@@ -472,7 +470,7 @@ object AYUtil {
                     var color = Config.Color_AY39_Right
 
                     check1 = MRect.createPointR(MPoint(right0, line1Y), r)
-                    if(check1.hasSimColor(img,Config.Color_AY39_Left,sim)){
+                    if (check1.hasSimColor(img, Config.Color_AY39_Left, sim)) {
                         continue
                     }
                     if ((!check1.hasSimColor(img, color, sim) || isBlack(
@@ -542,5 +540,27 @@ object AYUtil {
         return list
     }
 
+    val pukes = arrayListOf<Pair<BufferedImage, Int>>()
+    fun getPuke(): Int {
+        val img = getImage(Config.AY_Puke_rect)
+        if (pukes.isEmpty()) {
+            File(anyueFolder, "puke").listFiles().forEach {
+                pukes.add(
+                    Pair(
+                        getImageFromFile(it),
+                        it.nameWithoutExtension.substring(it.nameWithoutExtension.lastIndexOf("_")).toInt()
+                    )
+                )
+            }
+        }
+        pukes.forEach {
+            if(ImgUtil.isImageSim(img,it.first,0.95)){
+                return it.second
+            }
+        }
+
+        return -1
+
+    }
 
 }

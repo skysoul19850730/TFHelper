@@ -1,17 +1,12 @@
 package tasks.huodong.qiuxiang2
 
-import data.Config
 import data.HeroBean
-import getImage
-import getImageFromRes
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
-import utils.ImgUtil
 import java.awt.event.KeyEvent
-import java.awt.image.BufferedImage
 import kotlin.math.abs
 
 abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {

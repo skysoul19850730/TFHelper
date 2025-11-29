@@ -2,23 +2,15 @@ package tasks
 
 import androidx.compose.runtime.mutableStateListOf
 import data.Config
-import data.Config.delayLong
 import data.Config.delayNor
-import data.Config.zhandou_hero1CheckRect
-import data.Config.zhandou_hero2CheckRect
-import data.Config.zhandou_hero3CheckRect
-import data.HeroBean
-import data.MRect
 import getImage
 import kotlinx.coroutines.*
 import log
 import logOnly
 import utils.ImgUtil
-import utils.MRobot
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
-import kotlin.coroutines.resume
 
 object Hero : Guanka.ChangeListener {
 

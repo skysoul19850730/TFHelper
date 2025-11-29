@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
 import kotlin.math.abs
 
-class An39(val heroDoing: BaseAnYueHeroDoing, val heros39Up4: List<HeroBean>) :AnSub{
+class An39(val heroDoing: BaseAnYueHeroDoing) : AnSub {
 
     var DownLoadPositionFromKeyFor39 = -1
 
@@ -18,15 +18,25 @@ class An39(val heroDoing: BaseAnYueHeroDoing, val heros39Up4: List<HeroBean>) :A
     var status = 2
     var lastXue = 1f
 
+    var heros39Up4 = listOf<HeroBean>()
 
     override fun addToHeroDoing() {
         heroDoing.apply {
             addGuanDeal(39) {
-                over {
-                    curGuan > 39
+                over {//这样以后可以处理 结束后上回去的写法，
+                    curGuan > 39 && fulls(*heros39Up4.toTypedArray())
                 }
                 chooseHero {
-                    deal39(this)
+                    if(curGuan==39) {
+                        deal39(this)
+                    }else{
+                        upAny(heros39Up4)
+                    }
+                }
+                onStart {
+                    heros39Up4 = carDoing.carps.filter {
+                        it.mPos in 2..5
+                    }.map { it.mHeroBean!! }
                 }
             }
         }

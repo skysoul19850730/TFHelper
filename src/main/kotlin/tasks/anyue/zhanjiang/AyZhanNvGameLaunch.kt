@@ -55,7 +55,7 @@ class AyZhanNvGameLaunch : IGameLaunch {
         heroDoing =when(App.mLaunchModel){
 //            App.model_anyue_zhanjiang -> AYWuZhanHeroDoingSimpleBoBack()
             App.model_anyue_zhanjiang -> AYWuZhanHeroDoingSimpleBoBack2()
-            model_anyue_5zhan ->AYWuZhanHeroDoingSimpleBack3()
+            model_anyue_5zhan ->AYWuZhanHeroDoingSimpleBack4()
 //            model_anyue_5zhan ->AYWuZhanHeroDoingSimpleBack()
 //            model_anyue_5zhan ->AYWuZhanHeroDoingCopy()
 //            model_anyue_bo -> AYHeroDoingBoNo19()

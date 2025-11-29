@@ -1,7 +1,5 @@
 package data
 
-import data.Config.delayNor
-import getImageFromRes
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
@@ -9,9 +7,7 @@ import log
 import resFile
 import model.CarDoing
 import utils.ImgUtil
-import utils.MRobot
 import java.awt.image.BufferedImage
-import java.io.File
 
 //weightModel 0有就行，1 优先满金,2不满星
 //heroname取文件夹名字，但文件夹名字就是取得英雄名字
