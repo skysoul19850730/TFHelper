@@ -6,6 +6,8 @@ import java.awt.event.KeyEvent
 
 abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
 
+    //火灵攻击4次后，6秒后放无敌，4秒后解除；6秒时扔冰，两秒后再扔以后，共两个就可以等解除了，如果冰的等级高，第二个可以1.5秒后就扔
+
     override suspend fun onKeyDown(code: Int): Boolean {
         if (code == KeyEvent.VK_NUMPAD9) {//9强制改变waitting，防止waiting有逻辑错误不上卡
             waiting = !waiting

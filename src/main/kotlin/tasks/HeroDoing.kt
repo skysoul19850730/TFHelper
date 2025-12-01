@@ -108,6 +108,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     open suspend fun doAfterHeroBeforeWaiting(heroBean: HeroBean) {
 
     }
+    open suspend fun doAfterNoHeroSelected(){}
 
     var curZhuangBei: Int = 0
     var isHuanIng = false
@@ -503,6 +504,8 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
         if (heroChoose > -1) {
             lastHeroPres = null
             doUpHero(hs.get(heroChoose)!!, heroChoose)
+        }else{
+            doAfterNoHeroSelected()
         }
     }
 

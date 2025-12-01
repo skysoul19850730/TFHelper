@@ -544,7 +544,7 @@ object AYUtil {
     fun getPuke(): Int {
         val img = getImage(Config.AY_Puke_rect)
         if (pukes.isEmpty()) {
-            File(anyueFolder, "puke").listFiles().forEach {
+            resFile("$anyueFolder/puke").listFiles().forEach {
                 pukes.add(
                     Pair(
                         getImageFromFile(it),

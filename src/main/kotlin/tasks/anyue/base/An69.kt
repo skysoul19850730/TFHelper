@@ -8,12 +8,13 @@ class An69(val heroDoing: BaseAnYueHeroDoing,val qius:List<HeroBean>):AnSub {
 
     var status = 0//0等血  1打球 2打完球
 
+    var bossXue = 1f
     override fun addToHeroDoing(){
         heroDoing.apply {
             addGuanDeal(69){
                 over { curGuan>69 || status==2}
                 chooseHero {
-                    var bossXue = XueLiang.getBossXueliang()
+                     bossXue = XueLiang.getBossXueliang()
                     while(status==0 && curGuan<70){
                         if(bossXue>0 && bossXue<0.5){
                             delay(300)
@@ -37,7 +38,13 @@ class An69(val heroDoing: BaseAnYueHeroDoing,val qius:List<HeroBean>):AnSub {
                         }
 
                     }
-                    if(status==1 && XueLiang.getBossXueliang()<1f){
+                    if(status==1){
+                       var xueNow = XueLiang.getBossXueliang()
+                        if(xueNow<bossXue){
+                            //被打掉血了开始
+                            status=2
+                            return@chooseHero -1
+                        }
                         upAny(qius)
                     }else {
                         status=2

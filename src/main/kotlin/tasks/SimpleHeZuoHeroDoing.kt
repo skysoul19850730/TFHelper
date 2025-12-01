@@ -210,6 +210,16 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
         }
     }
 
+    override suspend fun doAfterNoHeroSelected() {
+        //因为有些时候流程中 dealHero会返回-1，这样就无法触发onEnd。比如49开始是自动保存，end时结束保存，以前只能在50里结束保存
+        //现在写onstart保存，onEnd结束保存，over是curguan>49。但因为实质上不会上卡，dealhero返回的-1，就无法触发onHeroclick，就无法触发doAfterHeroBeforeWaiting
+        //原事务，只会在上完一张卡之后【判断业务是否完成，但实际存在不上卡也要验证是否完成，比如暗月69打冰，dealhero里返回冰，但如果血量开始下降了就返回-1不打冰了。但反-1就无法触发end
+        if (!waiting && isGkOver(curGuanDeal)) {
+            waiting = true
+            curGuanDeal?.onGuanDealEnd?.invoke()
+        }
+    }
+
     override fun onGuanChange(guan: Int) {
         try {
             guanDealList.reversed().forEach {

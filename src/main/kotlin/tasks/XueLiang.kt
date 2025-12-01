@@ -10,6 +10,7 @@ import log
 import utils.MRobot
 import java.awt.Color
 import java.awt.image.BufferedImage
+import java.math.BigDecimal
 
 object XueLiang {
 

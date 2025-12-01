@@ -59,21 +59,21 @@ class AYWuZhanHeroDoingSimpleBack4 : BaseAnYueHeroDoing() {
         add39()
 
         //add49 后面要识别49球了
-        addGuanDeal(49){
-            over { curGuan>49 }
-            chooseHero{
-                while(curGuan==49){
-                    delay(1000)
-                }
-                -1
-            }
-            onStart {
-                App.startAutoSave()
-            }
-            onEnd {
-                App.stopAutoSave()
-            }
-        }
+//        addGuanDeal(49){
+//            over { curGuan>49 }
+//            chooseHero{
+//                while(curGuan==49){
+//                    delay(1000)
+//                }
+//                -1
+//            }
+//            onStart {
+//                App.startAutoSave()
+//            }
+//            onEnd {
+//                App.stopAutoSave()
+//            }
+//        }
 
         add69(listOf(bingqiu))
         add79()
