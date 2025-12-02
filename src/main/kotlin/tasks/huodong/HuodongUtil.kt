@@ -53,7 +53,7 @@ object HuodongUtil {
 
 
 
-    var huodongStartTime = LocalDate.of(2025, 9, 23)
+    var huodongStartTime = LocalDate.of(2025, 12, 2)
     var perCircleDate = 7// 7天一轮，担心不是七天
     private fun getHuodongDoing():HeroDoing?{
         if(mModel == 1002){

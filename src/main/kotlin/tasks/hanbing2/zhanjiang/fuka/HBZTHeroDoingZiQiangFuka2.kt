@@ -16,7 +16,9 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
     val isRenwu = false
 
     val xiaoye = HeroCreator.xiaoye.create()
-    val sishen = HeroCreator.sishen.create()
+    val dianfa = HeroCreator.dianfa.create().apply {
+        isMohua = false
+    }
     val niutou = HeroCreator.niutou.create().apply {
         isMohua = false
     }
@@ -33,7 +35,7 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
 
     override fun initHeroes() {
         super.initHeroes()
-        heros = arrayListOf(tianshi, bingnv, xiaoye, lvgong, bingqiu, yuren, niutou, sishen, shexian, guangqiu)
+        heros = arrayListOf(tianshi, bingnv, xiaoye, lvgong, bingqiu, yuren, niutou, dianfa, shexian, guangqiu)
 
         guanDealList.add(GuanDeal(0, isOver = {
             bingnv.isInCar()
@@ -49,10 +51,10 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
 
         addGuanDeal(10) {
             over {
-                fulls(shexian, xiaoye, niutou, sishen)
+                fulls(shexian, xiaoye, niutou, dianfa)
             }
             chooseHero {
-                upAny(shexian, xiaoye, niutou, sishen)
+                upAny(shexian, xiaoye, niutou, dianfa)
             }
             onStart {
                 carDoing.downHero(bingnv)
@@ -60,10 +62,10 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
         }
         addGuanDeal(29) {
             over {
-                fulls(bingnv, lvgong, shexian, xiaoye, niutou, sishen)
+                fulls(yuren, lvgong, shexian, xiaoye, niutou, dianfa)
             }
             chooseHero {
-                upAny(bingnv, lvgong, shexian, xiaoye, niutou, sishen)
+                upAny(yuren, lvgong, shexian, xiaoye, niutou, dianfa)
             }
         }
         addGuanDeal(98) {
@@ -73,9 +75,7 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
             chooseHero {
                 upAny(tianshi)
             }
-            onStart {
-                carDoing.downHero(bingnv)
-            }
+           
         }
         addGuanDeal(100) {
             over {
@@ -128,9 +128,9 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
         }))
 
         guanDealList.add(GuanDeal(148, isOver = {
-            fulls(bingnv, lvgong, shexian, xiaoye, niutou, tianshi, yuren)
+            fulls(dianfa, lvgong, shexian, xiaoye, niutou, tianshi, yuren)
         }, chooseHero = {
-            upAny(bingnv, lvgong, shexian, xiaoye, niutou, tianshi, yuren)
+            upAny(dianfa, lvgong, shexian, xiaoye, niutou, tianshi, yuren)
         }, onGuanDealStart = { startLeishenOberserver() }))
 
         gudingShuaQiuTask("bingqiu", 149, 2500, overGuan = 150, dealTime = 3000,
@@ -163,9 +163,9 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
             )
         )
 
-        change2Tianshi3(
-            190
-        )
+//        change2Tianshi3(
+//            190
+//        )
 
         addGuanDeal(190){
             over {
@@ -182,13 +182,17 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
                     -1
                 }
             }
+            onStart { 
+                carDoing.downHero(tianshi)
+                carDoing.downHero(yuren)
+            }
         }
 
 
         guanDealList.add(GuanDeal(
             199,
             isOver = {
-                currentGuan() > 199
+                curGuan > 199
             },
             chooseHero = {
                 deal199Super2(this)
@@ -201,16 +205,16 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
                 "白球撞上后 按3 进入监听点名，期间可以按数字键盘进行下卡，点名结束后，可以按3重新进入白球卡阶段（下萨满补到3星）"
         })
 
-        addGuan210(arrayListOf(yuren, niutou, sishen,xiaoye,tianshi,lvgong))
+        addGuan210(arrayListOf(yuren, niutou, dianfa,xiaoye,tianshi,lvgong))
         curGuanDeal = guanDealList.first()
     }
 
     fun List<HeroBean?>.upBase(): Int {
-        return upAny(lvgong, shexian, xiaoye, niutou, tianshi, yuren, sishen)
+        return upAny(lvgong, shexian, xiaoye, niutou, tianshi, yuren, dianfa)
     }
 
     fun fullBase(): Boolean {
-        return fulls(lvgong, shexian, xiaoye, niutou, tianshi, yuren, sishen)
+        return fulls(lvgong, shexian, xiaoye, niutou, tianshi, yuren, dianfa)
     }
 
     private fun change2Tianshi3(guan: Int, otherGuanDeal: GuanDeal? = null) {
