@@ -14,6 +14,7 @@ import tasks.daxuanwo.XWZJHeroDoingZiQiang
 import tasks.hanbing2.huoling.HBBoHuolingHeroDoing
 import tasks.hanbing2.zhanjiang.*
 import tasks.hanbing2.zhanjiang.fuka.HBZTHeroDoingZiQiangFuka
+import tasks.hanbing2.zhanjiang.fuka.HBZTHeroDoingZiQiangFuka2
 
 class HBZhanNvGameLaunch : IGameLaunch {
 
@@ -73,7 +74,7 @@ class HBZhanNvGameLaunch : IGameLaunch {
             App.model_hanbing_5zhan_ziqiang -> HBZTHeroDoingZiQiang()
 //            App.model_hanbing_5zhan_ziqiang -> HBZTHeroDoingZiQiang2()
 //            App.model_hanbing_5zhan_ziqiang_fuka -> HB5ZGGHeroDoingZiQiangFuka()
-            App.model_hanbing_5zhan_ziqiang_fuka -> HBZTHeroDoingZiQiangFuka()
+            App.model_hanbing_5zhan_ziqiang_fuka -> HBZTHeroDoingZiQiangFuka2()
 //            App.model_hanbing_5zhan_ziqiang_fuka -> HBZTHeroDoingZiQiang()
 //            App.model_hanbing_5zhan_ziqiang ->HBZhanNvHeroDoingZiQiang5zs()
 //            App.model_hanbing_5zhan_boer ->HBHeroDoingBo5zs()

@@ -349,6 +349,8 @@ abstract class BaseSimpleAnYueHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListene
 
         val pos = AYUtil.getAy39SelectedPositions(carDoing.chePosition, img)
         if (pos.isNotEmpty()) {//点名，
+            delay(2000)//这里新增下延迟，如果延迟后关卡已经变了，证明已经速杀了，不再下卡
+            if(curGuan>39)return
             down39(img, pos)
         }
         if (abs(xue - lastXue) > 0.03) {//上卡过程中撞过了，没撞过就不用继续识别
