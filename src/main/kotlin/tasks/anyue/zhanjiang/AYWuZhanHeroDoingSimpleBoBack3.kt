@@ -6,6 +6,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tasks.XueLiang
+import tasks.anyue.base.An69
 import java.awt.event.KeyEvent
 
 class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
@@ -61,6 +62,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
 
         changeZhuangbei(50) { qiangxi }
 
+        An69(this, listOf(huanqiu)).addToHeroDoing()
         addGuanDealWithHerosFull(70, listOf(tianshi), listOf(niutou))
 
 
@@ -166,6 +168,8 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
 
     var g139State = 0
 
+    val g129FirstState:Int //右车 1 (先下射线）  左车0（先不下）
+        get() = if(chePosition==1) 1 else 0
     var g129State = 0//0等待,1 下宝库 备宝库，2上宝库 //回到了初始态，等1再下宝库循环
     var g129XueCount = 1//0,1 下射线，2，3上射线
     var checkXue = true

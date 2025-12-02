@@ -54,12 +54,12 @@ class AyZhanNvGameLaunch : IGameLaunch {
         isHezuoIng = true
         heroDoing =when(App.mLaunchModel){
 //            App.model_anyue_zhanjiang -> AYWuZhanHeroDoingSimpleBoBack()
-            App.model_anyue_zhanjiang -> AYWuZhanHeroDoingSimpleBoBack2()
+            App.model_anyue_zhanjiang -> AYWuZhanHeroDoingSimpleBoBack3()
             model_anyue_5zhan ->AYWuZhanHeroDoingSimpleBack4()
 //            model_anyue_5zhan ->AYWuZhanHeroDoingSimpleBack()
 //            model_anyue_5zhan ->AYWuZhanHeroDoingCopy()
 //            model_anyue_bo -> AYHeroDoingBoNo19()
-            else -> AYWuZhanHeroDoingSimpleBoBack2()
+            else -> AYWuZhanHeroDoingSimpleBoBack3()
         }
 //        heroDoing = AYZhanNvHeroDoing5()
         heroDoing?.init()
