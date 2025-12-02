@@ -24,9 +24,11 @@ class XWZJHeroDoingBo : BaseSimpleXWHeroDoing() {
     private suspend fun backHun(index: Int): Int {
         if (index > -1) {
             if (System.currentTimeMillis() - lastHun > 2000) {
+                lastHun = System.currentTimeMillis()
                 return index
             } else {
                 delay(2000 - (System.currentTimeMillis() - lastHun))
+                lastHun = System.currentTimeMillis()
                 return index
             }
         }
@@ -79,6 +81,7 @@ class XWZJHeroDoingBo : BaseSimpleXWHeroDoing() {
 
         add50(listOf(tieqi,yuren), listOf(zhanjiang, niutou, feiting, tieqi, sishen, bingqi, yuren))
 
+        add69()
         curGuanDeal = guanDealList.get(0)
     }
 

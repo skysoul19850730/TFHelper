@@ -3,6 +3,8 @@ package tasks.hanbing2.zhanjiang
 import data.HeroBean
 import data.HeroCreator
 import kotlinx.coroutines.delay
+import org.apache.commons.compress.harmony.pack200.PackingUtils
+import tasks.XueLiang
 import tasks.Zhuangbei
 import tasks.hanbing2.BaseSimpleHBHeroDoing
 import java.awt.event.KeyEvent
@@ -45,6 +47,7 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
         guanDealList.add(GuanDeal(95, isOver = {
             fullBase() && yandou
         }, chooseHero = {
+            carDoing.downHero(wangjiang)
             upBase(zhuangbei = { yandou })
         }))
 
@@ -206,6 +209,16 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
     private suspend fun deal199(heros: List<HeroBean?>): Int {
         while (step199 == 0 && curGuan < 200) {
             delay(200)
+        }
+
+        if(step199==1){
+            //等点名
+            XueLiang.observerXueDown()//掉血 等于 白球撞上了
+            PackingUtils.log("白球撞上了，进入step2")
+            step199 = 2
+            delay(300)//怕不同步，延迟300，满上萨满
+
+            return heros.upAny( tianshi)
         }
 
 

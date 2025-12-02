@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import tasks.CustomHeroDoing
 import tasks.HeroDoing
 import tasks.huodong.fengbao.*
+import tasks.huodong.huangfeihong.HFHHero1
 import tasks.huodong.qiuxiang.QiuXiangDay2
 import tasks.huodong.qiuxiang.QiuXiangDay3
 import tasks.huodong.qiuxiang.QiuXiangDay7
@@ -65,7 +66,7 @@ object HuodongUtil {
         var today = LocalDate.now()
         var dayDt = abs( ChronoUnit.DAYS.between(today, huodongStartTime).toInt())
         return when(dayDt%perCircleDate){
-            0-> Fengbao1()
+            0-> HFHHero1()
             1-> Fengbao2()
             2-> Fengbao3()
             3-> Fengbao4()

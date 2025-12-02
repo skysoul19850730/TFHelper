@@ -23,6 +23,7 @@ open class BaseHFH:SimpleHeZuoHeroDoing() {
                        index = indexOf(qiu!!)
                        if(index>-1){
                            if(System.currentTimeMillis()> lastQiuTime+qiuTime){
+                               lastQiuTime=System.currentTimeMillis()
                                index
                            }else {
                                delay(300)
@@ -32,6 +33,9 @@ open class BaseHFH:SimpleHeZuoHeroDoing() {
                    }else -1
                 }
 
+            }
+            onStart {
+                lastQiuTime = System.currentTimeMillis() +55000
             }
         }
 

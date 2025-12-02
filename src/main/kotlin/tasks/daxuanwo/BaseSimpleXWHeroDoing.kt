@@ -43,6 +43,13 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 g49 = 1
                 return true
             }
+            if(curGuan==69){
+                g69State+=1
+                if(g69State>=2){
+                    g69State=0
+                }
+                return true
+            }
 
         }
         if(code == KeyEvent.VK_NUMPAD3){
