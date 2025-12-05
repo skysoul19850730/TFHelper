@@ -18,7 +18,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
     val gugu = HeroCreator.gugu.create()
     val wangjiang = HeroCreator.wangjiang.create()
     val jiaonv = HeroCreator.jiaonv.create()
-    val dianfa = HeroCreator.dianfa.create()
+    val sishen = HeroCreator.sishen.create()
     val feiting = HeroCreator.feiting.create()
     val tianshi = HeroCreator.tianshi.create()
 
@@ -36,7 +36,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
             gugu,
             wangjiang,
             jiaonv,
-            dianfa,
+            sishen,
             feiting,
             tianshi,
             huanqiu,
@@ -68,10 +68,10 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
 
         addGuanDeal(29) {
             over {
-                fulls(dianfa) && longxin
+                fulls(sishen) && longxin
             }
             chooseHero {
-                upAny(dianfa, zhuangbei = { longxin })
+                upAny(sishen, zhuangbei = { longxin })
             }
         }
         addGuanDeal(98) {
@@ -127,9 +127,9 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
             })
         )
         guanDealList.add(GuanDeal(130, isOver = {
-            fulls(zhanjiang, gugu, tieqi, jiaonv, dianfa, wangjiang, feiting) && yandou
+            fulls(zhanjiang, gugu, tieqi, jiaonv, sishen, wangjiang, feiting) && yandou
         }, chooseHero = {
-            upAny(zhanjiang, gugu, tieqi, jiaonv, dianfa, wangjiang, feiting, zhuangbei = { yandou })
+            upAny(zhanjiang, gugu, tieqi, jiaonv, sishen, wangjiang, feiting, zhuangbei = { yandou })
         }, onGuanDealStart = {
             stopChuanZhangOberserver()
             carDoing.downHero(tianshi)
@@ -155,7 +155,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
             GuanDeal(189, isOver = { curGuan > 189 },
                 chooseHero = {
                     delay(500)
-                    val ind = upAny(tieqi, zhanjiang, dianfa, jiaonv, tianshi, gugu, feiting)
+                    val ind = upAny(tieqi, zhanjiang, sishen, jiaonv, tianshi, gugu, feiting)
                     if (ind < 0 && !isRenwu) {
                         upAny(guangqiu)
                     } else ind
@@ -188,7 +188,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
         })
 
 
-        addGuan210(arrayListOf(tieqi, zhanjiang, gugu, jiaonv, tianshi, dianfa))
+        addGuan210(arrayListOf(tieqi, zhanjiang, gugu, jiaonv, tianshi, sishen))
         curGuanDeal = guanDealList.first()
     }
 
@@ -251,7 +251,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
 
 
             if (carDoing.hasAllOpenSpace() || carDoing.hasNotFull()) {
-                return heros.upAny(zhanjiang, dianfa, jiaonv, tieqi, tianshi, gugu, feiting)
+                return heros.upAny(zhanjiang, sishen, jiaonv, tieqi, tianshi, gugu, feiting)
             } else {
                 while (step199 == 2 && curGuan == 199) {
                     var dianmingIndex = carDoing.getHB199Selected()
@@ -268,7 +268,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
                         carDoing.downPosition(position199)
                         carDoing.downPosition(dianmingIndex)
                         position199 = -1
-                        return heros.upAny(zhanjiang, dianfa, jiaonv, tieqi, tianshi, gugu, feiting)
+                        return heros.upAny(zhanjiang, sishen, jiaonv, tieqi, tianshi, gugu, feiting)
                     }
                     delay(100)
                 }
@@ -282,11 +282,11 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
 
 
     fun fullBase(): Boolean {
-        return fulls(zhanjiang, tieqi, gugu, jiaonv, dianfa, tianshi, feiting)
+        return fulls(zhanjiang, tieqi, gugu, jiaonv, sishen, tianshi, feiting)
     }
 
     fun List<HeroBean?>.upBase(zhuangbei: (() -> Boolean)? = null): Int {
-        return upAny(zhanjiang, tieqi, gugu, jiaonv, dianfa, tianshi, feiting, zhuangbei = zhuangbei)
+        return upAny(zhanjiang, tieqi, gugu, jiaonv, sishen, tianshi, feiting, zhuangbei = zhuangbei)
     }
 
     private fun change2Tianshi3(guan: Int, otherGuanDeal: GuanDeal? = null) {

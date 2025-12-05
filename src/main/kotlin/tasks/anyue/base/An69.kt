@@ -2,9 +2,10 @@ package tasks.anyue.base
 
 import data.HeroBean
 import kotlinx.coroutines.delay
+import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
 
-class An69(val heroDoing: BaseAnYueHeroDoing,val qius:List<HeroBean>):AnSub {
+class An69(val heroDoing: SimpleHeZuoHeroDoing,val qius:List<HeroBean>):AnSub {
 
     var status = 0//0等血  1打球 2打完球
 
@@ -39,6 +40,7 @@ class An69(val heroDoing: BaseAnYueHeroDoing,val qius:List<HeroBean>):AnSub {
 
                     }
                     if(status==1){
+                        delay(300)
                        var xueNow = XueLiang.getBossXueliang()
                         if(xueNow<bossXue){
                             //被打掉血了开始
