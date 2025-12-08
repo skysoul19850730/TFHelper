@@ -20,12 +20,12 @@ class An69(val heroDoing: SimpleHeZuoHeroDoing,val qius:List<HeroBean>):AnSub {
                         if(bossXue>0 && bossXue<0.5){
                             delay(300)
                             var xue = XueLiang.getBossXueliang()
-                            if(xue == bossXue){
+                            if(xue >= bossXue){
                                 //第一次判断相等，有可能是boss自己回血导致刚好回到上次观察的血量
                                 //延迟300毫秒再获取一次血量，如果还是相同就代表无敌了（boss回血频率比较低)
                                 delay(300)
                                 xue = XueLiang.getBossXueliang()
-                                if(xue==bossXue){
+                                if(xue>=bossXue){
                                     status = 1
                                 }else{
                                     bossXue = xue
