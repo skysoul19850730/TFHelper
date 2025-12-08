@@ -66,7 +66,6 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
         addGuanDealWithHerosFull(70, listOf(tianshi), listOf(niutou))
 
 
-
         guanDealList.add(GuanDeal(111, onlyDoSomething = {
             carDoing.downHero(feiting)
         }).apply { des = "下射线" })
@@ -85,6 +84,16 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
             chooseHero = { g129Index(this) },
             onGuanDealStart = {
                 g129State = 0
+                if(carDoing.chePosition == 1){
+                    //后车的话，黄蜂出来2.5秒后下，但不识别黄凤，就从129开始后
+                    //掉血一次后，count满2，g129state会变回0再上射线。后面就一样了
+                    //如果是前车就不用管，就等第一次掉血就可以
+                    GlobalScope.launch {
+                        delay(15000)
+                        g129State = 1//下掉
+                    }
+
+                }
                 GlobalScope.launch {
                     check129Xue()
                 }
