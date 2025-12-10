@@ -25,7 +25,7 @@ object HeroCreator{
     val dijing = HeroBuilder("dijing")
     val efei = HeroBuilder("efei")
     val emo = HeroBuilder("emo")
-    val feiji = HeroBuilder("feiji")
+    val feiji = HeroBuilder("feiji", isMohua = true)
     val fenghuang = HeroBuilder("fenghuang")
     val fuke = HeroBuilder("fuke")
     val ganglie = HeroBuilder("ganglie")
