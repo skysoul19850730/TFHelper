@@ -13,7 +13,7 @@ import utils.HBUtil
 
 class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
 
-    val isRenwu = false
+    val isRenwu = true
 
     val xiaoye = HeroCreator.xiaoye.create()
     val dianfa = HeroCreator.dianfa.create().apply {
