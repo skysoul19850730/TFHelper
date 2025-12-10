@@ -64,7 +64,7 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
             }
 
             chooseHero {
-                carDoing.downHero(sishen)
+                carDoing.downHero(yuren)
                 upAny(haiyao)
             }
         }

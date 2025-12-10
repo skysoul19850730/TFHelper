@@ -40,14 +40,16 @@ class An69(val heroDoing: SimpleHeZuoHeroDoing,val qius:List<HeroBean>):AnSub {
 
                     }
                     if(status==1){
-                        delay(300)
                        var xueNow = XueLiang.getBossXueliang()
-                        if(xueNow<bossXue){
-                            //被打掉血了开始
+                        if(xueNow<0.8){
+                            upAny(qius)
+                        }else if(xueNow<1){
                             status=2
-                            return@chooseHero -1
+                            upAny(qius)
+                        }else{
+                            status=2
+                            -1
                         }
-                        upAny(qius)
                     }else {
                         status=2
                         -1

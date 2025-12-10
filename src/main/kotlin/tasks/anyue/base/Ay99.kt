@@ -1,7 +1,9 @@
 package tasks.anyue.base
 
 import data.Config
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import utils.AYUtil
 
 class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
@@ -22,6 +24,7 @@ class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
         } else {
             delay(timePreBing - (System.currentTimeMillis() - lastBing))
         }
+        lastBing = System.currentTimeMillis()
     }
 
     private fun addToHeroDoingUseBing() {
@@ -30,50 +33,34 @@ class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
             addGuanDeal(99) {
                 over { curGuan > 99 || bossXue <= 0 }
                 chooseHero {
-                    if (curPuke > 0) {
-                        if (needPuke()) {
-                            //停冰 杀牌
-                            while (paiXueZai()) {//血条不在了就是杀掉了认为
-                                delay(500)
-                            }
-                            bossXue -= curPuke
-                            curPuke = 0
-                        } else {
-                            if (!paiXueZai()) {//切牌了要
-                                curPuke = 0
-                            }
-                            daBing()
-                            return@chooseHero this.indexOf(bingqiu!!)
-                        }
-                    } else {
-                        curPuke = AYUtil.getPuke()
-                        if (curPuke > 0) {
-                            if (needPuke()) {
-                                //停冰 杀牌
-                                while (paiXueZai()) {
-                                    delay(500)
-                                }
-                                bossXue -= curPuke
-                                curPuke = 0
-                            } else {
-                                if (!paiXueZai()) {//切牌了要
-                                    curPuke = 0
-                                }
-                                daBing()
-                                return@chooseHero this.indexOf(bingqiu!!)
-                            }
-                        } else {
-                            daBing()
-                            return@chooseHero this.indexOf(bingqiu!!)
-                        }
+                    if(curGuan>0 && needPuke()){
+                        val alreadyBingTime = System.currentTimeMillis()-lastQiuTime
+                        delay(5000-alreadyBingTime)//假设刚用了冰 5秒后能打死，已经冰了2秒了，就只需要等3秒
+                        curPuke=0
                     }
-
+                    if(curGuan==0){
+                        daBing()
+                        return@chooseHero indexOf(bingqiu)
+                    }
                     -1
+                }
+                onStart {
+                    shibiePai()
                 }
             }
         }
     }
-
+    fun shibiePai(){
+        GlobalScope.launch {
+            while(heroDoing.curGuan==79){
+                while(curPuke>0){
+                    delay(500)
+                }
+                curPuke = AYUtil.getPuke()
+                delay(200)
+            }
+        }
+    }
     fun paiXueZai() = Config.AyPukeXuePoint.isFit()
 
     var count4State2 = 0//2阶段已吃牌数
@@ -116,6 +103,7 @@ class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
             //50/4= 12.5
 
             if (curPuke >= bossXue) {
+                bossXue-=curPuke
                 return true
             } else if (bossXue - curPuke <= 10) {
                 return false //吃掉后小于等于10就失败了，不能要

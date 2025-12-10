@@ -5,6 +5,9 @@ import tasks.CustomHeroDoing
 import tasks.HeroDoing
 import tasks.huodong.fengbao.*
 import tasks.huodong.huangfeihong.HFHHero1
+import tasks.huodong.huangfeihong.HFHHero3
+import tasks.huodong.huangfeihong.HFHHero4
+import tasks.huodong.huangfeihong.HFHHero7
 import tasks.huodong.qiuxiang.QiuXiangDay2
 import tasks.huodong.qiuxiang.QiuXiangDay3
 import tasks.huodong.qiuxiang.QiuXiangDay7
@@ -68,12 +71,12 @@ object HuodongUtil {
         return when(dayDt%perCircleDate){
             0-> HFHHero1()
             1-> Fengbao2()
-            2-> Fengbao3()
-            3-> Fengbao4()
+            2-> HFHHero3()
+            3-> HFHHero4()
             4-> Fengbao5()
 //            5-> Fengbao6()//强组，需要带别人，再让别人带一把小号
-            6-> Fengbao7()
-            else->QiuXiang3Day2()
+            6-> HFHHero7()
+            else-> HFHHero7()
         }
     }
 }

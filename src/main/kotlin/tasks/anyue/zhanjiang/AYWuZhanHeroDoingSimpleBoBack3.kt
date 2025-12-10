@@ -5,6 +5,7 @@ import data.HeroCreator
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import log
 import tasks.XueLiang
 import tasks.anyue.base.An69
 import java.awt.event.KeyEvent
@@ -84,12 +85,13 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
             chooseHero = { g129Index(this) },
             onGuanDealStart = {
                 g129State = 0
+                time=System.currentTimeMillis()
                 if(carDoing.chePosition == 1){
                     //后车的话，黄蜂出来2.5秒后下，但不识别黄凤，就从129开始后
                     //掉血一次后，count满2，g129state会变回0再上射线。后面就一样了
                     //如果是前车就不用管，就等第一次掉血就可以
                     GlobalScope.launch {
-                        delay(15000)
+                        delay(19000)
                         g129State = 1//下掉
                     }
 
@@ -98,7 +100,8 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
                     check129Xue()
                 }
             })
-            .apply { des = "按0下射线，再按0上射线" })
+            .apply { des = "按0下射线，再按0上射线,按3获取第一个旋风得时间" })
+        //19232秒，含2.5，接近3了
 
         guanDealList.add(
             GuanDeal(
@@ -109,8 +112,13 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
                 })
         )
 
+        addGuanDeal(141){
+            onlyDo {
+                carDoing.downHero(feiting)
+            }
+        }
 
-        addGuanDealWithHerosFull(150, listOf(niutou), listOf(tuling))
+        addGuanDealWithHerosFull(150, listOf(niutou,feiting), listOf(tuling))
 
         guanDealList.add(GuanDeal(179, isOver = {
             curGuan > 179
@@ -146,6 +154,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
 
         curGuanDeal = guanDealList.get(0)
     }
+    var time = 0L
 
     /**
      * //179  0初始态（其他都满，下土灵得状态，到boss就按0）。1，杀敌状态，不要的牌都按1（杀死后按0回初始态）。
@@ -256,6 +265,12 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
                     //如果按键了，就取消看血自动了，避免二者冲突
                     checkXue = false
                     g129State = if (g129State == 0) 1 else 0
+                }
+                KeyEvent.VK_NUMPAD3->{
+                    log("129 旋风第一个 ${System.currentTimeMillis()-time}")
+                    if(carDoing.chePosition == 1) {
+                        g129State = 1
+                    }
                 }
             }
 

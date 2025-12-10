@@ -232,7 +232,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         }
 
 
-        if(guan in listOf(49)){
+        if(guan in listOf(59)){
             App.startAutoSave(200)
         }else{
             App.stopAutoSave()

@@ -548,7 +548,7 @@ object AYUtil {
                 pukes.add(
                     Pair(
                         getImageFromFile(it),
-                        it.nameWithoutExtension.substring(it.nameWithoutExtension.lastIndexOf("_")).toInt()
+                        it.nameWithoutExtension.substring(it.nameWithoutExtension.lastIndexOf("_")+1).toInt()
                     )
                 )
             }
