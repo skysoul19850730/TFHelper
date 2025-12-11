@@ -79,7 +79,7 @@ class XWZJHeroDoingBo : BaseSimpleXWHeroDoing() {
         add49(feiting)
 
 
-        add50(listOf(tieqi,yuren), listOf(zhanjiang, niutou, feiting, tieqi, sishen, bingqi, yuren))
+        add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, bingqi, yuren),listOf(tieqi,yuren))
 
         add69()
         curGuanDeal = guanDealList.get(0)
