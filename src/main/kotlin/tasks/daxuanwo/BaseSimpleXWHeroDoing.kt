@@ -205,6 +205,8 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 }
                 -1
             }
+
+            des = "69关，按0依次执行 下中间两个或上满中间两个"
         }
     }
 
