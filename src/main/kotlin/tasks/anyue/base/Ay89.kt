@@ -4,6 +4,7 @@ import data.Config
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import log
 import utils.AYUtil
 
 class Ay89(val heroDoing: BaseAnYueHeroDoing) : AnSub {
@@ -31,12 +32,12 @@ class Ay89(val heroDoing: BaseAnYueHeroDoing) : AnSub {
             addGuanDeal(89) {
                 over { curGuan > 89 || pukes.size == 5}
                 chooseHero {
-                    if(curGuan>0 && needPuke()){
-                        val alreadyBingTime = System.currentTimeMillis()-lastQiuTime
+                    if(curPuke>0 && needPuke()){
+                        val alreadyBingTime = (System.currentTimeMillis() - lastBing).coerceAtLeast(0)
                         delay(5000-alreadyBingTime)//假设刚用了冰 5秒后能打死，已经冰了2秒了，就只需要等3秒
                         curPuke=0
                     }
-                    if(curGuan==0){
+                    if(curPuke==0){
                         daBing()
                         return@chooseHero indexOf(bingqiu)
                     }
@@ -51,7 +52,7 @@ class Ay89(val heroDoing: BaseAnYueHeroDoing) : AnSub {
 
     fun shibiePai(){
         GlobalScope.launch {
-            while(heroDoing.curGuan==79){
+            while(heroDoing.curGuan==89){
                 while(curPuke>0){
                     delay(500)
                 }

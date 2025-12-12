@@ -5,6 +5,7 @@ import data.HeroBean
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import log
 import tasks.SimpleHeZuoHeroDoing
 import utils.AYUtil
 
@@ -33,12 +34,12 @@ class Ay79(val heroDoing: BaseAnYueHeroDoing) : AnSub {
             addGuanDeal(79) {
                 over { curGuan > 79 || bossXue == 0 }
                 chooseHero {
-                    if (curGuan > 0 && needPuke()) {
-                        val alreadyBingTime = System.currentTimeMillis() - lastQiuTime
+                    if (curPuke > 0 && needPuke()) {
+                        val alreadyBingTime = (System.currentTimeMillis() - lastBing).coerceAtLeast(0)
                         delay(5000 - alreadyBingTime)//假设刚用了冰 5秒后能打死，已经冰了2秒了，就只需要等3秒
                         curPuke = 0
                     }
-                    if (curGuan == 0) {
+                    if (curPuke == 0) {
                         daBing()
                         return@chooseHero indexOf(bingqiu)
                     }

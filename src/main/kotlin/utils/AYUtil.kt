@@ -541,8 +541,8 @@ object AYUtil {
     }
 
     val pukes = arrayListOf<Pair<BufferedImage, Int>>()
-    fun getPuke(): Int {
-        val img = getImage(Config.AY_Puke_rect)
+    fun getPuke(img2:BufferedImage?=null): Int {
+        val img =img2?: getImage(Config.AY_Puke_rect)
         if (pukes.isEmpty()) {
             resFile("$anyueFolder/puke").listFiles().forEach {
                 pukes.add(
@@ -555,11 +555,12 @@ object AYUtil {
         }
         pukes.forEach {
             if(ImgUtil.isImageSim(img,it.first,0.95)){
+                log("识别到扑克：${it.second}")
                 return it.second
             }
         }
 
-        return -1
+        return 0
 
     }
 
