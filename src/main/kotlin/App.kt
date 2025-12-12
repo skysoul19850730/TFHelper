@@ -74,6 +74,7 @@ object App {
 
     val model_xuanwo_wawangbo = model_xuanwo or 0x00000001
     val model_xuanwo_wawangziqiang = model_xuanwo or 0x00000002
+    val model_xuanwo_huolingbo = model_xuanwo or 0x00000004
 
     val _launchModel = mutableStateOf(model_duizhan)
     var mLaunchModel: Int
@@ -230,7 +231,7 @@ object App {
                 AyZhanNvGameLaunch()
             }
 
-            model_xuanwo_wawangbo, model_xuanwo_wawangziqiang->{
+            model_xuanwo_wawangbo,model_xuanwo_huolingbo, model_xuanwo_wawangziqiang->{
                 HBZhanNvGameLaunch()
             }
 

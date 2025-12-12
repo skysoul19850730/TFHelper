@@ -45,22 +45,15 @@ class XWHuolingHeroDoingBo : BaseSimpleXWHeroDoing() {
         heros = arrayListOf(
             haiyao, shuiling, huoling, bingqi, dianfa, gugong, feiting, hunqiu, guangqiu, fengling
         )
-        addGuanDeal(0) {
-            over {
-                fulls(huoling, dianfa, fengling, feiting)
-            }
-            chooseHero {
-                if (huoling.isInCar()) {
-                    upAny(huoling, feiting, dianfa, fengling)
-                } else upAny(huoling)
-            }
-        }
 
         addGuanDealWithHerosFull(0, listOf(huoling,dianfa,shuiling,fengling,gugong,haiyao,feiting))
 
 
         add49(feiting)
 
+        add50(listOf(huoling,dianfa,shuiling,fengling,gugong,bingqi,feiting), listOf(fengling,shuiling))
+
+        add69()
 
 
         curGuanDeal = guanDealList.get(0)
