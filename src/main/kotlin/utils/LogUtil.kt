@@ -12,6 +12,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 
 object LogUtil {
+    val tag = "LogUtil"
     val logDirPath = Config.caiji_main_path + File.separator + "logs"
     val messages = mutableStateListOf<Any>()
 
@@ -37,7 +38,9 @@ object LogUtil {
         }
 
         arrayListOf<Any>().also {
-            it.addAll(messages)
+            synchronized(LogUtil.tag) {
+                it.addAll(messages)
+            }
         }.forEach {
             if(it is LogData){
                 if(it.data is String){
@@ -49,7 +52,9 @@ object LogUtil {
             }
         }
         MainScope().launch {
-            messages.clear()
+            synchronized(LogUtil.tag) {
+                messages.clear()
+            }
         }
 
     }

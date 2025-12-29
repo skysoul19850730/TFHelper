@@ -41,6 +41,7 @@ object HeroCreator{
     val hunqiu = HeroBuilder("hunqiu", needCar = false)
     val huofa = HeroBuilder("huofa")
     val huoling = HeroBuilder("huoling")
+    val fengling = HeroBuilder("fengling")
     val huoqiang = HeroBuilder("huoqiang")
     val jiaonv = HeroBuilder("jiaonv")
     val kuangjiang = HeroBuilder("kuangjiang")

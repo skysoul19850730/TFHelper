@@ -70,7 +70,7 @@ object HuodongUtil {
             1-> HFHHero2()
             2-> HFHHero3()
             3-> HFHHero4()
-            4-> Fengbao5()
+            4-> HFHHero5()
 //            5-> Fengbao6()//强组，需要带别人，再让别人带一把小号
             6-> HFHHero7()
             else-> HFHHero7()

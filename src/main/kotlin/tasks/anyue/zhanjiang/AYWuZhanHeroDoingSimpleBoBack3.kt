@@ -86,12 +86,12 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
             onGuanDealStart = {
                 g129State = 0
                 time=System.currentTimeMillis()
-                if(carDoing.chePosition == 1){
+                if(carDoing.chePosition == 0){
                     //后车的话，黄蜂出来2.5秒后下，但不识别黄凤，就从129开始后
                     //掉血一次后，count满2，g129state会变回0再上射线。后面就一样了
                     //如果是前车就不用管，就等第一次掉血就可以
                     GlobalScope.launch {
-                        delay(19000)
+                        delay(18500)
                         g129State = 1//下掉
                     }
 
@@ -133,7 +133,9 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
         }
         )
 
-        addGuanDeal(180) {
+        addGuanDealWithHerosFull(180, listOf(tianshi))
+
+        addGuanDeal(182) {
             over {
                 jiaonv.currentLevel == 3
             }
@@ -191,13 +193,17 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
     var g129State = 0//0等待,1 下宝库 备宝库，2上宝库 //回到了初始态，等1再下宝库循环
     var g129XueCount = 1//0,1 下射线，2，3上射线
     var checkXue = true
+    var g129First = true
     suspend fun check129Xue() {
 
         while (curGuan <= 129 && checkXue) {
             XueLiang.observerXueDown(xueRate = 0.1f, over = { curGuan > 129 })
             g129XueCount++
             if (g129XueCount == 2) {
-                delay(700)
+                if(!g129First) {//第一次不延迟，否则离boss太近
+                    delay(800)
+                }
+                g129First = false
                 g129XueCount = 0
                 if (checkXue) {
                     g129State = if (g129State == 0) 1 else 0
@@ -268,7 +274,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
                 }
                 KeyEvent.VK_NUMPAD3->{
                     log("129 旋风第一个 ${System.currentTimeMillis()-time}")
-                    if(carDoing.chePosition == 1) {
+                    if(carDoing.chePosition == 0) {
                         g129State = 1
                     }
                 }

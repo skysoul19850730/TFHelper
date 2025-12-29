@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent
 class XWHuolingHeroDoingBo : BaseSimpleXWHeroDoing() {
     val shuiling = HeroCreator.shuiling.create()
     val huoling = HeroCreator.huoling.create()
-    val fengling = HeroCreator.huoling.create()
+    val fengling = HeroCreator.fengling.create()
 //    val fengling = HeroCreator.fengling.create()
     val dianfa = HeroCreator.dianfa.create()
     val gugong = HeroCreator.gugong.create()

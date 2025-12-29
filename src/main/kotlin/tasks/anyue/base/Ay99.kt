@@ -33,16 +33,16 @@ class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
             addGuanDeal(99) {
                 over { curGuan > 99 || bossXue <= 0 }
                 chooseHero {
-                    if(curPuke>0 && needPuke()){
-                        val alreadyBingTime = (System.currentTimeMillis() - lastBing).coerceAtLeast(0)
-                        delay(5000-alreadyBingTime)//假设刚用了冰 5秒后能打死，已经冰了2秒了，就只需要等3秒
-                        curPuke=0
-                    }
-                    if(curPuke==0){
+                    if (curPuke > 0 && needPuke()) {
+                        delay(6000-(System.currentTimeMillis()-shibieTime))
+                        indexOf(bingqiu)
+                    }else{
                         daBing()
-                        return@chooseHero indexOf(bingqiu)
+                        if (curPuke > 0 && needPuke()) {
+                            delay(6000-(System.currentTimeMillis()-shibieTime))
+                        }
+                        indexOf(bingqiu)
                     }
-                    -1
                 }
                 onStart {
                     shibiePai()
@@ -50,17 +50,21 @@ class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
             }
         }
     }
-    fun shibiePai(){
+    var shibieTime = 0L
+    fun shibiePai() {
         GlobalScope.launch {
-            while(heroDoing.curGuan==99){
-                while(curPuke>0){
-                    delay(500)
-                }
+            while (heroDoing.curGuan == 99) {
                 curPuke = AYUtil.getPuke()
-                delay(200)
+                if(curPuke>0){
+                    shibieTime = System.currentTimeMillis()
+                    delay(6000-(System.currentTimeMillis()-shibieTime))
+                    curPuke = 0
+                }
+                delay(100)
             }
         }
     }
+
     fun paiXueZai() = Config.AyPukeXuePoint.isFit()
 
     var count4State2 = 0//2阶段已吃牌数

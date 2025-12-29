@@ -177,14 +177,15 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
                 return
             }
 
-            curGuanDeal = changeTo
-            MainData.curGuanKaDes.value = curGuanDeal?.des ?: ""
-            log("curGuanDeal is ${curGuanDeal!!.startGuan}")
+
+            MainData.curGuanKaDes.value = changeTo.des ?: ""
+            log("curGuanDeal is ${changeTo.startGuan}")
             GlobalScope.launch {
-                curGuanDeal?.onGuanDealStart?.invoke()
-                if (curGuanDeal?.isOver?.invoke() == true) {//start中判断不需要执行此deal，可以将waiting置true，这样直接触发end
-                    curGuanDeal?.onGuanDealEnd?.invoke()
+                changeTo.onGuanDealStart?.invoke()
+                if (changeTo.isOver.invoke()) {//start中判断不需要执行此deal，可以将waiting置true，这样直接触发end
+                    changeTo.onGuanDealEnd?.invoke()
                 } else {
+                    curGuanDeal = changeTo
                     waiting = false
                 }
             }

@@ -35,15 +35,17 @@ class Ay79(val heroDoing: BaseAnYueHeroDoing) : AnSub {
                 over { curGuan > 79 || bossXue == 0 }
                 chooseHero {
                     if (curPuke > 0 && needPuke()) {
-                        val alreadyBingTime = (System.currentTimeMillis() - lastBing).coerceAtLeast(0)
-                        delay(5000 - alreadyBingTime)//假设刚用了冰 5秒后能打死，已经冰了2秒了，就只需要等3秒
-                        curPuke = 0
-                    }
-                    if (curPuke == 0) {
+                        delay(6000-(System.currentTimeMillis()-shibieTime))
+                        indexOf(bingqiu)
+                    }else{
                         daBing()
-                        return@chooseHero indexOf(bingqiu)
+                        if (curPuke > 0 && needPuke()) {//要的就等6秒
+                            delay(6000-(System.currentTimeMillis()-shibieTime))
+                        }
+                        indexOf(bingqiu)
                     }
-                    -1
+
+
                 }
                 onStart {
                     shibiePai()
@@ -52,14 +54,21 @@ class Ay79(val heroDoing: BaseAnYueHeroDoing) : AnSub {
         }
     }
 
+    var shibieTime = 0L
+
     fun shibiePai() {
         GlobalScope.launch {
             while (heroDoing.curGuan == 79) {
-                while (curPuke > 0) {
-                    delay(500)
-                }
+//                while (curPuke > 0) {
+//                    delay(500)
+//                }
                 curPuke = AYUtil.getPuke()
-                delay(200)
+                if(curPuke>0){
+                    shibieTime = System.currentTimeMillis()
+                    delay(6000-(System.currentTimeMillis()-shibieTime))
+                    curPuke = 0
+                }
+                delay(100)
             }
         }
     }

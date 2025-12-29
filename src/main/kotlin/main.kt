@@ -1301,7 +1301,9 @@ fun Any.log(msg: Any, onlyPrint: Boolean = false) {
     println(logData.time + " ${logData.data.hashCode()} " + logData.data.toString())
     if (!onlyPrint) {
         MainScope().launch {
-            LogUtil.messages.add(0, logData)
+            synchronized(LogUtil.tag) {
+                LogUtil.messages.add(0, logData)
+            }
         }
     }
 }
@@ -1314,7 +1316,9 @@ fun loges(msg: String) {
     }
     println(logData.time + " " + logData.data.toString())
     MainScope().launch {
-        LogUtil.messages.add(0, logData)
+        synchronized(LogUtil.tag) {
+            LogUtil.messages.add(0, logData)
+        }
     }
 
 }

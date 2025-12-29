@@ -11,6 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tasks.SimpleHeZuoHeroDoing
+import tasks.daxuanwo.utils.WX59
 import ui.zhandou.UIKeyListenerManager
 import utils.ImgUtil
 import utils.MRobot
@@ -19,10 +20,10 @@ import java.awt.event.KeyEvent
 // 9  29 都自动执行
 abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {
 
-    var heroDown49:HeroBean?=null
-    var midHeros69:List<HeroBean>? = null
+    var heroDown49: HeroBean? = null
+    var midHeros69: List<HeroBean>? = null
 
-    var auto59 = true
+    var auto59 = false
 
     override suspend fun onKeyDown(code: Int): Boolean {
         //如果龙王识别出错可以按快捷下对应卡牌，但不知道快捷键按下得时间，所以不能延时进行上卡，只能快捷键9来恢复上卡
@@ -33,27 +34,27 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         }
 
         if (code == KeyEvent.VK_NUMPAD0) {
-            if (curGuan == 9){
+            if (curGuan == 9) {
                 GlobalScope.launch {
                     MRobot.moveFullScreen()
                 }
                 return true
             }
-            if(curGuan==49){
+            if (curGuan == 49) {
                 g49 = 1
                 return true
             }
-            if(curGuan==69){
-                g69State+=1
-                if(g69State>=2){
-                    g69State=0
+            if (curGuan == 69) {
+                g69State += 1
+                if (g69State >= 2) {
+                    g69State = 0
                 }
                 return true
             }
 
         }
-        if(code == KeyEvent.VK_NUMPAD3){
-            if(curGuan == 49){
+        if (code == KeyEvent.VK_NUMPAD3) {
+            if (curGuan == 49) {
                 g49 = 2
                 return true
             }
@@ -64,30 +65,31 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     }
 
 
-    fun add50(fullsHeros:List<HeroBean>, midHeros:List<HeroBean>){
+    fun add50(fullsHeros: List<HeroBean>, midHeros: List<HeroBean>) {
         midHeros69 = midHeros
-        addGuanDeal(50){
+        //这里要晚一点
+        addGuanDeal(52) {
             over {
                 fulls(*fullsHeros.toTypedArray())
             }
-            chooseHero{
-                val otherHeros = fullsHeros.filter { !midHeros.contains(it)}
-                if(!carDoing.carps.get(0).hasHero() || !carDoing.carps.get(1).hasHero()){
+            chooseHero {
+                val otherHeros = fullsHeros.filter { !midHeros.contains(it) }
+                if (!carDoing.carps.get(0).hasHero() || !carDoing.carps.get(1).hasHero()) {
                     //如果01位置空着，就上其他的
                     upAny(*otherHeros.toTypedArray())
-                }else if(!carDoing.carps.get(2).hasHero() || !carDoing.carps.get(3).hasHero()){
+                } else if (!carDoing.carps.get(2).hasHero() || !carDoing.carps.get(3).hasHero()) {
                     //如果01都上好后，2，3有空的，则上mids
-                   var index = upAny(*midHeros.toTypedArray())
-                    if(index>-1){
+                    var index = upAny(*midHeros.toTypedArray())
+                    if (index > -1) {
                         index
-                    }else{
+                    } else {
                         //如果没有mids预选，可以上 0，1位置的英雄
                         val list = carDoing.carps.take(2).map {
                             it.mHeroBean!!
                         }
                         upAny(*list.toTypedArray())
                     }
-                }else{
+                } else {
                     //如果0123都不空了，就开始全部上满
                     upAny(*fullsHeros.toTypedArray())
                 }
@@ -97,28 +99,27 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
                 //如果不在fulls里，就下掉
                 carDoing.carps.forEach {
-                    if(it.mHeroBean!=null && !fullsHeros.contains(it.mHeroBean)){
+                    if (it.mHeroBean != null && !fullsHeros.contains(it.mHeroBean)) {
                         carDoing.downHero(it.mHeroBean!!)
                     }
                 }
 
                 //如果要摆中间的两个 不在中间，就下掉要重上
                 midHeros.forEach {
-                    if(it.position!=2 && it.position!=3){
+                    if (it.position != 2 && it.position != 3) {
                         carDoing.downHero(it)
                     }
                 }
 
                 //看中间的两个是不是要摆放的，不是的话，要下掉
                 var hero2 = carDoing.carps.get(2).mHeroBean
-                if(hero2!=null && !midHeros.contains(hero2)){
+                if (hero2 != null && !midHeros.contains(hero2)) {
                     carDoing.downPosition(2)
                 }
                 hero2 = carDoing.carps.get(3).mHeroBean
-                if(hero2!=null && !midHeros.contains(hero2)){
+                if (hero2 != null && !midHeros.contains(hero2)) {
                     carDoing.downPosition(3)
                 }
-
 
 
             }
@@ -127,10 +128,10 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     }
 
     var g49 = 0
-    fun add49(heroBean: HeroBean){
+    fun add49(heroBean: HeroBean) {
         heroDown49 = heroBean
 
-        addGuanDeal(48){
+        addGuanDeal(48) {
             over {
                 heroDown49!!.isInCar()
             }
@@ -142,18 +143,18 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             }
         }
 
-        addGuanDeal(49){
+        addGuanDeal(49) {
             over {
-                curGuan>49 || (g49==2 && heroDown49!!.isFull() && g49StartBoss == null)
+                curGuan > 49 || (g49 == 2 && heroDown49!!.isFull() && g49StartBoss == null)
             }
             chooseHero {
-                if(heroDown49!!.isFull() && g49StartBoss!=null){
-                    g49 =3
+                if (heroDown49!!.isFull() && g49StartBoss != null) {
+                    g49 = 3
                 }
 
-                if(g49 == 3){
-                      g49StartBoss?.invoke(this)?:-1
-                }else {
+                if (g49 == 3) {
+                    g49StartBoss?.invoke(this) ?: -1
+                } else {
 
                     val index = indexOf(heroDown49)
                     if (index > -1) {
@@ -175,32 +176,38 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         }
     }
 
-    var g49StartBoss : (suspend (List<HeroBean?>)->Int)?=null
+    var g49StartBoss: (suspend (List<HeroBean?>) -> Int)? = null
 
 
     var g69State = 0 //0:全上，1 下中间俩
-    fun add69(){
-        addGuanDeal(69){
+    fun add69() {
+        addGuanDeal(69) {
             over {
-                curGuan>69
+                curGuan > 69
             }
 
             chooseHero {
-                if(g69State==0){
-                    if(midHeros69?.all { it.isFull() }==true){
-                        while(g69State == 0){
+                if (g69State == 0) {
+                    if (midHeros69?.all { it.isFull() } == true) {
+                        while (g69State == 0) {
                             delay(200)
                         }
-                    }else{
-                        upAny(*midHeros69!!.toTypedArray())
+                    } else {
+                        return@chooseHero upAny(*midHeros69!!.toTypedArray())
                     }
                 }
-                if(g69State == 1){
+                if (g69State == 1) {
                     midHeros69?.forEach {
                         carDoing.downHero(it)
                     }
-                    while(g69State == 1){
-                        delay(100)
+                    //备卡第一个
+                    val ind = upAny(midHeros69!!.first())
+
+                    if (ind > -1) {
+                        while (g69State == 1) {
+                            delay(20)
+                        }
+                        return@chooseHero ind
                     }
                 }
                 -1
@@ -213,32 +220,28 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
 
-        if(guan == 9){
+        if (guan == 9) {
             GlobalScope.launch {
                 delay(1000)
                 MRobot.moveFullScreen()
             }
         }
-        if(guan == 29){
+        if (guan == 29) {
             start29()
-        }else{
+        } else {
             stop29()
         }
 
-        if(auto59){
-            if(guan == 59){
-                start59()
-            }else {
-                stop59()
-            }
+        if (guan == 59) {
+            WX59.autoDo(auto59)
         }
 
 
-        if(guan in listOf(59)){
-            App.startAutoSave(200)
-        }else{
-            App.stopAutoSave()
-        }
+//        if (guan in listOf(59)) {
+//            App.startAutoSave(200)
+//        } else {
+//            App.stopAutoSave()
+//        }
     }
 
 
@@ -272,8 +275,8 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     }
 
 
-    var job29:Job?=null
-    fun start29(){
+    var job29: Job? = null
+    fun start29() {
         var subFoler = "${Config.platName}/xuanwo/"
         val daxia = getImageFromRes("${subFoler}xw_daxia.png")
         val xw_pangxie = getImageFromRes("${subFoler}xw_pangxie.png")
@@ -283,39 +286,41 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
         job29?.cancel()
         job29 = GlobalScope.launch {
-            while(curGuan==29){
-                val img = getImage(MRect.createWH(675,210,54,30))
+            while (curGuan == 29) {
+                val img = getImage(MRect.createWH(675, 210, 54, 30))
                 val sim = 0.95
-              val point =   if(ImgUtil.isImageSim(img,daxia,sim)){
-                    MPoint(650,300)
-                }else  if(ImgUtil.isImageSim(img,xw_pangxie,sim)){
-                  MPoint(410,310)
-              }else if(ImgUtil.isImageSim(img,xw_shaoji,sim)){
-                  MPoint(470,410)
-              }else if(ImgUtil.isImageSim(img,xw_shaoyu,sim)){
-                  MPoint(580,410)
-              }else if(ImgUtil.isImageSim(img,xw_zhutou,sim)){
-                  MPoint(530,270)
-              }else{
-                  null
-              }
-                if(point!=null){
+                val point = if (ImgUtil.isImageSim(img, daxia, sim)) {
+                    MPoint(650, 300)
+                } else if (ImgUtil.isImageSim(img, xw_pangxie, sim)) {
+                    MPoint(410, 310)
+                } else if (ImgUtil.isImageSim(img, xw_shaoji, sim)) {
+                    MPoint(470, 410)
+                } else if (ImgUtil.isImageSim(img, xw_shaoyu, sim)) {
+                    MPoint(580, 410)
+                } else if (ImgUtil.isImageSim(img, xw_zhutou, sim)) {
+                    MPoint(530, 270)
+                } else {
+                    null
+                }
+                if (point != null) {
                     point.clickPc()
                     delay(5000)
-                }else{
+                } else {
                     delay(100)
                 }
             }
         }
     }
-    fun stop29(){
+
+    fun stop29() {
         job29?.cancel()
     }
 
-    fun start59(){
+    fun start59() {
 
     }
-    fun stop59(){
+
+    fun stop59() {
 
     }
 }

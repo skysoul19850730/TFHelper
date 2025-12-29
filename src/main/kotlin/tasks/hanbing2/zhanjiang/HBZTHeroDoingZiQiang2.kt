@@ -101,8 +101,8 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
                 curGuan > 109
             }
             chooseHero {
-                var index = upBase()
-                if (index > -1) index else upAny(guangqiu)
+                 upBase()
+
             }
             onStart {
                 carDoing.downHero(wangjiang)

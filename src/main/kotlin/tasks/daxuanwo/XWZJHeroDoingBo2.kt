@@ -4,10 +4,10 @@ import data.HeroCreator
 import kotlinx.coroutines.delay
 import java.awt.event.KeyEvent
 
-class XWZJHeroDoingBo : BaseSimpleXWHeroDoing() {
+class XWZJHeroDoingBo2 : BaseSimpleXWHeroDoing() {
     val tieqi = HeroCreator.tieqi.create()
     val zhanjiang = HeroCreator.zhanjiang.create()
-    val shitou = HeroCreator.shitou.create()
+    val kuangjiang = HeroCreator.kuangjiang.create()
     val niutou = HeroCreator.niutou.create()
     val yuren = HeroCreator.yuren.create()
     val feiting = HeroCreator.feiting.create()
@@ -15,7 +15,7 @@ class XWZJHeroDoingBo : BaseSimpleXWHeroDoing() {
     val haiyao = HeroCreator.haiyao.create()
     val bingqi = HeroCreator.bingqi.create()
 
-    val wangjiang = HeroCreator.wangjiang.create()
+    val hunqiu = HeroCreator.hunqiu.create()
     val guangqiu = HeroCreator.guangqiu.create()
 
 
@@ -38,8 +38,13 @@ class XWZJHeroDoingBo : BaseSimpleXWHeroDoing() {
     override fun initHeroes() {
         super.initHeroes()
 
+        g49StartBoss = {
+            var index = it.indexOf(hunqiu)
+            backHun(index)
+        }
+
         heros = arrayListOf(
-            haiyao, tieqi, zhanjiang, bingqi, niutou, yuren, feiting, wangjiang, guangqiu, shitou
+            haiyao, tieqi, zhanjiang, bingqi, niutou, yuren, feiting, hunqiu, guangqiu, kuangjiang
         )
         addGuanDeal(0) {
             over {
@@ -64,17 +69,17 @@ class XWZJHeroDoingBo : BaseSimpleXWHeroDoing() {
 
         addGuanDeal(38) {
             over {
-                fulls(zhanjiang, niutou, feiting, tieqi, shitou, haiyao, yuren)
+                fulls(zhanjiang, niutou, feiting, tieqi, kuangjiang, haiyao, yuren)
             }
             chooseHero {
-                upAny(zhanjiang, niutou, feiting, tieqi, haiyao, yuren, shitou)
+                upAny(zhanjiang, niutou, feiting, tieqi, haiyao, yuren, kuangjiang)
             }
         }
 
         add49(feiting)
 
 
-        add50(listOf(zhanjiang, niutou, feiting, tieqi, wangjiang, bingqi, yuren),listOf(yuren,wangjiang,))
+        add50(listOf(zhanjiang, niutou, feiting, tieqi, kuangjiang, bingqi, yuren),listOf(yuren,kuangjiang,))
 
         add69()
         curGuanDeal = guanDealList.get(0)

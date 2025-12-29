@@ -377,7 +377,7 @@ data class CarPosition(
 
         logOnly("car:${carDoing.chePosition} position:${mPos} hb199 hasCount :$hasCount")
         if (hasCount > 300) {
-            App.save()
+//            App.save()
             return true
         }
         return false

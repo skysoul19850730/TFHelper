@@ -33,6 +33,7 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
     }
     override fun initHeroes() {
         super.initHeroes()
+        auto59 = true
         g49StartBoss = {
             var index = it.indexOf(muqiu)
             backHun(index)
@@ -64,7 +65,7 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
             }
 
             chooseHero {
-                carDoing.downHero(yuren)
+                carDoing.downHero(sishen)
                 upAny(haiyao)
             }
         }
