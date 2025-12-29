@@ -659,4 +659,24 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
         }
         return index
     }
+
+    val dianming210s = arrayListOf<Int>()
+    fun getHB210Selected(imgTest: BufferedImage? = null): Int {
+        var startTime = System.currentTimeMillis()
+        val img = imgTest ?: getImage(App.rectWindow)
+        var index = carps.indexOfFirst {
+            if(dianming210s.contains(it.mPos)){
+                false
+            }else {
+                it.isHB199Selected(img)
+            }
+        }
+
+        logOnly(img)
+        if (index > -1) {
+            dianming210s.add(index)
+            log("che $chePosition hb210 selected at index :${index} time:${System.currentTimeMillis() - startTime}")
+        }
+        return index
+    }
 }

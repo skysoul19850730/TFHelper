@@ -188,7 +188,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
         })
 
 
-        addGuan210(arrayListOf(tieqi, zhanjiang, gugu, jiaonv, tianshi, sishen))
+        addGuan210(arrayListOf(tieqi, zhanjiang, gugu, jiaonv, sishen, tianshi))
         curGuanDeal = guanDealList.first()
     }
 
