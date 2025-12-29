@@ -95,7 +95,12 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
             }
             chooseHero {
                 var index = upBase()
-                if (index > -1) index else upAny(guangqiu)
+                if (index > -1) index else {
+                    if(isRenwu){
+                        -1
+                    }else
+                    upAny(guangqiu)
+                }
             }
             onStart {
                 carDoing.downHero(bingnv)

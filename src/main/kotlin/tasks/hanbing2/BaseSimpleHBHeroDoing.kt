@@ -94,6 +94,9 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             }
 
             if (click210Pos > -1) {
+                if(!carDoing.dianming210s.contains(click210Pos)) {
+                    carDoing.dianming210s.add(click210Pos)
+                }
                 return true
             }
         }
@@ -543,6 +546,25 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             over { false }
             chooseHero {
                 deal210(this)
+            }
+            onStart {
+
+                GlobalScope.launch {
+                    delay(10000)
+                    while(curGuan<210 && running){
+
+                        var index = carDoing.getHB210Selected()
+                        if(index>-1){
+                            click210Pos = index
+                            delay(25000)//30秒一个黑洞
+                        }else{
+                            delay(500)
+                        }
+
+                    }
+
+                }
+
             }
             des = "哪里被标记为黑洞就点哪里"
         }

@@ -18,11 +18,15 @@ fun UtilPage(){
             button("洗点查看"){
                 page = 1
             }
+            button("战将伤害"){
+                page = 2
+            }
 
         }
 
         when(page){
             1 -> WashPage()
+            2 -> ZhanJiangPage()
         }
 
 

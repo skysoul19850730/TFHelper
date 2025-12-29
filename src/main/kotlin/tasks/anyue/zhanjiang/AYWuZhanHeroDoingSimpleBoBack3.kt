@@ -23,6 +23,13 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
     val huanqiu = HeroCreator.huanqiu.create()
     val jiaonv = HeroCreator.jiaonv.create()
 
+    override suspend fun onHuanQiuPost() {
+        if (curGuan == 69) {
+            return
+        }
+        super.onHuanQiuPost()
+    }
+
     override fun initHeroes() {
         heros = arrayListOf(zhanjiang, tieqi, tianshi, jiaonv, sishen, feiting, tuling, niutou, guangqiu, huanqiu)
 
@@ -118,6 +125,33 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
             }
         }
 
+        addGuanDeal(149){
+            over {
+                curGuan>149 || feiting.isFull()
+            }
+
+            chooseHero {
+
+                while(g149XueState<5 && curGuan<150){
+                    // 掉血状态维持3次，可以认为是石柱，因为石柱不能回血
+                    // 但凡满血一次都可以重新识别血量，满了血就大概率不是石柱
+                    // 只有石柱上飞艇
+
+                    delay(if(g149XueState==0) 10000 else 1000)
+                    if(XueLiang.getXueLiang()<0.9){
+                        g149XueState++
+                    }else{
+                        g149XueState = 0
+                    }
+
+                }
+
+                upAny(feiting)
+
+            }
+
+        }
+
         addGuanDealWithHerosFull(150, listOf(niutou,feiting), listOf(tuling))
 
         guanDealList.add(GuanDeal(179, isOver = {
@@ -156,6 +190,9 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
 
         curGuanDeal = guanDealList.get(0)
     }
+
+    var g149XueState = 0
+
     var time = 0L
 
     /**
