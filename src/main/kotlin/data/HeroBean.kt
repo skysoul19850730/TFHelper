@@ -29,6 +29,7 @@ class HeroBean(
     val imgList
         get() = (curHeroFinder?: heroFinders.first()).imgList
 
+    val fullStarNum  get() = if (isMohua) 5 else 4
 
     var trueFull4Duizhan = false
 
@@ -184,5 +185,8 @@ class HeroBean(
     fun reset() {
         position = -1
         currentLevel = 0
+    }
+    fun setFull(){
+        currentLevel =  fullStarNum
     }
 }

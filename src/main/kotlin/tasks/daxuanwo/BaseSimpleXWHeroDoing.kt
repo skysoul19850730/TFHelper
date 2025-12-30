@@ -20,8 +20,8 @@ import java.awt.event.KeyEvent
 // 9  29 都自动执行
 abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {
 
-    var heroDown49: HeroBean? = null
-    var midHeros69: List<HeroBean>? = null
+    var heroDown49:HeroBean?=null
+    var midHeros69:List<HeroBean>? = null
 
     var auto59 = false
 
@@ -180,6 +180,40 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
 
     var g69State = 0 //0:全上，1 下中间俩
+    var g69Type = 1  // 0：正常上，按顺序，有哪个上哪个，
+    // 1：没都上车时，优先上没上车的。比如要满鱼人，但也要上个电法撑速度，
+    // 当有鱼人电法时如果电法没在车，就先电法，后面就都一样了
+    //
+
+    // 不管g69Type是什么，在达到g69基本要求后，是否需要第一个优先快速满，与upany的区别就是如果没第一个有第二个但也有光球时，upany会优先上卡
+    //而不是上光（光还验卡呢）。这里优先用光来撞运气去满第一个，然后考虑节省掉验光操作
+    var g69TypeFirstQuickFull = true
+
+    var g69guangCount = 0
+    var g69allNeedStar = 8
+    override suspend fun onGuangqiuPost() {
+        if(curGuan == 69){
+            var noFullCount = carDoing.carps.count {
+                !(it.mHeroBean?.isFull() ?: true)
+            }
+            if (noFullCount == 1) {//只有一个英雄就直接长星，15光了
+                carDoing.carps.find {
+                    !(it.mHeroBean?.isFull() ?: true)
+                }?.apply {
+                    addHero()
+//                if(mHeroBean?.isFull() == true){
+//                    mHeroBean?.checkStarLevelUseCard(carDoing)
+//                }
+                }
+            } else if (noFullCount < 1) {//都满着就不用验了
+                return
+            } else{
+                g69guangCount++
+            }
+            return
+        }
+        super.onGuangqiuPost()
+    }
     fun add69() {
         addGuanDeal(69) {
             over {
@@ -193,24 +227,71 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                             delay(200)
                         }
                     } else {
-                        return@chooseHero upAny(*midHeros69!!.toTypedArray())
+                        var index = -1
+                        //type = 0
+                        if(g69Type == 0){
+                            if(g69TypeFirstQuickFull){
+                                //优先快速满第一个,这里就包含光了
+                                index = upAny(midHeros69!!.first())
+                            }
+
+                            if(index <0){
+                                index =  upAny(*midHeros69!!.toTypedArray())
+                            }
+
+                        }else if(g69Type == 1){
+                            //第一个都没上车。都走正常顺序
+                            if( !midHeros69!!.first().isInCar()){
+                                index = upAny(*midHeros69!!.toTypedArray())
+                            }else if( !midHeros69!!.get(1).isInCar()){
+                                //第二个没上车，优先上车
+                                index = upAny(*midHeros69!!.reversed().toTypedArray())
+                            }else{
+
+                                if(g69TypeFirstQuickFull){
+                                    //优先快速满第一个,这里就包含光了
+                                    index = upAny(midHeros69!!.first())
+                                }
+
+                                if(index <0){
+                                    index =  upAny(*midHeros69!!.toTypedArray())
+                                }
+                            }
+                        }
+
+                        if(index>-1){
+                            if(midHeros69!!.sumOf { it.currentLevel }+ g69guangCount >= g69allNeedStar-1){
+                                midHeros69!!.forEach {
+                                    it.setFull()//当前星 + 光 = 满-1 就都设置为满就可以了.(因为index还没返回出去，所以按-1计算
+                                }
+                            }
+                        }
+
+                        return@chooseHero index
                     }
                 }
                 if (g69State == 1) {
                     midHeros69?.forEach {
                         carDoing.downHero(it)
                     }
+                    g69guangCount = 0
                     //备卡第一个
                     val ind = upAny(midHeros69!!.first())
 
                     if (ind > -1) {
                         while (g69State == 1) {
-                            delay(20)
+                            delay(50)
                         }
                         return@chooseHero ind
                     }
                 }
                 -1
+            }
+
+            onStart {
+                g69allNeedStar = midHeros69!!.sumOf {
+                    it.fullStarNum
+                }
             }
 
             des = "69关，按0依次执行 下中间两个或上满中间两个"

@@ -1,4 +1,4 @@
-package tasks.anyue.zhanjiang
+package tasks.anyue.zhanjiang.backup
 
 import data.HeroBean
 import data.HeroCreator
@@ -6,6 +6,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tasks.XueLiang
+import tasks.anyue.zhanjiang.BaseSimpleAnYueHeroDoing
 import java.awt.event.KeyEvent
 import kotlin.math.abs
 

@@ -160,7 +160,11 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
             var checked = carDoing.checkStarsWithoutCard()
             if (!checked) {//1.5秒没有check到的话，再使用弹窗识别
                 if (carDoing.openCount() > 1 || chePosition == 0) {//前车或开格子多余1个
-                    carDoing.checkStars()
+                    var changed = carDoing.checkStars()
+                    if(!changed){
+                        //未检测到的话，尝试让工程位+1.因为不可能检测不到，除非就是工程位没到达顶部（车本身只开了4个以内的格子，所以点不到工程位)
+                        carDoing.carps.getOrNull(6)?.addHero()
+                    }
                 } else {
                     needCheckStar = true
                 }

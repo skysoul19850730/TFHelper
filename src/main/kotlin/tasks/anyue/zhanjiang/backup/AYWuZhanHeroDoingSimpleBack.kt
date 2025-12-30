@@ -1,8 +1,9 @@
-package tasks.anyue.zhanjiang
+package tasks.anyue.zhanjiang.backup
 
 import data.HeroBean
 import data.HeroCreator
 import log
+import tasks.anyue.zhanjiang.BaseSimpleAnYueHeroDoing
 
 class AYWuZhanHeroDoingSimpleBack : BaseSimpleAnYueHeroDoing() {
 
