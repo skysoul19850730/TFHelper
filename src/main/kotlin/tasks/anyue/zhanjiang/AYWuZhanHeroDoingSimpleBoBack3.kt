@@ -137,8 +137,8 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
                     // 但凡满血一次都可以重新识别血量，满了血就大概率不是石柱
                     // 只有石柱上飞艇
 
-                    delay(if(g149XueState==0) 10000 else 1000)
-                    if(XueLiang.getXueLiang()<0.9){
+                    delay( 1000)
+                    if(XueLiang.getXueLiang()<0.95){
                         g149XueState++
                     }else{
                         g149XueState = 0

@@ -10,7 +10,7 @@ import ui.zhandou.hanbing.HanBingModel
 import java.awt.event.KeyEvent
 
 class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
-    val isRenwu = true
+    val isRenwu = false
 
 
     val zhanjiang = HeroCreator.zhanjiang.create()

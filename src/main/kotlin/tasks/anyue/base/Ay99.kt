@@ -4,6 +4,7 @@ import data.Config
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import log
 import utils.AYUtil
 
 class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
@@ -17,7 +18,7 @@ class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
     }
 
     var lastBing = 0L
-    var timePreBing = 2000L
+    var timePreBing = 2800L
     suspend fun daBing() {
         if (System.currentTimeMillis() - lastBing > timePreBing) {
 
@@ -68,7 +69,14 @@ class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
     fun paiXueZai() = Config.AyPukeXuePoint.isFit()
 
     var count4State2 = 0//2阶段已吃牌数
-    fun needPuke(): Boolean {
+
+    fun needPuke(): Boolean{
+        var doNeed = doneedPuke()
+        log("doneed $curPuke $doNeed , curXue is $bossXue")
+        return doNeed
+    }
+
+    fun doneedPuke(): Boolean {
         if (pukes.size == 5) {
             state = 1
             if (bossXue == 120) {
@@ -113,9 +121,9 @@ class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
                 return false //吃掉后小于等于10就失败了，不能要
             } else {
 
-                var min = bossXue - (count4State2 - 1) * 20  //假设后面都等王，这张牌最小可以是多少
+                var min = bossXue - (5-count4State2-1) * 20  //假设后面都等王，这张牌最小可以是多少
                 //就算70，我都可以拿1，69，就最低拿9，剩下就必须都是王了
-                var avg = bossXue / count4State2 //平均要拿这么多，然后每一步取
+                var avg = bossXue / (5-count4State2) //平均要拿这么多，然后每一步取
 
                 if(curPuke<min){
                     return false
@@ -138,11 +146,13 @@ class Ay99(val heroDoing: BaseAnYueHeroDoing) : AnSub {
 
                     if( curPuke>=  (min+avg)/2){
                         bossXue-=curPuke
+                        count4State2++
                         return true
                     }
                     return false
                 }
 
+                count4State2++
                 bossXue-=curPuke
 
                 return true

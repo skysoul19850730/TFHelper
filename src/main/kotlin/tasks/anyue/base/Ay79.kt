@@ -18,7 +18,7 @@ class Ay79(val heroDoing: BaseAnYueHeroDoing) : AnSub {
     }
 
     var lastBing = 0L
-    var timePreBing = 2000L
+    var timePreBing = 2800L
     suspend fun daBing() {
         if (System.currentTimeMillis() - lastBing > timePreBing) {
 
