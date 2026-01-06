@@ -1,4 +1,4 @@
-package tasks.anyue.zhanjiang
+package tasks.anyue.zhanjiang.backup
 
 import data.HeroBean
 import data.HeroCreator
@@ -7,6 +7,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import log
 import tasks.XueLiang
+import tasks.anyue.zhanjiang.BaseSimpleAnYueHeroDoing
 import java.awt.event.KeyEvent
 
 class AYWuZhanHeroDoingSimpleBack2 : BaseSimpleAnYueHeroDoing() {

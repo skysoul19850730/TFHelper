@@ -10,7 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import button
-import tasks.anyue.zhanjiang.AYWuZhanHeroDoingSimpleBoBack2
+import tasks.anyue.zhanjiang.backup.AYWuZhanHeroDoingSimpleBoBack2
 import ui.utils.HerosPage
 import ui.utils.HerosPageData
 import ui.utils.WashDataBean
