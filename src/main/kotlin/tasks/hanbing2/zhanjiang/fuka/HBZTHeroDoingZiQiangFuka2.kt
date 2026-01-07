@@ -75,7 +75,7 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
             chooseHero {
                 upAny(tianshi)
             }
-           
+
         }
         addGuanDeal(100) {
             over {
@@ -96,10 +96,10 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
             chooseHero {
                 var index = upBase()
                 if (index > -1) index else {
-                    if(isRenwu){
+                    if (isRenwu) {
                         -1
-                    }else
-                    upAny(guangqiu)
+                    } else
+                        upAny(guangqiu)
                 }
             }
             onStart {
@@ -109,13 +109,10 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
         guanDealList.add(GuanDeal(110, isOver = {
             fullBase()
         }, chooseHero = {
-            if (needReCheckStar) {
-                carDoing.reCheckStars()
-                needReCheckStar = false
-            }
+
             upBase()
         }, onGuanDealStart = {
-            needReCheckStar = true
+            carDoing.reCheckStars()
         }))
 
         guanDealList.add(
@@ -172,22 +169,22 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
 //            190
 //        )
 
-        addGuanDeal(190){
+        addGuanDeal(190) {
             over {
                 yuren.currentLevel == 3 && tianshi.currentLevel == 3
             }
             chooseHero {
-                if(tianshi.currentLevel<3 && yuren.currentLevel<3){
-                    upAny(tianshi,yuren)
-                }else if(tianshi.currentLevel<3){
+                if (tianshi.currentLevel < 3 && yuren.currentLevel < 3) {
+                    upAny(tianshi, yuren)
+                } else if (tianshi.currentLevel < 3) {
                     indexOf(tianshi)
-                }else if(yuren.currentLevel<3){
+                } else if (yuren.currentLevel < 3) {
                     indexOf(yuren)
-                }else {
+                } else {
                     -1
                 }
             }
-            onStart { 
+            onStart {
                 carDoing.downHero(tianshi)
                 carDoing.downHero(yuren)
             }
@@ -210,7 +207,7 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
                 "白球撞上后 按3 进入监听点名，期间可以按数字键盘进行下卡，点名结束后，可以按3重新进入白球卡阶段（下萨满补到3星）"
         })
 
-        addGuan210(arrayListOf(yuren, niutou, dianfa,xiaoye,tianshi,lvgong))
+        addGuan210(arrayListOf(yuren, niutou, dianfa, xiaoye, tianshi, lvgong))
         curGuanDeal = guanDealList.first()
     }
 
