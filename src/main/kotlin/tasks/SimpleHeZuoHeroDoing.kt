@@ -177,7 +177,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
                 return
             }
 
-
+            curGuanDeal = changeTo
             MainData.curGuanKaDes.value = changeTo.des ?: ""
             log("curGuanDeal is ${changeTo.startGuan}")
             GlobalScope.launch {
@@ -185,7 +185,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
                 if (changeTo.isOver.invoke()) {//start中判断不需要执行此deal，可以将waiting置true，这样直接触发end
                     changeTo.onGuanDealEnd?.invoke()
                 } else {
-                    curGuanDeal = changeTo
+
                     waiting = false
                 }
             }
