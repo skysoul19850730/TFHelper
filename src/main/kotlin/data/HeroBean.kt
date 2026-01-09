@@ -134,7 +134,7 @@ class HeroBean(
             } catch (e: Exception) {
                 log("未检测到星级，超时")
             }
-            var result = (level != currentLevel)
+            var result = (level != currentLevel &&  level > 0)
             if (level > 0) {
                 currentLevel = level
             }
