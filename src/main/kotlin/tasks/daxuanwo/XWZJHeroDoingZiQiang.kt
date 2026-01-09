@@ -12,7 +12,7 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
     val gugu = HeroCreator.gugu.create()
 
     val niutou = HeroCreator.niutou.create()
-    val sishen = HeroCreator.sishen.create()
+    val moqiu = HeroCreator.moqiu.create()
 
     val muqiu = HeroCreator.hunqiu.create()
     val guangqiu = HeroCreator.guangqiu.create()
@@ -38,24 +38,24 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
             var index = it.indexOf(muqiu)
             backHun(index)
         }
-        heros = arrayListOf(tieqi,zhanjiang,yuren,feiting,gugu,niutou,sishen,muqiu,guangqiu,haiyao)
+        heros = arrayListOf(tieqi,zhanjiang,yuren,feiting,gugu,niutou,moqiu,muqiu,guangqiu,haiyao)
         addGuanDeal(0){
             over {
-                fulls(zhanjiang,gugu,feiting,sishen,niutou)
+                fulls(zhanjiang,gugu,feiting,moqiu,niutou)
             }
             chooseHero {
                 if(zhanjiang.isInCar()) {
-                    upAny(zhanjiang,gugu,feiting,sishen,niutou)
+                    upAny(zhanjiang,gugu,feiting,moqiu,niutou)
                 }else upAny(zhanjiang)
             }
         }
 
         addGuanDeal(18){
             over {
-                fulls(zhanjiang,sishen,feiting,tieqi,niutou,gugu,yuren)
+                fulls(zhanjiang,moqiu,feiting,tieqi,niutou,gugu,yuren)
             }
             chooseHero{
-                upAny(zhanjiang,sishen,feiting,tieqi,niutou,gugu,yuren)
+                upAny(zhanjiang,moqiu,feiting,tieqi,niutou,gugu,yuren)
             }
         }
 
@@ -65,12 +65,12 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
             }
 
             chooseHero {
-                carDoing.downHero(sishen)
+                carDoing.downHero(moqiu)
                 upAny(haiyao)
             }
         }
 
-        add49(gugu)
+        add49WithQiu(gugu,moqiu,5000)
 
         curGuanDeal = guanDealList.get(0)
     }

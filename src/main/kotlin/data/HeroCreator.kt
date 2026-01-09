@@ -15,7 +15,7 @@ object HeroCreator{
     val bawang = HeroBuilder("bawang")
     val binggong = HeroBuilder("binggong")
     val bingnv = HeroBuilder("bingnv")
-    val bingqi = HeroBuilder("bingqi")
+    val bingqi = HeroBuilder("bingqi", isMohua = true)
     val bingqiu = HeroBuilder("bingqiu", needCar = false)
     val daoke = HeroBuilder("daoke")
     val dapao = HeroBuilder("dapao", isGC = true)

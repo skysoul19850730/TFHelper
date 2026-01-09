@@ -65,7 +65,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     }
 
     val curGuan: Int
-        get() = (guankaTask?.currentGuanIndex ?: 0)+1
+        get() = (guankaTask?.currentGuanIndex ?: 0) + 1
 
 
     abstract fun initHeroes()
@@ -108,7 +108,8 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     open suspend fun doAfterHeroBeforeWaiting(heroBean: HeroBean) {
 
     }
-    open suspend fun doAfterNoHeroSelected(){}
+
+    open suspend fun doAfterNoHeroSelected() {}
 
     var curZhuangBei: Int = 0
     var isHuanIng = false
@@ -161,9 +162,11 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
             if (!checked) {//1.5秒没有check到的话，再使用弹窗识别
                 if (carDoing.openCount() > 1 || chePosition == 0) {//前车或开格子多余1个
                     var changed = carDoing.checkStars()
-                    if(!changed){
+                    if (!changed) {
                         //未检测到的话，尝试让工程位+1.因为不可能检测不到，除非就是工程位没到达顶部（车本身只开了4个以内的格子，所以点不到工程位)
-                        carDoing.carps.getOrNull(6)?.addHero()
+                        //tmd 格子数少时工程不是6号位
+//                        carDoing.carps.getOrNull(6)?.addHero()
+                        carDoing.carps.firstOrNull { it.mHeroBean?.isGongCheng == true }?.addHero()
                     }
                 } else {
                     needCheckStar = true
@@ -384,6 +387,22 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 //        }
 //    }
 
+//    private suspend fun checkShuaXinClicked(delay: Long): List<HeroBean?>? {
+//        var hs: List<HeroBean?>? = null
+//        withTimeoutOrNull(delay) {
+//            while (true) {
+//                hs = doGetPreHeros()
+//                if (lastHeroPres != null) {
+//                    //如果上次的不为空，那么肯定hs有值，（假设识别是准的)
+//                    //如果hs为空，证明其实刷新就成功了
+//                    if (hs == null) {
+//
+//                    }
+//                }
+//            }
+//        }
+//    }
+
     private suspend fun clickShuaxinAndWaitYuxuanChanged2(): List<HeroBean?>? {
 
         //先确保变了
@@ -391,28 +410,38 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 
         var shuaxinClicked = true
 
-        var hs: List<HeroBean?>? = null
+        var ths: List<HeroBean?>? = null
 
-        while (shuaxinClicked) {
+        while (shuaxinClicked && running) {//这里要加个running，感觉如果正处在执行刷卡时，如果stop了，这里的条件其实还不会结束
             MRobot.singleClick(Config.zhandou_shuaxinPoint)
-            delay(100)
-            withTimeoutOrNull(400) {
+            delay(200)//这里可以回头看下留100ms是否合适，是否可以适当增加点时间，反正点完刷新100ms后应该还是识别不到卡的
+            withTimeoutOrNull(300) {
                 while (shuaxinClicked) {
-                    hs = doGetPreHeros()
+                    ths = doGetPreHeros()
 
-                    var noChanged = if (lastHeroPres != null) {
-                        (hs?.getOrNull(0) == null || hs?.getOrNull(0) == lastHeroPres?.getOrNull(0))
-                                && (hs?.getOrNull(1) == null || hs?.getOrNull(1) == lastHeroPres?.getOrNull(1))
-                                && (hs?.getOrNull(2) == null || hs?.getOrNull(2) == lastHeroPres?.getOrNull(2))
+                    if (lastHeroPres != null) {
+                        //如果上次的不为空，那么肯定hs有值，（假设识别是准的)
+                        //如果hs为空，证明其实刷新就成功了
+                        if (ths == null) {//代表把之前的预选刷没了
+                            shuaxinClicked = false
+                        } else if (ths!!.zip(lastHeroPres!!).count { it.first != null && it.first != it.second } > 0) {
+                            //发现一个和预选不一样的就是刷成功了
+                            shuaxinClicked = false
+                        } else if(ths!!.all { it != null }){
+                            //如果ths已经全识别到了，代表没刷新（和last一样，如果有不一样的就走上面条件了）
+                            break
+                        }else{
+                            //这里可能比如说时间太短 前两个一样，但可能第三个会不一样，所以这里要再继续识别，不处理即可
+                        }
+
                     } else {
-                        hs?.getOrNull(0) == null && hs?.getOrNull(1) == null && hs?.getOrNull(2) == null
-                    }
-
-                    if (noChanged) {//变了之后立马识别，会从上次的消失动画里继续识别到即将消失的上一组预选。这里就一直识别到和上一次不一样为止
-                        //如果500ms都没识别到和上次 不一样，证明刷新后和之前一摸一样，那就返回当前的hs
-
-                    } else {
-                        shuaxinClicked = false
+                        //如果本身没有预选卡
+                        if (ths == null) {
+                            //没识别到，继续等识别
+                        } else {
+                            //只要识别到了一个就代表刷下生效了，走外面真正识别的逻辑
+                            shuaxinClicked = false
+                        }
                     }
                 }
             }
@@ -431,12 +460,13 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
             } else {
                 //刷到一个不一样的，就代表刷新了,但可能 比如  只有第三个识别到女王，前两个还没识别到呢，但可以确认已经ok了，那么就用之前方式获取
                 //但如果hs本身就3个都有，且和之前不同，那么就可以直接用了，就不用再识别一次
-                if (hs?.contains(null) == true) {
-                    hs = getPreHeros(700)
-                }
+
             }
         }
-        return hs
+        if (ths == null || ths!!.contains(null)) {
+            ths = getPreHeros(700)
+        }
+        return ths
     }
 
     var yubeiHeroBean: HeroBean? = null
@@ -513,7 +543,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
         if (heroChoose > -1) {
             lastHeroPres = null
             doUpHero(hs.get(heroChoose)!!, heroChoose)
-        }else{
+        } else {
             doAfterNoHeroSelected()
         }
     }
@@ -698,6 +728,33 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
             }
         }
     }
+
+//    suspend fun doGetPreHerosSync(): List<HeroBean?>? {
+//        var result: List<HeroBean?>? = null
+//        withContext(Dispatchers.IO) {
+//            val img = getImage(App.rectWindow)
+//
+//
+//            val hero1 =
+//                async { getHeroAtRect(img.getSubImage(Config.zhandou_hero1CheckRect), 0) }
+//
+//            val hero2 =
+//                async { getHeroAtRect(img.getSubImage(Config.zhandou_hero2CheckRect), 1) }
+//            val hero3 =
+//                async { getHeroAtRect(img.getSubImage(Config.zhandou_hero3CheckRect), 2) }
+//
+//            val h1 = hero1.await()
+//            val h2 = hero2.await()
+//            val h3 = hero3.await()
+//            if (h1 == null && h2 == null && h3 == null) {
+//                result = null
+//            } else {
+//                result = arrayListOf(h1, h2, h3)
+//            }
+//        }
+//        return result
+//    }
+
 
     open suspend fun getPreHeros(timeout: Long = 2300) = suspendCancellableCoroutine<List<HeroBean?>?> {
         val startTime = System.currentTimeMillis()

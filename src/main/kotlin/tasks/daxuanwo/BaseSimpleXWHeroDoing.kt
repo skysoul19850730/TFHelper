@@ -11,6 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tasks.SimpleHeZuoHeroDoing
+import tasks.XueLiang
 import tasks.daxuanwo.utils.WX59
 import ui.zhandou.UIKeyListenerManager
 import utils.ImgUtil
@@ -20,9 +21,10 @@ import java.awt.event.KeyEvent
 // 9  29 都自动执行
 abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {
 
-    var heroDown49:HeroBean?=null
-    var midHeros69:List<HeroBean>? = null
+    var heroDown49: HeroBean? = null
+    var midHeros69: List<HeroBean>? = null
 
+    var auto29 = true
     var auto59 = false
 
     override suspend fun onKeyDown(code: Int): Boolean {
@@ -128,7 +130,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     }
 
     var g49 = 0
-    fun add49(heroBean: HeroBean) {
+    open fun add49(heroBean: HeroBean) {
         heroDown49 = heroBean
 
         addGuanDeal(48) {
@@ -176,6 +178,89 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         }
     }
 
+    var lastQiu49 = 0L
+    lateinit var qiu49: HeroBean
+    var qiu49Time: Long = 0L
+
+    /**
+     * 其实这里也就小号用的到，这个球基本也就是魔球了
+     */
+    fun add49WithQiu(heroBean: HeroBean, qiu: HeroBean, qiuTime: Long) {
+        heroDown49 = heroBean
+        qiu49 = qiu
+        qiu49Time = qiuTime
+
+        addGuanDeal(48) {
+            over {
+                heroDown49!!.isInCar()
+            }
+            chooseHero {
+                upAny(heroDown49!!)
+            }
+            onStart {
+                carDoing.downHero(heroDown49!!)
+            }
+        }
+
+        addGuanDeal(49) {
+            over {
+                curGuan > 49 || (g49 == 2 && heroDown49!!.isFull() && g49StartBoss == null)
+            }
+            chooseHero {
+                if (heroDown49!!.isFull() && g49StartBoss != null) {
+                    g49 = 3
+                }
+
+                if (g49 == 3) {
+                    g49StartBoss?.invoke(this) ?: -1
+                }else if(g49==2){//打完融合，boss和满herodown的两个阶段都不再需要打魔球了，鱼人战将基本都够攻速了，打魔没效果了。
+                    return@chooseHero upAny(heroDown49!!)
+                } else {
+                    var mo = indexOf(qiu49)
+                    val index = indexOf(heroDown49)
+                    //融合阶段
+                    if (g49 == 1) {
+                        carDoing.downHero(heroDown49!!)
+                        g49 = 0
+                    }
+
+                    if (!heroDown49!!.isInCar()) {
+                        //没在车上就赶紧上车，通常就是刚下了卡，那就赶紧上去，先不考虑球，如果预选里没有，再看是否扔魔不扔就反-1刷新了
+                        if (index > -1) {
+                            return@chooseHero index
+                        } else if (mo > -1 && XueLiang.getXueLiang() > 0.9f) {//这里不管时间也没关系，只有血量够就可以扔魔
+                            lastQiu49 = System.currentTimeMillis()
+                            return@chooseHero mo
+                        } else {
+                            return@chooseHero -1 //没魔就放弃这次， 去刷新上卡
+                        }
+                    }
+                    if (mo > -1) {
+                        //如果在车上，这里就可以等，但等的逻辑里必须判断g49==1让下卡的情况
+                        while(System.currentTimeMillis()-lastQiu49<qiu49Time && g49==0){
+                            delay(100)
+                        }
+                        if(g49 == 1){
+                            carDoing.downHero(heroDown49!!)
+                            g49 = 0
+                        }
+                        if (!heroDown49!!.isInCar() && index > -1) {
+                            return@chooseHero index
+                        } else {
+                            lastQiu49 = System.currentTimeMillis()
+                            return@chooseHero mo
+                        }
+                    }
+
+
+                    //如果上面都没走，证明没特殊情况，所以至少也要刷出魔球来，这里就返回-1去刷出魔球了需要
+                   return@chooseHero -1
+                }
+            }
+            des = "需要切的时候按0，会自动下卡再上卡，收集完成后按3，切换的卡会上满"
+        }
+    }
+
     var g49StartBoss: (suspend (List<HeroBean?>) -> Int)? = null
 
 
@@ -192,7 +277,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     var g69guangCount = 0
     var g69allNeedStar = 8
     override suspend fun onGuangqiuPost() {
-        if(curGuan == 69){
+        if (curGuan == 69) {
             var noFullCount = carDoing.carps.count {
                 !(it.mHeroBean?.isFull() ?: true)
             }
@@ -207,13 +292,14 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 }
             } else if (noFullCount < 1) {//都满着就不用验了
                 return
-            } else{
+            } else {
                 g69guangCount++
             }
             return
         }
         super.onGuangqiuPost()
     }
+
     fun add69() {
         addGuanDeal(69) {
             over {
@@ -229,38 +315,38 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     } else {
                         var index = -1
                         //type = 0
-                        if(g69Type == 0){
-                            if(g69TypeFirstQuickFull){
+                        if (g69Type == 0) {
+                            if (g69TypeFirstQuickFull) {
                                 //优先快速满第一个,这里就包含光了
                                 index = upAny(midHeros69!!.first())
                             }
 
-                            if(index <0){
-                                index =  upAny(*midHeros69!!.toTypedArray())
+                            if (index < 0) {
+                                index = upAny(*midHeros69!!.toTypedArray())
                             }
 
-                        }else if(g69Type == 1){
+                        } else if (g69Type == 1) {
                             //第一个都没上车。都走正常顺序
-                            if( !midHeros69!!.first().isInCar()){
+                            if (!midHeros69!!.first().isInCar()) {
                                 index = upAny(*midHeros69!!.toTypedArray())
-                            }else if( !midHeros69!!.get(1).isInCar()){
+                            } else if (!midHeros69!!.get(1).isInCar()) {
                                 //第二个没上车，优先上车
                                 index = upAny(*midHeros69!!.reversed().toTypedArray())
-                            }else{
+                            } else {
 
-                                if(g69TypeFirstQuickFull){
+                                if (g69TypeFirstQuickFull) {
                                     //优先快速满第一个,这里就包含光了
                                     index = upAny(midHeros69!!.first())
                                 }
 
-                                if(index <0){
-                                    index =  upAny(*midHeros69!!.toTypedArray())
+                                if (index < 0) {
+                                    index = upAny(*midHeros69!!.toTypedArray())
                                 }
                             }
                         }
 
-                        if(index>-1){
-                            if(midHeros69!!.sumOf { it.currentLevel }+ g69guangCount >= g69allNeedStar-1){
+                        if (index > -1) {
+                            if (midHeros69!!.sumOf { it.currentLevel } + g69guangCount >= g69allNeedStar - 1) {
                                 midHeros69!!.forEach {
                                     it.setFull()//当前星 + 光 = 满-1 就都设置为满就可以了.(因为index还没返回出去，所以按-1计算
                                 }
@@ -307,7 +393,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 MRobot.moveFullScreen()
             }
         }
-        if (guan == 29) {
+        if (guan == 29 && auto29) {
             start29()
         } else {
             stop29()
