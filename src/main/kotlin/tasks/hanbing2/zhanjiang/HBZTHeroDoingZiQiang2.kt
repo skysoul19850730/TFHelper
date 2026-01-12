@@ -112,13 +112,9 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
         guanDealList.add(GuanDeal(110, isOver = {
             fullBase() && qiangxi
         }, chooseHero = {
-            if (needReCheckStar) {
-                carDoing.reCheckStars()
-                needReCheckStar = false
-            }
             upBase(zhuangbei = { qiangxi })
         }, onGuanDealStart = {
-            needReCheckStar = true
+            carDoing.reCheckStars()
         }))
 
         guanDealList.add(

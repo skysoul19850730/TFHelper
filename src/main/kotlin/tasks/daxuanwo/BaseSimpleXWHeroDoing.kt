@@ -211,9 +211,15 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     g49 = 3
                 }
 
-                if (g49 == 3) {
-                    g49StartBoss?.invoke(this) ?: -1
-                }else if(g49==2){//打完融合，boss和满herodown的两个阶段都不再需要打魔球了，鱼人战将基本都够攻速了，打魔没效果了。
+                if (g49 == 3) {//兼顾打磨 打魂
+                    var mo = indexOf(qiu49)
+                    if(System.currentTimeMillis()-lastQiu49>qiu49Time-1000 && mo>-1){
+                        lastQiu49 = System.currentTimeMillis()
+                        return@chooseHero mo
+                    }else {
+                        return@chooseHero g49StartBoss?.invoke(this) ?: -1
+                    }
+                } else if (g49 == 2) {//打完融合，boss和满herodown的两个阶段都不再需要打魔球了，鱼人战将基本都够攻速了，打魔没效果了。
                     return@chooseHero upAny(heroDown49!!)
                 } else {
                     var mo = indexOf(qiu49)
@@ -237,10 +243,10 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     }
                     if (mo > -1) {
                         //如果在车上，这里就可以等，但等的逻辑里必须判断g49==1让下卡的情况
-                        while(System.currentTimeMillis()-lastQiu49<qiu49Time && g49==0){
+                        while (System.currentTimeMillis() - lastQiu49 < qiu49Time && g49 == 0) {
                             delay(100)
                         }
-                        if(g49 == 1){
+                        if (g49 == 1) {
                             carDoing.downHero(heroDown49!!)
                             g49 = 0
                         }
@@ -254,7 +260,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
 
                     //如果上面都没走，证明没特殊情况，所以至少也要刷出魔球来，这里就返回-1去刷出魔球了需要
-                   return@chooseHero -1
+                    return@chooseHero -1
                 }
             }
             des = "需要切的时候按0，会自动下卡再上卡，收集完成后按3，切换的卡会上满"
