@@ -300,7 +300,15 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         super.onGuangqiuPost()
     }
 
-    fun add69() {
+    fun add69(fixeMidHeros:List<HeroBean>?=null) {
+        if(fixeMidHeros!=null){//这种是为了 类似天使这种只能68，69再上，防止抢兵的，中间先上别的，68的时候再修正成天使
+
+            addGuanDealWithHerosFull(68,fixeMidHeros,midHeros69?.filter {
+                !fixeMidHeros.contains(it)
+            })
+            midHeros69 = fixeMidHeros
+
+        }
         addGuanDeal(69) {
             over {
                 curGuan > 69
