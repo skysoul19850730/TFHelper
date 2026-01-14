@@ -38,7 +38,10 @@ class XWZJHeroDoingBo3 : BaseSimpleXWHeroDoing() {
 
     override fun initHeroes() {
         super.initHeroes()
-
+        g49StartBoss = {
+            var index = it.indexOf(hunqiu)
+            backHun(index)
+        }
         heros = arrayListOf(
             sishen, tieqi, zhanjiang, hunqiu, niutou, yuren, feiting, tianshi, guangqiu, jiaonv
         )
@@ -97,7 +100,7 @@ class XWZJHeroDoingBo3 : BaseSimpleXWHeroDoing() {
         //内部实际是52关开始
         add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, jiaonv, yuren),listOf(yuren,jiaonv,))
 
-        add69(listOf(tianshi,yuren))
+        add69(listOf(yuren,tianshi),hunqiu)
         curGuanDeal = guanDealList.get(0)
     }
 

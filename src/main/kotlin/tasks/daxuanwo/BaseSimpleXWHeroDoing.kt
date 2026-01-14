@@ -306,7 +306,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         super.onGuangqiuPost()
     }
 
-    fun add69(fixeMidHeros:List<HeroBean>?=null) {
+    fun add69(fixeMidHeros:List<HeroBean>?=null,hunqiu:HeroBean?=null) {
         if(fixeMidHeros!=null){//这种是为了 类似天使这种只能68，69再上，防止抢兵的，中间先上别的，68的时候再修正成天使
 
             addGuanDealWithHerosFull(68,fixeMidHeros,midHeros69?.filter {
@@ -340,6 +340,12 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                             }
 
                         } else if (g69Type == 1) {
+                            if(hunqiu!=null) {
+                                val hun = indexOf(hunqiu)
+                                if(hun>-1 && XueLiang.getXueLiang()<0.95){
+                                    return@chooseHero hun
+                                }
+                            }
                             //第一个都没上车。都走正常顺序
                             if (!midHeros69!!.first().isInCar()) {
                                 index = upAny(*midHeros69!!.toTypedArray())
