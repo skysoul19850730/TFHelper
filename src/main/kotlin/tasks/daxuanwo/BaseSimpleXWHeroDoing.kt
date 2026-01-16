@@ -269,6 +269,11 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
     var g49StartBoss: (suspend (List<HeroBean?>) -> Int)? = null
 
+    /**
+     * 69的额外操作，比如打魔，打魂，在特定生命周期扔给外面，Int, 0代表下卡前，1代表上卡中，2代表上满后
+     * 如果因为没有预选卡 就返回-2
+     */
+    var g69StartBoss: (suspend (List<HeroBean?>,Int) -> Int)? = null
 
     var g69State = 0 //0:全上，1 下中间俩
     var g69Type = 1  // 0：正常上，按顺序，有哪个上哪个，
@@ -325,8 +330,18 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     if (midHeros69?.all { it.isFull() } == true) {
                         while (g69State == 0) {
                             delay(200)
+                            val outIndex = g69StartBoss?.invoke(heros,0)?:-1
+                            if(outIndex>-1){
+                                return@chooseHero outIndex
+                            }
                         }
                     } else {
+
+                        val outIndex = g69StartBoss?.invoke(heros,0)?:-1
+                        if(outIndex>-1){
+                            return@chooseHero outIndex
+                        }
+
                         var index = -1
                         //type = 0
                         if (g69Type == 0) {
@@ -377,6 +392,14 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     }
                 }
                 if (g69State == 1) {
+                    val outIndex = g69StartBoss?.invoke(heros,0)?:-1
+                    if(outIndex==-2){
+                        return@chooseHero -1
+                    }else if(outIndex>-1){
+                        return@chooseHero outIndex
+                    }
+                    //如果不是因为没有预选卡，且返回-1，代表外面不处理了，再下卡
+
                     midHeros69?.forEach {
                         carDoing.downHero(it)
                     }
@@ -385,9 +408,14 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     val ind = upAny(midHeros69!!.first())
 
                     if (ind > -1) {
-                        while (g69State == 1) {
-                            delay(50)
+//                        while (g69State == 1) {
+//                            delay(50)
+//                        }
+
+                        XueLiang.observerXueDown(0.5f) {
+                            g69State!=1
                         }
+
                         return@chooseHero ind
                     }
                 }

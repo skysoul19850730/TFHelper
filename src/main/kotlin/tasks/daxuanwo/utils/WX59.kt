@@ -50,7 +50,7 @@ object WX59 {
                 list.forEach {
 
                     clickKey(it.toString())
-                    delay(300)
+                    delay(100)
                 }
             }
         }

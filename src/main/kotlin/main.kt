@@ -1369,7 +1369,7 @@ fun tttt(fw: FrameWindowScope) {
     GlobalScope.launch {
         delay(300)
 //        fw.window.setLocation(1920 - fw.window.width, 0)
-        fw.window.setBounds(1920 - fw.window.width, 0, fw.window.width, fw.window.height + 100)
+        fw.window.setBounds(1920 - fw.window.width-100, 0, fw.window.width+100, fw.window.height + 100)
     }
 }
 

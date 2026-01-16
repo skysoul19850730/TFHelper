@@ -655,7 +655,7 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
 
         logOnly(img)
         if (index > -1) {
-            logOnly("che $chePosition ay selected at index :${index} time:${System.currentTimeMillis() - startTime}")
+            log("che $chePosition ay selected at index :${index} time:${System.currentTimeMillis() - startTime}")
         }
         return index
     }

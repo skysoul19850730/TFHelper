@@ -56,6 +56,7 @@ import ui.zhandou.data.ZhanDouModel
 import ui.zhandou.duizhan.DuiZhanModel
 import ui.zhandou.hanbing.HanBingModel
 import ui.zhandou.hezuo.HeZuoModel
+import ui.zhandou.shenhai.ShenHaiModel
 import ui.zhandou.tiankong.TianKongModel
 import ui.zhandou.xuanwo.XuanWoModel
 import zdBasePage
@@ -70,6 +71,7 @@ object MainUIData {
         add(MainMenu(zdModel = HanBingModel()))
         add(MainMenu(zdModel = TianKongModel()))
         add(MainMenu(zdModel = XuanWoModel()))
+        add(MainMenu(zdModel = ShenHaiModel()))
         add(MainMenu(zdModel = AnYueModel()))
         add(MainMenu("工具"))
     }
