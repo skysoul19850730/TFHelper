@@ -1,5 +1,6 @@
 package utils
 
+import App
 import colorCompare
 import data.Config
 import data.HeroBean
@@ -15,6 +16,7 @@ import log
 import logOnly
 import model.CarDoing
 import resFile
+import test.Utils
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
@@ -126,200 +128,6 @@ object AYUtil {
 //        carDoing.getAY19Selected(img)
 //        carDoing2.getAY19Selected(img)
     }
-
-    fun testHB199() {
-        val list = File(Config.caiji_main_path + "\\tmphb199").listFiles()
-        val carDoing = CarDoing(0, CarDoing.CheType_MaChe)
-        carDoing.initPositions()
-        measureTimeMillis {
-            carDoing.getHB199Selected()
-        }.apply {
-            log("一个车，识别自己199 ，算上截图，共消耗时间：$this")
-        }
-        val carDoing2 = CarDoing(1, CarDoing.CheType_MaChe)
-        carDoing2.initPositions()
-
-        var car0Count = 0
-        var car1Count = 0
-
-        val allTimes = measureTimeMillis {
-            list.forEach {
-                val img = getImageFromFile(it)
-//                val img = getImageFromFile(File(Config.caiji_main_path + "\\tmp","1725017635441.png"))
-//                log(img)
-//           carDoing2.carps.get(1).over19Selected(img)
-                var has = false
-//                log("正在识别图片的名称：${it.name}")
-                carDoing.getHB199Selected(img).apply {
-                    if (this > -1) {
-                        car0Count++
-                        has = true
-                        log(img)
-                        log("che 0 ay selected at index :${this}")
-                    }
-                }
-                carDoing2.getHB199Selected(img).apply {
-                    if (this > -1) {
-                        car1Count++
-                        has = true
-                        log(img)
-                        log("che 1 ay selected at index :${this}")
-                    }
-                }
-//                img.saveTo(File(Config.caiji_main_path + "\\tmp", "hb199_${System.currentTimeMillis()}.png"))
-                if (!has) {
-                    log(img)
-                    log("未识别：${it.name}")
-                }
-            }
-        }
-
-        log("识别图片${list.size}张，0车识别到${car0Count}次，1车识别到${car1Count}次，总耗时:${allTimes}")
-
-//        val file = File(  Config.caiji_main_path + "\\tmp" ,"1724407869518.png")
-//        val img = getImageFromFile(file)
-//        carDoing.getAY19Selected(img)
-//        carDoing2.getAY19Selected(img)
-    }
-
-    fun testAY39() {
-        val list = File(Config.caiji_main_path + "\\tmpAY39").listFiles().filter {
-            it.name.contains("5727")
-        }
-//        measureTimeMillis {
-//            getAy39SelectedPositions()
-//        }.apply {
-//            log("识别39 ，算上截图，共消耗时间：$this")
-//        }
-
-        var count = 0
-        var allTimes = 0L
-        list.forEach {
-            val img = getImageFromFile(it)
-            allTimes = measureTimeMillis {
-
-
-//                    img = img.getSubImage(Config.qianRect)
-//                var text = Tess.getText(img)
-//                log("text is $text")
-//                var list = getAy39SelectedPositions(img)
-//                if (list.size > 0) {
-//                    count++
-//                    log("ay39 file name is ${it.name}")
-//                }
-                testHeroRec(img)
-            }
-        }
-
-        log("识别图片${list.size}张， 识别到的点名有：${count} 总耗时:${allTimes}")
-
-    }
-
-    val zhanjiang = HeroBean("zhanjiang", 100)
-    val tieqi = HeroBean("tieqi", 90)
-    val saman = HeroBean("saman", 80)
-    val sishen = HeroBean("sishen", 70)
-    val yuren = HeroBean("yuren", 60, compareRate = 0.9)
-    val baoku = HeroBean("shexian", 30, needCar = true, isGongCheng = true, compareRate = 0.9)
-    val xiaoye = HeroBean("xiaoye", 30)
-    val dijing = HeroBean("dijing", 30)
-    val huanqiu = HeroBean("huanqiu", 20, needCar = false, compareRate = 0.95)
-    val guangqiu = HeroBean("guangqiu", 0, needCar = false)
-    var heros = arrayListOf(zhanjiang, tieqi, saman, sishen, yuren, baoku, xiaoye, dijing, huanqiu, guangqiu)
-    private fun testHeroRec(img: BufferedImage) {
-        var heros = arrayListOf(dijing, huanqiu, zhanjiang, tieqi, saman, sishen, yuren, baoku, xiaoye, guangqiu)
-        GlobalScope.launch {
-            getPreHeros(img, heros)
-        }
-    }
-
-
-    open suspend fun getPreHeros(img: BufferedImage, heros: List<HeroBean>, timeout: Long = 2300) =
-        suspendCancellableCoroutine<List<HeroBean?>?> {
-            val startTime = System.currentTimeMillis()
-            GlobalScope.launch {
-                var h1: HeroBean? = null
-                var h2: HeroBean? = null
-                var h3: HeroBean? = null
-
-                try {
-                    withTimeout(timeout) {
-                        while (h1 == null || h2 == null || h3 == null) {
-                            val hero1 = if (h1 == null) {
-                                async { getHeroAtRect(heros, img.getSubImage(Config.zhandou_hero1CheckRect), 0) }
-                            } else null
-                            val hero2 = if (h2 == null) {
-                                async { getHeroAtRect(heros, img.getSubImage(Config.zhandou_hero2CheckRect), 1) }
-                            } else null
-                            val hero3 = if (h3 == null) {
-                                async { getHeroAtRect(heros, img.getSubImage(Config.zhandou_hero3CheckRect), 2) }
-                            } else null
-
-                            if (h1 == null) {
-                                h1 = hero1?.await()
-                                if (h1 != null) {
-                                    log("识别到英雄:${h1?.heroName} 耗时：${System.currentTimeMillis() - startTime}")
-                                }
-                            }
-                            if (h2 == null) {
-                                h2 = hero2?.await()
-                                if (h2 != null) {
-                                    log("识别到英雄:${h2?.heroName} 耗时：${System.currentTimeMillis() - startTime}")
-                                }
-                            }
-                            if (h3 == null) {
-                                h3 = hero3?.await()
-                                if (h3 != null) {
-                                    log("识别到英雄:${h3?.heroName} 耗时：${System.currentTimeMillis() - startTime}")
-                                }
-                            }
-//                        var i=0;
-//                        if(h1!=null)i++
-//                        if(h2!=null)i++
-//                        if(h3!=null)i++
-//                        if(i>=2)break
-//                        if (h1 == null || h2 == null || h3 == null) {//省去最后的100ms
-//                            delay(50)
-//                        }
-                        }
-                        logOnly("getPreHeros cost time:${System.currentTimeMillis() - startTime}")
-                        it.resume(arrayListOf(h1, h2, h3))
-//                    return@withTimeout arrayListOf(h1, h2, h3)
-                    }
-                } catch (e: Exception) {
-                    if (h1 == null && h2 == null && h3 == null) {
-                        it.resume(null)
-//                    return null
-                    } else {
-                        it.resume(arrayListOf(h1, h2, h3))
-//                    return arrayListOf(h1, h2, h3)
-                    }
-                }
-            }
-        }
-
-    //原来上卡判断是否上去了，耗时189ms，识别手卡200ms-500ms不等，日志大部分在400ms左右，
-    //更改3卡分别截图到只截图一张大图后（截图的api内部是同步的,所以即使使用时加了async和await，但截图的耗时还是线性想加的，只不过对比hero的时候是并行的)，
-    // 等待测试结果。像上面189，单次识别就要40多ms，里面还有个delay30ms的。所以两轮过去（一般两三轮比较就差不多知道上去没有了），大约就是3个40+2个30，大约就是180左右
-    //所以日志大部分上卡耗时都是189左右，剩下的就是比较的时间，可见比较耗时贼少，主要还是截图浪费了时间。
-    open suspend fun getHeroAtRect(heros: List<HeroBean>, img: BufferedImage, position: Int) =
-        suspendCancellableCoroutine<HeroBean?> {
-            val hero = heros.filter {//满了就不会出现在预选卡里，减少比较
-                !it.isFull()
-            }.firstOrNull {
-//            ImgUtil.isImageSim(img, it.img)
-//            ImgUtil.isHeroSim(img,it.img)
-                it.fitImage(img, position)
-            }
-            if (Config.debug) {
-                log(img)
-            }
-            if (hero != null) {
-                logOnly("getHeroAtRect ${hero?.heroName ?: "无结果"}")
-            } else logOnly("getHeroAtRect null")
-            it.resume(hero)
-
-        }
 
     fun getAy39SelectedPositions(chePos: Int, img: BufferedImage? = null): List<Int> {
         var list = getAy39SelectedPositions(img)
@@ -562,6 +370,170 @@ object AYUtil {
 
         return 0
 
+    }
+
+
+    class Ay139Icon(
+        val name:String,
+        val border:String,
+        val fill:String
+    ){
+        override fun toString(): String {
+            return "name:$name,border:$border,fill:$fill"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (other is Ay139Icon) {
+                if(other.name==name && other.border==border && other.fill==fill){
+                    return true
+                }
+            }
+            return false
+        }
+    }
+
+    //583,180 54 54
+
+    val rect1 = MRect.createWH(374,206,78,78)
+    val rect2 = MRect.createWH(474,168,78,78)
+    val rect3 = MRect.createWH(572,168,78,78)
+    //    val rect3 = MRect.createWH(583,180,55,55)
+    val rect4 = MRect.createWH(668,206,78,78)
+
+    fun testFill(rect:MRect, img:BufferedImage):String{
+        val wcount = rect.hasColorCount(Color.WHITE,20,img)
+        log(wcount)
+        if(wcount>800){
+            return "填充"
+        }
+        return "描边"
+    }
+
+    fun testBorder(img:BufferedImage): String{
+        var vLineWhiteCount = 0
+        for(x in 0 until 10){
+            vLineWhiteCount = 0
+            for(y in 0 until img.height){
+                val rgb = Color(img.getRGB(x,y))
+                if(rgb.red>240 && rgb.green>240 && rgb.blue>240){
+                    vLineWhiteCount++
+                }
+            }
+            if(vLineWhiteCount>img.height*0.8){
+                return "方形"
+            }
+        }
+        return "圆形"
+    }
+
+    fun getRunnitIcon(img: BufferedImage):Ay139Icon?{
+        //改大图，找到一张运行中的法杖描边图（可能斧头描边图也可以？）
+        val imgFlag = getImageFromRes("$anyueFolder/ay139flagtop.png")
+        val checkPoints = arrayListOf<MPoint>()
+
+        imgFlag.foreach { i, i2 ->
+            if(imgFlag.getRGB(i,i2)!=0){
+                checkPoints.add(MPoint(i,i2))
+            }
+            false
+        }
+        //去最开始的一个差不多的rect，左边留出一些像素空间，从右边开始遍历，得到结果就可以结束，不用管太靠后的地方
+        //这里肯定也是提前就开冰，冰了之后才来识别，所以一出现就可以识别了，如果漏了就下一张图基本还在这个rect内
+
+        return null
+    }
+
+    fun getDiffIcon(img:BufferedImage):Ay139Icon?{
+        val imgFlag = getImageFromRes("$anyueFolder/ay139flagtop.png")
+        val checkPoints = arrayListOf<MPoint>()
+
+        imgFlag.foreach { i, i2 ->
+            if(imgFlag.getRGB(i,i2)!=0){
+                checkPoints.add(MPoint(i,i2))
+            }
+            false
+        }
+        val img1 = img.getSubImage(rect1)
+        val img2 = img.getSubImage(rect2)
+        val img3 = img.getSubImage(rect3)
+        val img4 = img.getSubImage(rect4)
+
+        val f1 = testFill(rect1,img)
+        val b1 = testBorder(img1)
+        val c1 = test4Rect(checkPoints,imgFlag,img1)
+        val data1 = Ay139Icon(c1,b1,f1)
+        log("第一个是${data1.name}, ${data1.fill}，${data1.border}")
+
+        val f2 = testFill(rect2,img)
+        val b2 = testBorder(img2)
+        val c2 = test4Rect(checkPoints,imgFlag,img2)
+        val data2 = Ay139Icon(c2,b2,f2)
+        log("第二个是${data2.name}, ${data2.fill}，${data2.border}")
+
+        val f3 = testFill(rect3,img)
+        val b3 = testBorder(img3)
+        val c3 = test4Rect(checkPoints,imgFlag,img3)
+        val data3 = Ay139Icon(c3,b3,f3)
+        log("第三个是${data3.name}, ${data3.fill}，${data3.border}")
+
+        val f4 = testFill(rect4,img)
+        val b4 = testBorder(img4)
+        val c4 = test4Rect(checkPoints,imgFlag,img4)
+        val data4 = Ay139Icon(c4,b4,f4)
+        log("第四个是${data4.name}, ${data4.fill}，${data4.border}")
+
+        listOf(data1,data2,data3,data4).apply {
+            if(count { it.name=="法杖" }==1){
+                return first { it.name == "法杖" }
+            }
+            if(count { it.name=="斧头" }==1){
+                return first { it.name == "斧头" }
+            }
+            if(count { it.fill == "填充" } ==1){
+                return first { it.fill == "填充" }
+            }
+            if(count { it.fill == "描边" } ==1){
+                return first { it.fill == "描边" }
+            }
+            if(count { it.border == "方形" } ==1){
+                return first { it.border == "方形" }
+            }
+            if(count { it.border == "圆形" } ==1 ){
+                return first { it.border == "圆形" }
+            }
+        }
+        return null
+    }
+    //374 206  78
+    //474 168  78
+    // 572 168  78
+    //668  206   78
+    fun test4Rect(checkPoints:List<MPoint>, imgFlag:BufferedImage, img:BufferedImage):String{
+        val dx = img.width - imgFlag.width
+        val dy = img.height - imgFlag.height
+
+        for(x in 0 until dx){
+            for(y in 0 until dy){
+                val newImg = img.getSubImage(MRect.createWH(x,y,imgFlag.width,imgFlag.height))
+                if(test4SameRect(checkPoints,newImg)){
+                    return "法杖"
+                }
+            }
+        }
+
+        return "斧头"
+
+    }
+    fun test4SameRect(checkPoints:List<MPoint>,img:BufferedImage):Boolean{
+        var sameCount =
+            checkPoints.count {
+                val rgb = Color(img.getRGB(it.x,it.y))
+                !(rgb.red<200 && rgb.green<200 && rgb.blue<200)
+            }
+//        if(sameCount>400) {
+//            log("test4SameRect,count is $sameCount")
+//        }
+        return sameCount>checkPoints.size*0.8
     }
 
 }
