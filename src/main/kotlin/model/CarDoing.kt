@@ -28,6 +28,7 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
 
         val starCheckRect = MRect.create4P(310, 340, 344, 368)
         val saleCheckRect = MRect.create4P(260, 430, 300, 460)
+        val saleCheckRect2 = MRect.create4P(260, 406, 296, 434)
 
         val cardClosePoint = MPoint(752, 125, Color(222, 73, 57))
 

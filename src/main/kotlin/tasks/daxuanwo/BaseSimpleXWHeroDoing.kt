@@ -204,20 +204,30 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
         addGuanDeal(49) {
             over {
-                curGuan > 49 || (g49 == 2 && heroDown49!!.isFull() && g49StartBoss == null)
+                curGuan > 49
             }
             chooseHero {
-                if (heroDown49!!.isFull() && g49StartBoss != null) {
+                if (heroDown49!!.isFull()) {
                     g49 = 3
                 }
 
                 if (g49 == 3) {//兼顾打磨 打魂
                     var mo = indexOf(qiu49)
-                    if(System.currentTimeMillis()-lastQiu49>qiu49Time-1000 && mo>-1){
+                    if (System.currentTimeMillis() - lastQiu49 > qiu49Time - 1000 && mo > -1) {
                         lastQiu49 = System.currentTimeMillis()
                         return@chooseHero mo
-                    }else {
-                        return@chooseHero g49StartBoss?.invoke(this) ?: -1
+                    } else {
+                        if (g49StartBoss != null) {
+                            return@chooseHero g49StartBoss?.invoke(this) ?: -1
+                        } else {
+                            if (mo > -1) {
+                                delay(qiu49Time - 1000 - (System.currentTimeMillis() - lastQiu49))
+                                lastQiu49 = System.currentTimeMillis()
+                                return@chooseHero mo
+                            } else {
+                                return@chooseHero -1
+                            }
+                        }
                     }
                 } else if (g49 == 2) {//打完融合，boss和满herodown的两个阶段都不再需要打魔球了，鱼人战将基本都够攻速了，打魔没效果了。
                     return@chooseHero upAny(heroDown49!!)
@@ -273,7 +283,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
      * 69的额外操作，比如打魔，打魂，在特定生命周期扔给外面，Int, 0代表下卡前，1代表上卡中，2代表上满后
      * 如果因为没有预选卡 就返回-2
      */
-    var g69StartBoss: (suspend (List<HeroBean?>,Int) -> Int)? = null
+    var g69StartBoss: (suspend (List<HeroBean?>, Int) -> Int)? = null
 
     var g69State = 0 //0:全上，1 下中间俩
     var g69Type = 1  // 0：正常上，按顺序，有哪个上哪个，
@@ -311,10 +321,10 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         super.onGuangqiuPost()
     }
 
-    fun add69(fixeMidHeros:List<HeroBean>?=null,hunqiu:HeroBean?=null) {
-        if(fixeMidHeros!=null){//这种是为了 类似天使这种只能68，69再上，防止抢兵的，中间先上别的，68的时候再修正成天使
+    fun add69(fixeMidHeros: List<HeroBean>? = null, hunqiu: HeroBean? = null) {
+        if (fixeMidHeros != null) {//这种是为了 类似天使这种只能68，69再上，防止抢兵的，中间先上别的，68的时候再修正成天使
 
-            addGuanDealWithHerosFull(68,fixeMidHeros,midHeros69?.filter {
+            addGuanDealWithHerosFull(68, fixeMidHeros, midHeros69?.filter {
                 !fixeMidHeros.contains(it)
             })
             midHeros69 = fixeMidHeros
@@ -330,15 +340,15 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     if (midHeros69?.all { it.isFull() } == true) {
                         while (g69State == 0) {
                             delay(200)
-                            val outIndex = g69StartBoss?.invoke(heros,0)?:-1
-                            if(outIndex>-1){
+                            val outIndex = g69StartBoss?.invoke(this, 0) ?: -1
+                            if (outIndex > -1) {
                                 return@chooseHero outIndex
                             }
                         }
                     } else {
 
-                        val outIndex = g69StartBoss?.invoke(heros,0)?:-1
-                        if(outIndex>-1){
+                        val outIndex = g69StartBoss?.invoke(this, 0) ?: -1
+                        if (outIndex > -1) {
                             return@chooseHero outIndex
                         }
 
@@ -355,9 +365,9 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                             }
 
                         } else if (g69Type == 1) {
-                            if(hunqiu!=null) {
+                            if (hunqiu != null) {
                                 val hun = indexOf(hunqiu)
-                                if(hun>-1 && XueLiang.getXueLiang()<0.95){
+                                if (hun > -1 && XueLiang.getXueLiang() < 0.95) {
                                     return@chooseHero hun
                                 }
                             }
@@ -392,10 +402,10 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     }
                 }
                 if (g69State == 1) {
-                    val outIndex = g69StartBoss?.invoke(heros,0)?:-1
-                    if(outIndex==-2){
+                    val outIndex = g69StartBoss?.invoke(this, 0) ?: -1
+                    if (outIndex == -2) {
                         return@chooseHero -1
-                    }else if(outIndex>-1){
+                    } else if (outIndex > -1) {
                         return@chooseHero outIndex
                     }
                     //如果不是因为没有预选卡，且返回-1，代表外面不处理了，再下卡
@@ -413,8 +423,9 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 //                        }
 
                         XueLiang.observerXueDown(0.5f) {
-                            g69State!=1
+                            g69State != 1
                         }
+                        g69State=0
 
                         return@chooseHero ind
                     }

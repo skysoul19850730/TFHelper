@@ -77,6 +77,7 @@ object App {
     val model_xuanwo_wawangziqiang = model_xuanwo or 0x00000002
     val model_xuanwo_huolingbo = model_xuanwo or 0x00000004
     val model_xuanwo_wawangdairen = model_xuanwo or 0x00000008
+    val model_xuanwo_wawangdairen69 = model_xuanwo or 0x00000010
 
     val model_shenhai_wawangbo = model_shenhai or 0x00000001
 
@@ -235,7 +236,7 @@ object App {
                 AyZhanNvGameLaunch()
             }
 
-            model_xuanwo_wawangbo,model_xuanwo_huolingbo, model_xuanwo_wawangziqiang,model_xuanwo_wawangdairen->{
+            model_xuanwo_wawangbo,model_xuanwo_huolingbo, model_xuanwo_wawangziqiang,model_xuanwo_wawangdairen, model_xuanwo_wawangdairen69->{
                 HBZhanNvGameLaunch()
             }
             model_shenhai_wawangbo->{

@@ -564,4 +564,9 @@ object AYUtil {
 
     }
 
+    val point179Start = MPoint()
+    fun is179Fulls(){
+
+    }
+
 }

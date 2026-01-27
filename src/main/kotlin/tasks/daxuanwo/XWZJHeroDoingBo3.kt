@@ -38,10 +38,11 @@ class XWZJHeroDoingBo3 : BaseSimpleXWHeroDoing() {
 
     override fun initHeroes() {
         super.initHeroes()
-        g49StartBoss = {
-            var index = it.indexOf(hunqiu)
-            backHun(index)
-        }
+//        g49StartBoss = {
+//            var index = it.indexOf(hunqiu)
+//            backHun(index)
+//        }
+        auto59=true
         heros = arrayListOf(
             sishen, tieqi, zhanjiang, hunqiu, niutou, yuren, feiting, tianshi, guangqiu, jiaonv
         )
@@ -50,6 +51,9 @@ class XWZJHeroDoingBo3 : BaseSimpleXWHeroDoing() {
                 fulls(zhanjiang, niutou,jiaonv,sishen, feiting)
             }
             chooseHero {
+                if(carDoing.openCount()<1){//融合导致卖卡位置错了，先上非战将
+                    upAny(niutou,jiaonv,sishen,feiting)
+                }else
                 if (zhanjiang.isInCar()) {
                     upAny(zhanjiang, feiting, niutou,jiaonv,sishen)
                 } else upAny(zhanjiang)
@@ -99,8 +103,7 @@ class XWZJHeroDoingBo3 : BaseSimpleXWHeroDoing() {
         }
         //内部实际是52关开始
         add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, jiaonv, yuren),listOf(yuren,jiaonv,))
-
-        add69(listOf(yuren,tianshi),hunqiu)
+        add69(listOf(yuren,tianshi))
         curGuanDeal = guanDealList.get(0)
     }
 

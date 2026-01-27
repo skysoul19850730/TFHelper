@@ -134,7 +134,7 @@ object Config {
 
     val pointHeroChoose = MPoint(940, 320)
     val pointHeroChooseBack = MPoint(42, 83)
-    val pointHeroDuiZhan = MPoint(700, 85)
+    val pointHeroDuiZhan = MPoint(630, 85)
     val pointHeroDuiZhanFail = MPoint(780, 85)
     val pointDuiZhanRenshu = MPoint(43, 161)
     val pointDuiZhanRenshuOk = MPoint(620, 450)

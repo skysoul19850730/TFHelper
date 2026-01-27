@@ -5,7 +5,7 @@ import kotlinx.coroutines.delay
 import tasks.shenhai.BaseSimpleSHHeroDoing
 import java.awt.event.KeyEvent
 
-class SHZJHeroDoingBo : BaseSimpleSHHeroDoing() {
+class SHZJHeroDoingBo2 : BaseSimpleSHHeroDoing() {
     val tieqi = HeroCreator.tieqi.create()
     val zhanjiang = HeroCreator.zhanjiang.create()
     val yuren = HeroCreator.yuren.create()
@@ -14,13 +14,13 @@ class SHZJHeroDoingBo : BaseSimpleSHHeroDoing() {
     val tuling = HeroCreator.tuling.create()
     val tianshi = HeroCreator.tianshi.create()
 
-    val moqiu = HeroCreator.moqiu.create()
+    val muqiu = HeroCreator.muqiu.create()
     val hunqiu = HeroCreator.hunqiu.create()
     val guangqiu = HeroCreator.guangqiu.create()
 
     override fun initHeroes() {
         super.initHeroes()
-        heros = arrayListOf(tieqi,zhanjiang,yuren,shexian,tuling,niutou,moqiu,hunqiu,guangqiu,tianshi)
+        heros = arrayListOf(tieqi,zhanjiang,yuren,shexian,tuling,niutou,muqiu,hunqiu,guangqiu,tianshi)
 
         addGuanDeal(0) {
             over {
@@ -70,7 +70,7 @@ class SHZJHeroDoingBo : BaseSimpleSHHeroDoing() {
                     }
                     chooseHero {
                         if(tianshi.isFull()){
-                            backHun(indexOf(moqiu))
+                            backHun(indexOf(hunqiu))
                         }else{
                             upAny(tianshi)
                         }
@@ -87,11 +87,11 @@ class SHZJHeroDoingBo : BaseSimpleSHHeroDoing() {
     var lastHun = 0L
     private suspend fun backHun(index: Int): Int {
         if (index > -1) {
-            if (System.currentTimeMillis() - lastHun > 5000) {
+            if (System.currentTimeMillis() - lastHun > 2000) {
                 lastHun = System.currentTimeMillis()
                 return index
             } else {
-                delay(5000 - (System.currentTimeMillis() - lastHun))
+                delay(2000 - (System.currentTimeMillis() - lastHun))
                 lastHun = System.currentTimeMillis()
                 return index
             }
