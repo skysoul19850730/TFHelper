@@ -8,6 +8,7 @@ import org.apache.commons.codec.binary.Hex
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.NameValuePair
 import org.apache.http.message.BasicNameValuePair
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.*
 import java.net.URLEncoder
@@ -139,10 +140,20 @@ object Utils {
         }
     }
 
-
     fun getWindowFolderImg(name:String):BufferedImage{
         //12_33_43_618
        return getImageFromFile(File(App.caijiPath,name))
     }
+
+
+    //第二个图 方形的话 ，左上圆点477 173
+    //判断边框，方形的一条边的内边基本都是白色，可以以方形为基准，看其左侧一定范围内有没有一个数条超过多少白色的，如上，第二个图片是方形时，左上角坐标477,173一直向下都是白色
+    //为了防止每个位置的图的边的x不准，可以拟定检测宽度为5，以 上面为例，就是检测 477-2 到477+2
+
+    //填色，整体扫描下白色超过50%的就是填充的，一大片白色呢
+
+    //图案的检测
+
+
 }
 
