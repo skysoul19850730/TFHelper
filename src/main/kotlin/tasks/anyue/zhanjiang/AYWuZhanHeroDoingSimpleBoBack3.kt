@@ -132,19 +132,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
 
             chooseHero {
 
-                while(g149XueState<5 && curGuan<150){
-                    // 掉血状态维持3次，可以认为是石柱，因为石柱不能回血
-                    // 但凡满血一次都可以重新识别血量，满了血就大概率不是石柱
-                    // 只有石柱上飞艇
-
-                    delay( 1000)
-                    if(XueLiang.getXueLiang()<0.95){
-                        g149XueState++
-                    }else{
-                        g149XueState = 0
-                    }
-
-                }
+                XueLiang.xueNotBack { curGuan>149 }
 
                 upAny(feiting)
 
@@ -191,7 +179,6 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
         curGuanDeal = guanDealList.get(0)
     }
 
-    var g149XueState = 0
 
     var time = 0L
 
@@ -207,8 +194,9 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
     //3  特殊态7，冰球触发后按7上土灵，下一轮前按0回初始态。
     suspend fun List<HeroBean?>.deal179(): Int {
         if (tianshi.currentLevel == 3) {
-            while (state179 == 0 && curGuan < 180) {
-                delay(200)
+            delay(30*1000)//打扑克至少也得几十秒，之后再来判断血量
+            XueLiang.xueNotBack{
+                curGuan>179
             }
 
         }
