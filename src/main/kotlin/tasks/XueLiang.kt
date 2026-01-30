@@ -31,11 +31,11 @@ object XueLiang {
 
     }
 
-    suspend fun observerXueDown(xueRate:Float = 0.05f, over:(()->Boolean)?=null) {
+    suspend fun observerXueDown(xueRate: Float = 0.05f, over: (() -> Boolean)? = null) {
         var recordXue = getXueLiang(getImage(App.rectWindow))
         var curXue = recordXue
 
-        while (recordXue - curXue < xueRate  && (over?.invoke() != true)) {
+        while (recordXue - curXue < xueRate && (over?.invoke() != true)) {
             delay(10)
             curXue = getXueLiang(getImage(App.rectWindow))
             if (curXue > recordXue) {//有可能处于回血状态，回血的话就把记录的血提升到当前血，再继续监听掉血
@@ -56,6 +56,27 @@ object XueLiang {
         }
         log("getXueLiang end")
         return 1f
+    }
+
+    /**
+     * 是否多少秒内血量一直低于某值（不回血）
+     * xueLess:血量低于多少 比如低于0.6
+     */
+    suspend fun xueNotBack(xueLess: Float = 0.95f, over: (() -> Boolean)? = null) {
+        var xueState = 0
+        var startTimt = System.currentTimeMillis()
+        while (over?.invoke() != true) {
+            if(System.currentTimeMillis() - startTimt >5*60* 1000){//防止外面异常结束，over一直不true
+                return
+            }
+            val curXue = getXueLiang()
+            if (curXue < xueLess) {
+                xueState++
+            } else {
+                xueState = 0
+            }
+            delay(500)
+        }
     }
 
 

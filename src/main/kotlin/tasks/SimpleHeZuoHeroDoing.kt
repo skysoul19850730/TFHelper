@@ -166,7 +166,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
 
     var curGuanDeal: GuanDeal? = null
 
-    private fun changeGuanKa(guan: Int, changeTo: GuanDeal) {
+    protected fun changeGuanKa(guan: Int, changeTo: GuanDeal) {
 
 
         if (curGuanDeal == changeTo) {
