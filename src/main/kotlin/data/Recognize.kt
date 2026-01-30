@@ -1,6 +1,7 @@
 package data
 
 import data.Config.platform
+import log
 import model.CarDoing
 import utils.ImgUtil
 import utils.MRobot
@@ -60,10 +61,18 @@ enum class Recognize(private val resName: String, private val rect: MRect, priva
         }
 
     fun isFit(sim: Double = ImgUtil.simRate): Boolean {
-        if(this == saleRect){
-            return ImgUtil.isImageInRect(resNameFinal, rectFinal, sim) || saleRect2.isFit(sim)
+        val fit = ImgUtil.isImageInRect(resNameFinal, rectFinal, sim)
+        if(fit){
+            return  true
+        }else{
+            if(this == saleRect){
+                log("售卖识别失败，可能是融合")
+                return saleRect2.isFit(sim)
+            }else if(this == saleRect2){
+                log("售卖识别失败，使用融合得标识也未识别到")
+                return false
+            }else return false
         }
-        return ImgUtil.isImageInRect(resNameFinal, rectFinal, sim)
     }
 
     suspend fun click() {

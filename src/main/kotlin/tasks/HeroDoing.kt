@@ -206,6 +206,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 
     protected suspend fun checkCar() {
         log("开始检测车")
+        delay(2000)
         carDoing.carps.get(0).click()
         delay(2000)
         if (Recognize.saleRect.isFit()) {//是自己，啥也不用干，开始初始化得位置就是对得

@@ -338,7 +338,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             chooseHero {
                 if (g69State == 0) {
                     if (midHeros69?.all { it.isFull() } == true) {
-                        while (g69State == 0) {
+                        while (g69State == 0 && curGuan<70) {
                             delay(200)
                             val outIndex = g69StartBoss?.invoke(this, 0) ?: -1
                             if (outIndex > -1) {
@@ -423,7 +423,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 //                        }
 
                         XueLiang.observerXueDown(0.5f) {
-                            g69State != 1
+                            g69State != 1 || curGuan>69
                         }
                         g69State=0
 

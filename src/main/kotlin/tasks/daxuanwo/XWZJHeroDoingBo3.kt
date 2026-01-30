@@ -51,12 +51,12 @@ class XWZJHeroDoingBo3 : BaseSimpleXWHeroDoing() {
                 fulls(zhanjiang, niutou,jiaonv,sishen, feiting)
             }
             chooseHero {
-                if(carDoing.openCount()<1){//融合导致卖卡位置错了，先上非战将
-                    upAny(niutou,jiaonv,sishen,feiting)
-                }else
+//                if(carDoing.carps.get(0).mHeroBean==null){//融合导致卖卡位置错了，先上非战将
+//                    upAny(niutou,jiaonv,sishen,feiting)
+//                }else
                 if (zhanjiang.isInCar()) {
                     upAny(zhanjiang, feiting, niutou,jiaonv,sishen)
-                } else upAny(zhanjiang)
+                } else upAny(zhanjiang,feiting)
             }
         }
 
@@ -104,6 +104,7 @@ class XWZJHeroDoingBo3 : BaseSimpleXWHeroDoing() {
         //内部实际是52关开始
         add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, jiaonv, yuren),listOf(yuren,jiaonv,))
         add69(listOf(yuren,tianshi))
+        gudingShuaQiuTask("hunqiu",79,2000)
         curGuanDeal = guanDealList.get(0)
     }
 
