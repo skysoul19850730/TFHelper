@@ -19,11 +19,11 @@ abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
 
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
-//        if(guan in listOf(79,89,99)){
-//            App.startAutoSave(200)
-//        }else{
-//            App.stopAutoSave()
-//        }
+        if(guan in listOf(109,139,149,159)){
+            App.startAutoSave(200)
+        }else{
+            App.stopAutoSave()
+        }
     }
 
     fun add39() {
@@ -43,6 +43,10 @@ abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
     }
     fun add99(){
         Ay99(this).addToHeroDoing()
+    }
+
+    fun add139(){
+        Ay139(this).addToHeroDoing()
     }
 
 

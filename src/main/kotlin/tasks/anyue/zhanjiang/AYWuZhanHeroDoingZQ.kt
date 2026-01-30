@@ -8,87 +8,63 @@ import kotlinx.coroutines.launch
 import tasks.XueLiang
 import tasks.anyue.base.BaseAnYueHeroDoing
 
-class AYWuZhanHeroDoingSimpleBack4 : BaseAnYueHeroDoing() {
+class AYWuZhanHeroDoingZQ : BaseAnYueHeroDoing() {
 
     val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()
-    val sishen = HeroCreator.sishen.create()
-    val dijing = HeroCreator.dijing.create()
     val yuren = HeroCreator.yuren.create()
-    val bingqiu = HeroCreator.bingqiu.create()
-    val shexian = HeroCreator.shexian.create()
-
-    val guangqiu = HeroCreator.guangqiu.create()
+    val jiaonv = HeroCreator.jiaonv.create()
+    val feiting = HeroCreator.feiting.create()
 
     val tuling = HeroCreator.tuling.create()
+    val dijing = HeroCreator.dijing.create()
+    val tianshi = HeroCreator.tianshi.create()
+
+    val bingqiu = HeroCreator.bingqiu.create()
 
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, tieqi, tuling, sishen, gugu, shexian, guangqiu, dijing, bingqiu, yuren)
+        heros = arrayListOf(zhanjiang, tieqi, tuling, tianshi, gugu, feiting, jiaonv, dijing, bingqiu, yuren)
 
-        guanDealList.add(GuanDeal(0, isOver = {
-            zhanjiang.currentLevel == 3
-        }, chooseHero = {
-            if (!zhanjiang.isInCar()) {
-                upAny(zhanjiang)
-            } else if (!tieqi.isInCar()) {
-                upAny(tieqi)
-            } else {
-                upAny(zhanjiang, tieqi, gugu, sishen, shexian)
-            }
-        }))
-
-        addGuanDeal(17) {
+        addGuanDeal(0) {
             over {
-                fulls(zhanjiang, tieqi, gugu, sishen, yuren, dijing, shexian)
+                fulls(zhanjiang, gugu, jiaonv, dijing, feiting)
             }
             chooseHero {
-                upAny(zhanjiang, tieqi, gugu, sishen, yuren, dijing, shexian)
+                if (zhanjiang.isInCar()) {
+                    upAny(zhanjiang, gugu, jiaonv, dijing, feiting)
+                } else {
+                    upAny(zhanjiang)
+                }
             }
         }
 
-        guanDealList.add(GuanDeal(27, isOver = {
-            fulls(zhanjiang, tuling, tieqi, yuren, sishen, gugu, shexian)
-        }, chooseHero = {
-            upAny(zhanjiang, gugu, tieqi, tuling, sishen, yuren, shexian)
-        }, onGuanDealStart = {
-            carDoing.downHero(dijing)
-        }))
+        addGuanDealWithHerosFull(27, listOf(zhanjiang, gugu, jiaonv, dijing, feiting, tieqi, yuren))
+
+        addGuanDealWithHerosFull(38, listOf(tianshi), listOf(dijing))
 
         add39()
 
-        //add49 后面要识别49球了
-//        addGuanDeal(49){
-//            over { curGuan>49 }
-//            chooseHero{
-//                while(curGuan==49){
-//                    delay(1000)
-//                }
-//                -1
-//            }
-//            onStart {
-//                App.startAutoSave()
-//            }
-//            onEnd {
-//                App.stopAutoSave()
-//            }
-//        }
+        addGuanDealWithHerosFull(40, listOf(tuling), listOf(tianshi))
+
 
         add69(listOf(bingqiu))
         add79()
         add89()
         add99()
 
+        addGuanDealWithHerosFull(100, listOf(tianshi), listOf(yuren))
+
         guanDealList.add(GuanDeal(111, onlyDoSomething = {
-            carDoing.downHero(shexian)
+            carDoing.downHero(feiting)
         }).apply { des = "下射线" })
 
 
         guanDealList.add(GuanDeal(120, isOver = {
-            fulls(shexian)
+            fulls(feiting)
         }, chooseHero = {
-            upAny(shexian)
+            upAny(feiting)
         }
         ))
 
@@ -104,19 +80,19 @@ class AYWuZhanHeroDoingSimpleBack4 : BaseAnYueHeroDoing() {
         guanDealList.add(
             GuanDeal(
                 130,
-                isOver = { shexian.isFull() },
+                isOver = { feiting.isFull() },
                 chooseHero = {
-                    upAny(shexian)
+                    upAny(feiting)
                 })
         )
 
-        add139()
+//        add139()
 
         curGuanDeal = guanDealList.get(0)
     }
 
-    val g129FirstState:Int //右车 1 (先下射线）  左车0（先不下）
-        get() = if(chePosition==1) 1 else 0
+    val g129FirstState: Int //右车 1 (先下射线）  左车0（先不下）
+        get() = if (chePosition == 1) 1 else 0
 
     var g129State = 0//0等待,1 下宝库 备宝库，2上宝库 //回到了初始态，等1再下宝库循环
 
@@ -150,8 +126,8 @@ class AYWuZhanHeroDoingSimpleBack4 : BaseAnYueHeroDoing() {
         when (g129State) {
             1 -> {
                 delay(500)
-                carDoing.downHero(shexian)
-                var index = heros.indexOf(shexian)
+                carDoing.downHero(feiting)
+                var index = heros.indexOf(feiting)
                 if (index > -1) {
                     while (g129State == 1) {
                         delay(100)
