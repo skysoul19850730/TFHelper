@@ -30,6 +30,10 @@ abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
 
         An39(this).addToHeroDoing()
     }
+    fun add49() {
+
+        An49(this).addToHeroDoing()
+    }
 
     fun add69(qius69: List<HeroBean>){
         An69(this,qius69).addToHeroDoing()
@@ -44,7 +48,9 @@ abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
     fun add99(){
         Ay99(this).addToHeroDoing()
     }
-
+    fun add109(){
+        An109(this).addToHeroDoing()
+    }
     fun add139(){
         Ay139(this).addToHeroDoing()
     }

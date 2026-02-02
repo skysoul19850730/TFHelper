@@ -65,7 +65,7 @@ object XueLiang {
     suspend fun xueNotBack(xueLess: Float = 0.95f, over: (() -> Boolean)? = null) {
         var xueState = 0
         var startTimt = System.currentTimeMillis()
-        while (over?.invoke() != true) {
+        while (xueState<5 && over?.invoke() != true) {
             if(System.currentTimeMillis() - startTimt >5*60* 1000){//防止外面异常结束，over一直不true
                 return
             }

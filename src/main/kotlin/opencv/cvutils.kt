@@ -40,7 +40,7 @@ fun Mat.binary(autoRelease:Boolean = true):Mat{
     return binary
 }
 
-fun Mat.saveToImg(path:String?=null):BufferedImage{
+fun Mat.saveToImg(src:Mat?=null,path:String?=null):BufferedImage?{
 
     val path = if(path==null) "${System.getProperty("user.dir")}/temp.png"
     else if(path.contains(File.separatorChar)){
@@ -52,17 +52,31 @@ fun Mat.saveToImg(path:String?=null):BufferedImage{
         Imgcodecs.imwrite(path, this)
     } catch (e: Exception) {
 // 绘制所有轮廓到新图像并保存（便于查看）
-        val debugImg = Mat.zeros(this.size(), CvType.CV_8UC3)
-        if (this is MatOfPoint) {
-            Imgproc.drawContours(debugImg, listOf(this), -1, Scalar(0.0, 255.0, 0.0), 2) // 绿色轮廓
+        if (this is MatOfPoint && src != null) {
+            this.saveImg(src)
+        }else{
+            return null
         }
-        Imgcodecs.imwrite(
-            path,
-            debugImg
-        )
     }
 
     return getImageFromFile(File(path))
+}
+
+private fun MatOfPoint.saveImg(roi:Mat){
+    val mask = Mat.zeros(roi.size(), CvType.CV_8UC1)
+// ✅ 关键：thickness = -1 表示实心填充！
+    Imgproc.drawContours(mask, listOf(this), -1, Scalar(255.0), -1)
+
+// 提取原图中轮廓区域内容（保留真实颜色）
+    val filled = Mat()
+    Core.bitwise_and(roi, roi, filled, mask)
+    val path = "${java.lang.System.getProperty("user.dir")}/temp.png"
+// 保存（PNG支持透明，但此处是彩色图）
+    Imgcodecs.imwrite(path, filled)
+
+    mask.release()
+    filled.release()
+    getImageFromFile(File(path))
 }
 
 fun BufferedImage.toMat(): Mat {

@@ -1,8 +1,6 @@
+import data.Config
 import data.MRect
-import opencv.binary
-import opencv.saveToImg
-import opencv.toGray
-import opencv.toMat
+import opencv.*
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import org.opencv.imgcodecs.Imgcodecs
@@ -121,14 +119,26 @@ fun main() {
     }
     val startTime = System.currentTimeMillis()
 
-    val img = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug\\r2.png"))
+//    testDetectBlueOrb()
+//    return
+
 //
 //    IconAnalyzer.TOP_ICONS.forEach {
 //        img.saveSubTo(MRect.createWH(it.x,it.y,it.width,it.height),File("C:\\Users\\Administrator\\Desktop\\debug\\${it.x}_${it.y}.png"))
 //    }
 //    return
+    var img = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug\\ay491.png"))
+
+    var count = Config.rectCheckOfLeishen.hasColorCount(Config.colorLeishenHongqiu, testImg = img)
+    var count2 = Config.rectCheckOfLeishen.hasColorCount(Config.colorLeishenLanqiu, testImg = img)
 
 
+
+ hasRedShield()
+
+    println("count is $count, count2 is $count2")
+
+    return
     val tops = AY139Util.getTopMatTypes(img)
 
     if(tops!=null) {
@@ -277,5 +287,98 @@ fun saveCircularRegionFromMask(
     Imgcodecs.imwrite(outputPath, bgra)
     bgra.release()
 }
+//770,150,200,75
+fun hasRedShield(): Boolean {
+
+    var img = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug\\ay491.png")).toMat()
+   var bossRect = Rect(770,150,200,75)
+
+    val roi = img.submat(bossRect)
+    val hsv = Mat()
+    Imgproc.cvtColor(roi, hsv, Imgproc.COLOR_BGR2HSV)
+
+    val mask = Mat()
+    // 合并红区
+    Core.inRange(hsv, Scalar(0.0, 100.0, 120.0), Scalar(15.0, 255.0, 255.0), mask)
+    val mask2 = Mat()
+    Core.inRange(hsv, Scalar(165.0, 100.0, 120.0), Scalar(180.0, 255.0, 255.0), mask2)
+    Core.bitwise_or(mask, mask2, mask)
+
+    // 形态学增强
+    val kernel = Mat.ones(3, 3, CvType.CV_8U)
+    Imgproc.morphologyEx(mask, mask, Imgproc.MORPH_CLOSE, kernel)
+
+    val count = Core.countNonZero(mask)
+    roi.release(); hsv.release(); mask.release(); mask2.release()
+    println("hasredcount ${count}")
+    return count > 500 // 阈值可根据实测调整
+}
+
+
+
+/**
+ * 检测移动中的蓝色光球：颜色 + 圆形度双重验证
+ * @param img 输入图像（BGR）
+ * @param roiRect 大范围候选区（如 Rect(200, 240, 600, 240)）
+ * @return true = 存在符合“蓝+圆”的光球
+ */
+fun detectBlueOrbRobust(img: Mat, roiRect: Rect): Boolean {
+    val roi = img.submat(roiRect)
+    if (roi.empty()) { roi.release(); return false }
+
+    val hsv = Mat()
+    Imgproc.cvtColor(roi, hsv, Imgproc.COLOR_BGR2HSV)
+
+    // 1. 颜色掩码（蓝+中高亮）
+    val maskColor = Mat()
+    Core.inRange(hsv, Scalar(90.0, 75.0, 110.0), Scalar(120.0, 255.0, 225.0), maskColor)
+
+    // 2. 形态学清理（连接断裂）
+    val kernel = Mat.ones(3, 3, CvType.CV_8U)
+    Imgproc.morphologyEx(maskColor, maskColor, Imgproc.MORPH_CLOSE, kernel)
+    Imgproc.morphologyEx(maskColor, maskColor, Imgproc.MORPH_OPEN, kernel)
+
+    // 3. 提取轮廓并验证圆形度
+    val contours = ArrayList<MatOfPoint>()
+    Imgproc.findContours(maskColor, contours, Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE)
+    for (contour in contours) {
+        val area = Imgproc.contourArea(contour)
+        if (area < 800) continue // 太小忽略
+
+        val rect = Imgproc.boundingRect(contour)
+        val rectArea = rect.width * rect.height
+        if (rectArea == 0) continue
+
+        // 圆形度：4πA / (w² + h²) —— 圆=1，细长条≈0
+        val circularity = (4 * Math.PI * area) / (rect.width.toDouble() * rect.width + rect.height.toDouble() * rect.height)
+        if (circularity > 0.6) {
+            roi.release(); hsv.release(); maskColor.release();
+//            kernel.release()
+            return true
+        }
+    }
+
+    roi.release(); hsv.release(); maskColor.release();
+//    kernel.release()
+    return false
+}
+
+
+/**
+ * 示例调用（可放入 main 或测试函数）
+ */
+fun testDetectBlueOrb() {
+    var bossRect = Rect(200,260,700,200)
+    // 根据实际截图校准坐标（建议先用 debug 图确认）
+//    val hasOrb = detectBlueOrbRobust(img,bossRect)
+    var img = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug\\ay493.png")).toMat().submat(bossRect)
+
+    val mat = Imgcodecs.imread("blueball.png")
+    val hasOrb = MatSearch.templateFit(mat,img)
+    println("检测到蓝色光球: $hasOrb")
+    img.release()
+}
+
+
 
 

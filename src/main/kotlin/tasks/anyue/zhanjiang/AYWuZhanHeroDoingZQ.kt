@@ -48,11 +48,14 @@ class AYWuZhanHeroDoingZQ : BaseAnYueHeroDoing() {
 
         addGuanDealWithHerosFull(40, listOf(tuling), listOf(tianshi))
 
+        add49()
+
 
         add69(listOf(bingqiu))
         add79()
         add89()
         add99()
+        add109()
 
         addGuanDealWithHerosFull(100, listOf(tianshi), listOf(yuren))
 
