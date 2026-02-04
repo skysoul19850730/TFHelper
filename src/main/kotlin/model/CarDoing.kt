@@ -668,7 +668,7 @@ class CarDoing(var chePosition: Int = -1, var cheType: Int = CheType_YangChe) {
             if(dianming210s.contains(it.mPos)){
                 false
             }else {
-                it.isHB199Selected(img)
+                it.isHB199Selected(img,true)
             }
         }
 
