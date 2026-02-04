@@ -383,7 +383,7 @@ object App {
             User32.INSTANCE.RegisterHotKey(null, VK_NUMPAD7, 0, VK_NUMPAD7)
             User32.INSTANCE.RegisterHotKey(null, VK_NUMPAD8, 0, VK_NUMPAD8)
             User32.INSTANCE.RegisterHotKey(null, VK_NUMPAD9, 0, VK_NUMPAD9)
-            User32.INSTANCE.RegisterHotKey(null, VK_PLUS, 0, VK_PLUS)
+            User32.INSTANCE.RegisterHotKey(null, VK_ADD, 0, VK_ADD)
 
 
 
@@ -481,7 +481,7 @@ object App {
                                 MRobot.singleClickPc(CarDoing.salePoint)
                             }
 
-                            VK_PLUS ->{
+                            VK_ADD ->{
                                 App.save()
                             }
 

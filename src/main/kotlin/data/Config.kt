@@ -134,14 +134,19 @@ object Config {
 
     val pointHeroChoose = MPoint(940, 320)
     val pointHeroChooseBack = MPoint(42, 83)
-    val pointHeroDuiZhan = MPoint(700, 85)
-    val pointHeroDuiZhanFail = MPoint(780, 85)
+    val pointHeroDuiZhan = MPoint(630, 85)
+    val pointHeroDuiZhanFail = MPoint(700, 85)
     val pointDuiZhanRenshu = MPoint(43, 161)
     val pointDuiZhanRenshuOk = MPoint(620, 450)
 
     //600 270 200 130
     val colorLeishenLanqiu = Color(255, 255, 255)
     val colorLeishenHongqiu = Color(255, 45, 85)
+
+    val colorLeishenHongqiuHSV1 = Pair(0,13)
+    val colorLeishenHongqiuHSV2 = Pair(345,360)
+
+    val colorLeishenLanqiuHSV = Pair(175,185)
 
     //    val rectCheckOfLeishen = MRect.createWH(700,270,50,25)
     val rectCheckOfLeishen = MRect.createWH(566, 273, 220, 120)

@@ -78,6 +78,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             }
 
             if (position199 > -1) {
+                App.save()
                 return true
             }
         }
@@ -97,6 +98,7 @@ abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 if(!carDoing.dianming210s.contains(click210Pos)) {
                     carDoing.dianming210s.add(click210Pos)
                 }
+                App.save()
                 return true
             }
         }

@@ -7,15 +7,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tasks.XueLiang
 import tasks.anyue.base.BaseAnYueHeroDoing
-import java.awt.event.KeyEvent
 
-class AYWuZhanHeroDoingZQ : BaseAnYueHeroDoing() {
+class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
     val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()
     val yuren = HeroCreator.yuren.create()
-    val xiaoye = HeroCreator.xiaoye.create()
+    val jiaonv = HeroCreator.jiaonv.create()
     val feiting = HeroCreator.feiting.create()
 
     val tuling = HeroCreator.tuling.create()
@@ -26,22 +25,22 @@ class AYWuZhanHeroDoingZQ : BaseAnYueHeroDoing() {
 
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, tieqi, tuling, tianshi, gugu, feiting, xiaoye, dijing, bingqiu, yuren)
+        heros = arrayListOf(zhanjiang, tieqi, tuling, tianshi, gugu, feiting, jiaonv, dijing, bingqiu, yuren)
 
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang, gugu, xiaoye, dijing, feiting)
+                fulls(zhanjiang, gugu, jiaonv, dijing, feiting)
             }
             chooseHero {
                 if (zhanjiang.isInCar()) {
-                    upAny(zhanjiang, gugu, xiaoye, dijing, feiting)
+                    upAny(zhanjiang, gugu, jiaonv, dijing, feiting)
                 } else {
                     upAny(zhanjiang)
                 }
             }
         }
 
-        addGuanDealWithHerosFull(27, listOf(zhanjiang, gugu, xiaoye, dijing, feiting, tieqi, yuren))
+        addGuanDealWithHerosFull(27, listOf(zhanjiang, gugu, jiaonv, dijing, feiting, tieqi, yuren))
 
         addGuanDealWithHerosFull(38, listOf(tianshi), listOf(dijing))
 

@@ -1,5 +1,6 @@
 package opencv
 
+import androidx.compose.ui.res.loadImageBitmap
 import data.MRect
 import getImageFromFile
 import org.opencv.core.*
@@ -7,6 +8,7 @@ import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferByte
+import java.awt.image.DataBufferInt
 import java.io.File
 
 fun Mat.toGray(autoRelease:Boolean = true):Mat{
@@ -84,7 +86,30 @@ fun BufferedImage.toMat(): Mat {
     img.graphics.drawImage(this, 0, 0, null)
 
     val mat = Mat(this.height, this.width, CvType.CV_8UC3)
-    val data = (img.raster.dataBuffer as DataBufferByte).data
+    var imgbuffer = img.raster.dataBuffer as? DataBufferByte
+    if(imgbuffer == null){
+        imgbuffer = convertDataBufferIntToBytes(img.raster.dataBuffer as DataBufferInt)
+    }
+    val data = imgbuffer.data
     mat.put(0, 0, data)
     return mat
+}
+
+
+private fun convertDataBufferIntToBytes(dataBufferInt: DataBufferInt): DataBufferByte {
+    val intData = dataBufferInt.data
+    // 假设每个int值代表RGBA四个字节
+    val byteSize = intData.size * 4  // 每个int有4个字节
+    val byteData = ByteArray(byteSize)
+
+    for (i in intData.indices) {
+        val intValue = intData[i]
+        // 将int拆分为4个字节
+        byteData[i * 4] = ((intValue shr 24) and 0xFF).toByte()     // Alpha
+        byteData[i * 4 + 1] = ((intValue shr 16) and 0xFF).toByte() // Red
+        byteData[i * 4 + 2] = ((intValue shr 8) and 0xFF).toByte()  // Green
+        byteData[i * 4 + 3] = (intValue and 0xFF).toByte()          // Blue
+    }
+
+    return DataBufferByte(byteData, byteData.size)
 }

@@ -117,6 +117,8 @@ fun main() {
     } catch (e: Exception) {
         System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME)
     }
+
+
     val startTime = System.currentTimeMillis()
 
 //    testDetectBlueOrb()
@@ -127,7 +129,7 @@ fun main() {
 //        img.saveSubTo(MRect.createWH(it.x,it.y,it.width,it.height),File("C:\\Users\\Administrator\\Desktop\\debug\\${it.x}_${it.y}.png"))
 //    }
 //    return
-    var img = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug\\ay491.png"))
+    var img = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug\\tttaa1233.png"))
 
     var count = Config.rectCheckOfLeishen.hasColorCount(Config.colorLeishenHongqiu, testImg = img)
     var count2 = Config.rectCheckOfLeishen.hasColorCount(Config.colorLeishenLanqiu, testImg = img)

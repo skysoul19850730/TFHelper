@@ -5,6 +5,7 @@ import tasks.SimpleHeZuoHeroDoing
 import java.awt.event.KeyEvent
 
 abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
+    var an49:An49?=null
 
     //火灵攻击4次后，6秒后放无敌，4秒后解除；6秒时扔冰，两秒后再扔以后，共两个就可以等解除了，如果冰的等级高，第二个可以1.5秒后就扔
 
@@ -14,12 +15,16 @@ abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
             return false
         }
 
+        if (code == KeyEvent.VK_NUMPAD3) {
+            an49?.state = 1
+        }
+
         return false
     }
 
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
-        if(guan in listOf(109,139,149,159)){
+        if(guan in listOf(49,139,149,159)){
             App.startAutoSave(200)
         }else{
             App.stopAutoSave()

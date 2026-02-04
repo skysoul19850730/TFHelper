@@ -92,8 +92,8 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
             chooseHero = { g129Index(this) },
             onGuanDealStart = {
                 g129State = 0
-                time=System.currentTimeMillis()
-                if(carDoing.chePosition == 0){
+                time = System.currentTimeMillis()
+                if (carDoing.chePosition == 0) {
                     //后车的话，黄蜂出来2.5秒后下，但不识别黄凤，就从129开始后
                     //掉血一次后，count满2，g129state会变回0再上射线。后面就一样了
                     //如果是前车就不用管，就等第一次掉血就可以
@@ -119,20 +119,24 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
                 })
         )
 
-        addGuanDeal(141){
+        addGuanDeal(141) {
             onlyDo {
                 carDoing.downHero(feiting)
             }
         }
 
-        addGuanDeal(149){
+        addGuanDeal(149) {
+            var checked = false
             over {
-                curGuan>149 || feiting.isFull()
+                curGuan > 149 || feiting.isFull()
             }
 
             chooseHero {
 
-                XueLiang.xueNotBack { curGuan>149 }
+                if (!checked) {
+                    XueLiang.xueNotBack { curGuan > 149 }
+                    checked = true
+                }
 
                 upAny(feiting)
 
@@ -140,7 +144,8 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
 
         }
 
-        addGuanDealWithHerosFull(150, listOf(niutou,feiting), listOf(tuling))
+        //这里不能150，因为149的over态也是150（>149)所以会并发，这里触发下卡，149触发上飞艇，导致飞艇计数错误
+        addGuanDealWithHerosFull(152, listOf(niutou, feiting), listOf(tuling))
 
         guanDealList.add(GuanDeal(179, isOver = {
             curGuan > 179
@@ -192,15 +197,19 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
     //179  0初始态（其他都满，下土灵得状态，到boss就按0）。1，杀敌状态，不要的牌都按1（杀死后按0回初始态）。
     //2 特殊态5，下 射线土灵，鱼人（遇到牌5按2，撞车后按0回初始态）
     //3  特殊态7，冰球触发后按7上土灵，下一轮前按0回初始态。
+    var isChecked179 = false
     suspend fun List<HeroBean?>.deal179(): Int {
-        if (tianshi.currentLevel == 3) {
-            delay(30*1000)//打扑克至少也得几十秒，之后再来判断血量
-            XueLiang.xueNotBack{
-                curGuan>179
-            }
-
+        if(tianshi.isFull()){
+            waiting = true
         }
-        return indexOf(tianshi)
+        if (tianshi.currentLevel == 3 && !isChecked179) {
+            delay(30 * 1000)//打扑克至少也得几十秒，之后再来判断血量
+            XueLiang.xueNotBack {
+                curGuan > 179
+            }
+            isChecked179 = true
+        }
+        return upAny(tianshi)
     }
 
 
@@ -213,8 +222,8 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
 
     var g139State = 0
 
-    val g129FirstState:Int //右车 1 (先下射线）  左车0（先不下）
-        get() = if(chePosition==1) 1 else 0
+    val g129FirstState: Int //右车 1 (先下射线）  左车0（先不下）
+        get() = if (chePosition == 1) 1 else 0
     var g129State = 0//0等待,1 下宝库 备宝库，2上宝库 //回到了初始态，等1再下宝库循环
     var g129XueCount = 1//0,1 下射线，2，3上射线
     var checkXue = true
@@ -225,7 +234,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
             XueLiang.observerXueDown(xueRate = 0.1f, over = { curGuan > 129 })
             g129XueCount++
             if (g129XueCount == 2) {
-                if(!g129First) {//第一次不延迟，否则离boss太近
+                if (!g129First) {//第一次不延迟，否则离boss太近
                     delay(800)
                 }
                 g129First = false
@@ -297,9 +306,10 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
                     checkXue = false
                     g129State = if (g129State == 0) 1 else 0
                 }
-                KeyEvent.VK_NUMPAD3->{
-                    log("129 旋风第一个 ${System.currentTimeMillis()-time}")
-                    if(carDoing.chePosition == 0) {
+
+                KeyEvent.VK_NUMPAD3 -> {
+                    log("129 旋风第一个 ${System.currentTimeMillis() - time}")
+                    if (carDoing.chePosition == 0) {
                         g129State = 1
                     }
                 }

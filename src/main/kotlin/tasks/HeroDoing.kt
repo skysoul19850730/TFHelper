@@ -868,6 +868,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
     }
 
     open suspend fun isKeyDownNeed(code: Int): Boolean {
+        if (code == KeyEvent.VK_ADD) return false
         return true
     }
 
@@ -957,5 +958,56 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
             return true
         }
         return false
+    }
+
+
+    val noHuanqiu: Boolean
+        get() = !(heros.any {
+            it.heroName == "huanqiu"
+        })
+
+    fun List<HeroBean?>.upAny(
+        heros: List<HeroBean>, zhuangbei: (() -> Boolean)? = null,
+        useGuang: Boolean = true
+    ): Int {
+        return upAny(*heros.toTypedArray(), zhuangbei = zhuangbei, useGuang = useGuang)
+    }
+
+    fun List<HeroBean?>.upAny(
+        vararg heros: HeroBean,
+        zhuangbei: (() -> Boolean)? = null,
+        useGuang: Boolean = true
+    ): Int {
+        heros.forEach {
+            var index = indexOf(it)
+            if (index > -1) {
+                return index
+            }
+        }
+
+        if (zhuangbei != null && !noHuanqiu) {
+            var index = zhuangbei { zhuangbei() }
+            if (index > -1) {
+                return index
+            }
+        }
+
+        if (useGuang) {
+            if (heros.filter { it.isInCar() && !it.isFull() }.isNotEmpty()) {
+                return indexOfFirst {
+                    it?.heroName == "guangqiu"
+                }
+            }
+        }
+        return -1
+    }
+
+    fun List<HeroBean?>.zhuangbei(block: () -> Boolean): Int {
+        if (!block() && Zhuangbei.hasZhuangbei()) {
+            return indexOfFirst {
+                it?.heroName == "huanqiu"
+            }
+        }
+        return -1
     }
 }
