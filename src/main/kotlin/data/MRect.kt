@@ -75,6 +75,31 @@ class MRect {
         return false
     }
 
+    /**
+     * 只能判断主色调，比如红绿蓝有偏向的，可以是红绿的高混或者绿蓝高混（青色）,不能判断黑白
+     */
+    fun hasHSVColorCount(vararg pairs: Pair<Int,Int>,testImg: BufferedImage? = null): Int {
+        var img = testImg?.getSubImage(this) ?: getImage(this)
+        var count = 0
+        forEach { i, i2 ->
+            val color = img.getRGB(i - left, i2 - top).toHSB()
+            val h = (color[0]*360).toInt()
+            val s = color[1]
+
+            if(s>0.2) {
+                pairs.forEach {
+                    if (h in it.first..it.second) {
+                        count++
+                    }
+                }
+            }
+        }
+        return count
+    }
+
+
+
+
     fun hasColorCount(toColor: Color, sim: Int = 20, testImg: BufferedImage? = null): Int {
         var img = testImg?.getSubImage(this) ?: getImage(this)
         var count = 0
@@ -127,4 +152,9 @@ class MRect {
         }
     }
 
+}
+
+
+fun Int.toHSB():FloatArray{
+    return Color.RGBtoHSB(this shr 16 and 0xFF, this shr 8 and 0xFF, this  and 0xFF, null)
 }

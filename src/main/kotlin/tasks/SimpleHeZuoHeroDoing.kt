@@ -24,10 +24,6 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
         }
     }
 
-    val noHuanqiu: Boolean
-        get() = !(heros.any {
-            it.heroName == "huanqiu"
-        })
 
     val longxin: Boolean
         get() = (Zhuangbei.isLongxin() && Zhuangbei.hasZhuangbei()) || noHuanqiu
@@ -54,50 +50,6 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
         }
     }
 
-    fun List<HeroBean?>.upAny(
-        heros: List<HeroBean>, zhuangbei: (() -> Boolean)? = null,
-        useGuang: Boolean = true
-    ): Int {
-        return upAny(*heros.toTypedArray(), zhuangbei = zhuangbei, useGuang = useGuang)
-    }
-
-    fun List<HeroBean?>.upAny(
-        vararg heros: HeroBean,
-        zhuangbei: (() -> Boolean)? = null,
-        useGuang: Boolean = true
-    ): Int {
-        heros.forEach {
-            var index = indexOf(it)
-            if (index > -1) {
-                return index
-            }
-        }
-
-        if (zhuangbei != null && !noHuanqiu) {
-            var index = zhuangbei { zhuangbei() }
-            if (index > -1) {
-                return index
-            }
-        }
-
-        if (useGuang) {
-            if (heros.filter { it.isInCar() && !it.isFull() }.isNotEmpty()) {
-                return indexOfFirst {
-                    it?.heroName == "guangqiu"
-                }
-            }
-        }
-        return -1
-    }
-
-    fun List<HeroBean?>.zhuangbei(block: () -> Boolean): Int {
-        if (!block() && Zhuangbei.hasZhuangbei()) {
-            return indexOfFirst {
-                it?.heroName == "huanqiu"
-            }
-        }
-        return -1
-    }
 
     class GuanDeal(
         var startGuan: Int,
@@ -188,7 +140,12 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
             MainData.curGuanKaDes.value = changeTo.des ?: ""
             log("curGuanDeal is ${changeTo.startGuan}")
             GlobalScope.launch {
-                changeTo.onGuanDealStart?.invoke()
+                try {
+                    changeTo.onGuanDealStart?.invoke()
+                } catch (e: Exception) {
+                    log("changeGuanKa onGuanDealStart error:${e.message}")
+                }
+
                 if (changeTo.isOver.invoke()) {//start中判断不需要执行此deal，可以将waiting置true，这样直接触发end
                     changeTo.onGuanDealEnd?.invoke()
                 } else {
@@ -277,7 +234,8 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
         overGuan: Int? = null,
         dealTime: Long = 0L,
         sholudPasue: (suspend () -> Unit)? = null,
-        customOverJudge: (() -> Boolean)? = null
+        customOverJudge: (() -> Boolean)? = null,
+        onGuanDealStart: (suspend () -> Unit)? = null
     ) {
 
         var delayed = false
@@ -319,6 +277,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
             onGuanDealStart = {
                 qiuPlaying = true
                 qiuStopFlag = false
+                onGuanDealStart?.invoke()
                 if (allTime != null)
                     qiuAutoBeginTime = System.currentTimeMillis()
             },

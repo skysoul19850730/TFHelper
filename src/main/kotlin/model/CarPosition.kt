@@ -351,7 +351,7 @@ data class CarPosition(
     }
 
 
-    fun isHB199Selected(imgTest: BufferedImage): Boolean {
+    fun isHB199Selected(imgTest: BufferedImage,is210:Boolean = false): Boolean {
 //        MRect.createPointR(mRect.clickPoint, 3).forEach { i, i2 ->
 //            imgTest.setRGB(i,i2,Color.RED.rgb)
 //        }
@@ -376,7 +376,7 @@ data class CarPosition(
         }
 
         logOnly("car:${carDoing.chePosition} position:${mPos} hb199 hasCount :$hasCount")
-        if (hasCount > 300) {
+        if (hasCount > if(is210) 200 else 300) {
 //            App.save()
             return true
         }
