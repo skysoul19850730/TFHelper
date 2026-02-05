@@ -4,9 +4,7 @@ import addJiexiHeroResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -20,12 +18,14 @@ import tasks.Guanka
 import tasks.Hero
 import test
 import ui.weights.showInputDialog
+import java.awt.image.BufferedImage
 
 @Composable
 fun caijiPage() {
     val showJieXiHeroUI = remember { mutableStateOf(false) }
     val timeInputDialog = remember { mutableStateOf(false) }
     val customScreen = remember { mutableStateOf(false) }
+    var img4Custom by remember { mutableStateOf<BufferedImage?>(null) }
 
     Card(Modifier.fillMaxWidth().height(450.dp), elevation = 4.dp, backgroundColor = Color(0xffa1a1a1)) {
         Column(Modifier.padding(horizontal = 12.dp)) {

@@ -5,12 +5,10 @@ import data.MPoint
 import data.MRect
 import getImage
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.withTimeoutOrNull
 import log
 import utils.MRobot
 import java.awt.Color
 import java.awt.image.BufferedImage
-import java.math.BigDecimal
 
 object XueLiang {
 

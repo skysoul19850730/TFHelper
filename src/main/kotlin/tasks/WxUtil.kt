@@ -1,6 +1,5 @@
 package tasks
 
-import com.sun.jna.platform.win32.GDI32Util
 import com.sun.jna.platform.win32.User32
 import com.sun.jna.platform.win32.WinDef
 import data.Config

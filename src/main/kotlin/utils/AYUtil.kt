@@ -3,7 +3,6 @@ package utils
 import App
 import colorCompare
 import data.Config
-import data.HeroBean
 import data.MPoint
 import data.MRect
 import foreach
@@ -11,16 +10,13 @@ import getImage
 import getImageFromFile
 import getImageFromRes
 import getSubImage
-import kotlinx.coroutines.*
 import log
 import logOnly
 import model.CarDoing
 import resFile
-import test.Utils
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
-import kotlin.coroutines.resume
 import kotlin.system.measureTimeMillis
 
 object AYUtil {

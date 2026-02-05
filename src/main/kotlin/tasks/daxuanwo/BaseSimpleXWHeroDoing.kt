@@ -10,9 +10,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tasks.Boss
 import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
 import tasks.daxuanwo.utils.WX59
+import tasks.daxuanwo.utils.WX79
+import tasks.daxuanwo.utils.WX89
 import ui.zhandou.UIKeyListenerManager
 import utils.ImgUtil
 import utils.MRobot
@@ -26,6 +29,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
     var auto29 = true
     var auto59 = false
+    var auto89 = true
 
     override suspend fun onKeyDown(code: Int): Boolean {
         //如果龙王识别出错可以按快捷下对应卡牌，但不知道快捷键按下得时间，所以不能延时进行上卡，只能快捷键9来恢复上卡
@@ -52,6 +56,14 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     g69State = 0
                 }
                 return true
+            }
+            if (curGuan == 79) {
+                //点击结束自动旋转
+                WX79.doing = false
+            }
+            if (curGuan == 89) {
+                //点击结束自动旋转
+                WX89.doing = false
             }
 
         }
@@ -447,28 +459,45 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
 
-        if (guan == 9) {
-            GlobalScope.launch {
-                delay(1000)
-                MRobot.moveFullScreen()
+        try {//autoDo的都catch一下，异常不影响主流程
+
+
+            if (guan == 9) {
+                GlobalScope.launch {
+                    delay(1000)
+                    MRobot.moveFullScreen()
+                }
             }
-        }
-        if (guan == 29 && auto29) {
-            start29()
-        } else {
-            stop29()
-        }
+            if (guan == 29 && auto29) {
+                start29()
+            } else {
+                stop29()
+            }
 
-        if (guan == 59) {
-            WX59.autoDo(auto59)
-        }
-
+            if (guan == 59) {
+                WX59.autoDo(auto59)
+            }
+            if (guan == 79) {
+                WX79.autoDo(carDoing.carps.map {
+                    it.mRect.scale(0.3f)
+                }) {
+                    curGuan > 79
+                }
+            }
+            if (guan == 89) {
+                WX89.autoDo {
+                    curGuan > 89
+                }
+            }
 
 //        if (guan in listOf(59)) {
 //            App.startAutoSave(200)
 //        } else {
 //            App.stopAutoSave()
 //        }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 
