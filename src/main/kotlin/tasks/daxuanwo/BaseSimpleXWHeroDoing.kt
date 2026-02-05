@@ -425,6 +425,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                         XueLiang.observerXueDown(0.5f) {
                             g69State != 1 || curGuan>69
                         }
+                        delay(500)
                         g69State=0
 
                         return@chooseHero ind

@@ -13,6 +13,7 @@ import tasks.daxuanwo.*
 import tasks.hanbing2.huoling.HBBoHuolingHeroDoing
 import tasks.hanbing2.zhanjiang.*
 import tasks.hanbing2.zhanjiang.fuka.HBZTHeroDoingZiQiangFuka2
+import tasks.shenhai.tianshi.SHTSHeroDoingJing
 import tasks.shenhai.zhanjiang.SHTSHeroDoingBo
 import tasks.shenhai.zhanjiang.SHZJHeroDoingBo
 
@@ -87,7 +88,6 @@ class HBZhanNvGameLaunch : IGameLaunch {
             App.model_xuanwo_wawangdairen -> XWZJHeroDoingDairen()
             App.model_xuanwo_wawangdairen69 -> XWZJHeroDoingDairen2()
 
-            App.model_shenhai_wawangbo -> SHZJHeroDoingBo()
             App.model_shenhai_tianshiJing -> SHTSHeroDoingJing()
             App.model_shenhai_wawangbo -> SHTSHeroDoingBo()
             else ->HBZTHeroDoingZiQiang()

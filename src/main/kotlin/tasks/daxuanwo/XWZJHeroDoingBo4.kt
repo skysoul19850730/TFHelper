@@ -12,7 +12,7 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
     val sishen = HeroCreator.sishen.create()
     val bingqi = HeroCreator.bingqi.create()
     
-    val yuren = HeroCreator.yuren.create()
+    val wangjiang = HeroCreator.wangjiang.create()
     val feiting = HeroCreator.feiting.create()
     val haiyao = HeroCreator.haiyao.create()
 
@@ -23,7 +23,7 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
     override fun initHeroes() {
         super.initHeroes()
         heros = arrayListOf(
-            sishen, tieqi, zhanjiang, haiyao, niutou, yuren, feiting, tianshi, guangqiu, bingqi
+            sishen, tieqi, zhanjiang, haiyao, niutou, wangjiang, feiting, tianshi, guangqiu, bingqi
         )
         addGuanDeal(0) {
             over {
@@ -31,7 +31,10 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
             }
             chooseHero {
                 if (zhanjiang.isInCar()) {
-                    upAny(zhanjiang, feiting, niutou,sishen)
+                    if(feiting.isInCar()){
+                        upAny(zhanjiang,feiting  ,niutou,sishen)
+                    }else
+                    upAny(feiting,zhanjiang,  niutou,sishen)
                 } else upAny(zhanjiang)
             }
         }
@@ -48,13 +51,12 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
 
         addGuanDeal(38) {
             over {
-                fulls(zhanjiang, niutou, feiting, tieqi, haiyao, tianshi, yuren)
+                fulls(zhanjiang, niutou, feiting, tieqi, haiyao, tianshi, sishen)
             }
             chooseHero {
-                upAny(zhanjiang, niutou, feiting, tieqi, tianshi, yuren, haiyao)
+                upAny(zhanjiang, niutou, feiting, tieqi, tianshi, sishen, haiyao)
             }
             onStart {
-                carDoing.downHero(sishen)
                 delay(3000)
             }
         }
@@ -78,11 +80,11 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
             }
         }
         //内部实际是52关开始
-        add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, bingqi, tianshi),listOf(tieqi,tianshi))
+        add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, bingqi, wangjiang),listOf(tieqi,wangjiang))
 
-        add69()
+        add69(listOf(tieqi,tianshi))
 
-        addGuanDealWithHerosFull(70, listOf(tieqi,yuren), listOf(bingqi))
+        addGuanDealWithHerosFull(70, listOf(tieqi,wangjiang), listOf(bingqi,tianshi))
         addGuanDealWithHerosFull(78, listOf(tianshi))
         curGuanDeal = guanDealList.get(0)
     }
