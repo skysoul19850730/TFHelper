@@ -4,9 +4,7 @@ import data.Config
 import data.MRect
 import getImage
 import getImageFromRes
-import getSubImage
 import opencv.MatSearch
-import opencv.binary
 import opencv.toGray
 import opencv.toMat
 import org.opencv.core.Mat

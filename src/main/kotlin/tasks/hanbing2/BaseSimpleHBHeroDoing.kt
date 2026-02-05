@@ -10,7 +10,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import log
 import logOnly
-import saveTo
 import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
 import ui.zhandou.UIKeyListenerManager
@@ -18,7 +17,6 @@ import utils.HBUtil
 import utils.ImgUtil.forEach4Result
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
-import java.io.File
 
 abstract class BaseSimpleHBHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {
 

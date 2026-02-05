@@ -22,6 +22,7 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
 
     override fun initHeroes() {
         super.initHeroes()
+        auto59 = true
         heros = arrayListOf(
             sishen, tieqi, zhanjiang, haiyao, niutou, yuren, feiting, tianshi, guangqiu, bingqi
         )

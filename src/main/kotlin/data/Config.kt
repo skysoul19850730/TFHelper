@@ -2,7 +2,6 @@ package data
 
 import androidx.compose.runtime.mutableStateOf
 import java.awt.Color
-import java.awt.Point
 
 object Config {
 

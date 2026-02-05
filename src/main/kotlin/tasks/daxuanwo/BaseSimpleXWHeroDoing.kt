@@ -10,9 +10,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tasks.Boss
 import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
 import tasks.daxuanwo.utils.WX59
+import tasks.daxuanwo.utils.WX79
+import tasks.daxuanwo.utils.WX89
 import ui.zhandou.UIKeyListenerManager
 import utils.ImgUtil
 import utils.MRobot
@@ -26,6 +29,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
     var auto29 = true
     var auto59 = false
+    var auto89 = true
 
     override suspend fun onKeyDown(code: Int): Boolean {
         //如果龙王识别出错可以按快捷下对应卡牌，但不知道快捷键按下得时间，所以不能延时进行上卡，只能快捷键9来恢复上卡
@@ -52,6 +56,14 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     g69State = 0
                 }
                 return true
+            }
+            if (curGuan == 79) {
+                //点击结束自动旋转
+                WX79.doing = false
+            }
+            if (curGuan == 89) {
+                //点击结束自动旋转
+                WX89.doing = false
             }
 
         }
@@ -213,10 +225,10 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
                 if (g49 == 3) {//兼顾打磨 打魂
                     var mo = indexOf(qiu49)
-                    if(System.currentTimeMillis()-lastQiu49>qiu49Time-1000 && mo>-1){
+                    if (System.currentTimeMillis() - lastQiu49 > qiu49Time - 1000 && mo > -1) {
                         lastQiu49 = System.currentTimeMillis()
                         return@chooseHero mo
-                    }else {
+                    } else {
                         return@chooseHero g49StartBoss?.invoke(this) ?: -1
                     }
                 } else if (g49 == 2) {//打完融合，boss和满herodown的两个阶段都不再需要打魔球了，鱼人战将基本都够攻速了，打魔没效果了。
@@ -273,7 +285,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
      * 69的额外操作，比如打魔，打魂，在特定生命周期扔给外面，Int, 0代表下卡前，1代表上卡中，2代表上满后
      * 如果因为没有预选卡 就返回-2
      */
-    var g69StartBoss: (suspend (List<HeroBean?>,Int) -> Int)? = null
+    var g69StartBoss: (suspend (List<HeroBean?>, Int) -> Int)? = null
 
     var g69State = 0 //0:全上，1 下中间俩
     var g69Type = 1  // 0：正常上，按顺序，有哪个上哪个，
@@ -311,10 +323,10 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         super.onGuangqiuPost()
     }
 
-    fun add69(fixeMidHeros:List<HeroBean>?=null,hunqiu:HeroBean?=null) {
-        if(fixeMidHeros!=null){//这种是为了 类似天使这种只能68，69再上，防止抢兵的，中间先上别的，68的时候再修正成天使
+    fun add69(fixeMidHeros: List<HeroBean>? = null, hunqiu: HeroBean? = null) {
+        if (fixeMidHeros != null) {//这种是为了 类似天使这种只能68，69再上，防止抢兵的，中间先上别的，68的时候再修正成天使
 
-            addGuanDealWithHerosFull(68,fixeMidHeros,midHeros69?.filter {
+            addGuanDealWithHerosFull(68, fixeMidHeros, midHeros69?.filter {
                 !fixeMidHeros.contains(it)
             })
             midHeros69 = fixeMidHeros
@@ -330,15 +342,15 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     if (midHeros69?.all { it.isFull() } == true) {
                         while (g69State == 0) {
                             delay(200)
-                            val outIndex = g69StartBoss?.invoke(heros,0)?:-1
-                            if(outIndex>-1){
+                            val outIndex = g69StartBoss?.invoke(heros, 0) ?: -1
+                            if (outIndex > -1) {
                                 return@chooseHero outIndex
                             }
                         }
                     } else {
 
-                        val outIndex = g69StartBoss?.invoke(heros,0)?:-1
-                        if(outIndex>-1){
+                        val outIndex = g69StartBoss?.invoke(heros, 0) ?: -1
+                        if (outIndex > -1) {
                             return@chooseHero outIndex
                         }
 
@@ -355,9 +367,9 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                             }
 
                         } else if (g69Type == 1) {
-                            if(hunqiu!=null) {
+                            if (hunqiu != null) {
                                 val hun = indexOf(hunqiu)
-                                if(hun>-1 && XueLiang.getXueLiang()<0.95){
+                                if (hun > -1 && XueLiang.getXueLiang() < 0.95) {
                                     return@chooseHero hun
                                 }
                             }
@@ -392,10 +404,10 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     }
                 }
                 if (g69State == 1) {
-                    val outIndex = g69StartBoss?.invoke(heros,0)?:-1
-                    if(outIndex==-2){
+                    val outIndex = g69StartBoss?.invoke(heros, 0) ?: -1
+                    if (outIndex == -2) {
                         return@chooseHero -1
-                    }else if(outIndex>-1){
+                    } else if (outIndex > -1) {
                         return@chooseHero outIndex
                     }
                     //如果不是因为没有预选卡，且返回-1，代表外面不处理了，再下卡
@@ -413,7 +425,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 //                        }
 
                         XueLiang.observerXueDown(0.5f) {
-                            g69State!=1
+                            g69State != 1
                         }
 
                         return@chooseHero ind
@@ -435,28 +447,45 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
 
-        if (guan == 9) {
-            GlobalScope.launch {
-                delay(1000)
-                MRobot.moveFullScreen()
+        try {//autoDo的都catch一下，异常不影响主流程
+
+
+            if (guan == 9) {
+                GlobalScope.launch {
+                    delay(1000)
+                    MRobot.moveFullScreen()
+                }
             }
-        }
-        if (guan == 29 && auto29) {
-            start29()
-        } else {
-            stop29()
-        }
+            if (guan == 29 && auto29) {
+                start29()
+            } else {
+                stop29()
+            }
 
-        if (guan == 59) {
-            WX59.autoDo(auto59)
-        }
-
+            if (guan == 59) {
+                WX59.autoDo(auto59)
+            }
+            if (guan == 79) {
+                WX79.autoDo(carDoing.carps.map {
+                    it.mRect.scale(0.3f)
+                }) {
+                    curGuan > 79
+                }
+            }
+            if (guan == 89) {
+                WX89.autoDo {
+                    curGuan > 89
+                }
+            }
 
 //        if (guan in listOf(59)) {
 //            App.startAutoSave(200)
 //        } else {
 //            App.stopAutoSave()
 //        }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 

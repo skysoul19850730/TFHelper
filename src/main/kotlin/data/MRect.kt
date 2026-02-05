@@ -5,12 +5,8 @@ package data
 import colorCompare
 import getImage
 import getSubImage
-import sun.awt.Win32GraphicsDevice
 import utils.ImgUtil.forEach
-import utils.MRobot
 import java.awt.Color
-import java.awt.GraphicsEnvironment
-import java.awt.Point
 import java.awt.image.BufferedImage
 
 class MRect {
@@ -43,6 +39,14 @@ class MRect {
     override fun toString(): String {
 
         return "mRect :${super.toString()}.  top is $top,left is $left bottom is $bottom ,right is $right,clickPoint is ${clickPoint.toString()}"
+    }
+
+    /**
+     * 放大，一般用于找图
+     */
+    fun scale(scale: Float):MRect{
+        return MRect.createWH((left-(width*(scale-1)/2)).toInt(),
+            (top-(height*(scale-1)/2)).toInt(), (width*scale).toInt(), (height*scale).toInt())
     }
 
     fun hasWhiteColor(): Boolean {
