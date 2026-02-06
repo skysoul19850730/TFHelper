@@ -1,5 +1,6 @@
 package ui.caiji
 
+import IconEditorDialog
 import addJiexiHeroResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -25,7 +26,7 @@ fun caijiPage() {
     val showJieXiHeroUI = remember { mutableStateOf(false) }
     val timeInputDialog = remember { mutableStateOf(false) }
     val customScreen = remember { mutableStateOf(false) }
-    var img4Custom by remember { mutableStateOf<BufferedImage?>(null) }
+    var img4Custom = remember { mutableStateOf(false) }
 
     Card(Modifier.fillMaxWidth().height(450.dp), elevation = 4.dp, backgroundColor = Color(0xffa1a1a1)) {
         Column(Modifier.padding(horizontal = 12.dp)) {
@@ -48,6 +49,9 @@ fun caijiPage() {
             grayBtn("自定义裁剪") {
                 customScreen.value = true
             }
+            grayBtn("Icon制作"){
+                img4Custom.value = true
+            }
             App.subButtons()
             grayBtn("管卡采集") {
                 if (!Guanka.caijiing) {
@@ -63,7 +67,7 @@ fun caijiPage() {
         }
     }
 
-
+    IconEditorDialog(img4Custom)
     addJiexiHeroResult(showJieXiHeroUI)
     showInputDialog("输入时长分钟数，可以浮点型", "例如：120", timeInputDialog) {
         try {
@@ -77,4 +81,5 @@ fun caijiPage() {
     if (customScreen.value) {
         showOtherWindow(customScreen)
     }
+//        IconCreatorPage(img4Custom)
 }
