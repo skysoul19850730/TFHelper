@@ -1,256 +1,176 @@
 import org.opencv.core.*
-import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
+import org.opencv.imgcodecs.Imgcodecs
+import java.awt.Point
 
+/**
+ * 鲁棒模板匹配器：通过动态占位色隔离透明区域，并归一化匹配得分
+ * 支持任意颜色模板，彻底解决“透明区拉低匹配率”问题
+ */
 object RobustMatcher {
 
+    private val CANDIDATE_COLORS = listOf(
+        Scalar(0.0, 0.0, 0.0),        // 黑
+        Scalar(255.0, 255.0, 255.0),  // 白
+        Scalar(0.0, 0.0, 255.0),      // 红
+        Scalar(0.0, 255.0, 0.0),      // 绿
+        Scalar(255.0, 0.0, 0.0),      // 蓝
+        Scalar(255.0, 0.0, 255.0)     // 洋红
+    )
+
     /**
-     * 亮度归一化模板匹配
-     * 解决光照变化导致的匹配度下降
+     * 匹配模板到目标图
+     * @param templatePath 模板路径（PNG，含 Alpha）
+     * @param targetPath 目标图路径（任意格式）
+     * @param minScore 归一化后的最小匹配阈值（默认 0.75）
+     * @return Pair<归一化匹配率 [0.0~1.0], 最佳位置 Point?>，失败返回 (0.0, null)
      */
-    fun templateMatchNormalized(template: Mat, target: Mat): Core.MinMaxLocResult {
-        // 转换为灰度图，减少颜色干扰
-        val grayTemplate = Mat()
-        val grayTarget = Mat()
+    fun match(templatePath: String, targetPath: String, minScore: Double = 0.75): Pair<Double, Point?> {
+        val template = Imgcodecs.imread(templatePath, Imgcodecs.IMREAD_UNCHANGED)
+        val target = Imgcodecs.imread(targetPath, Imgcodecs.IMREAD_COLOR)
 
-        if (template.channels() > 1) {
-            Imgproc.cvtColor(template, grayTemplate, Imgproc.COLOR_BGR2GRAY)
-        } else {
-            template.copyTo(grayTemplate)
+        if (template.empty() || target.empty()) return 0.0 to null
+
+        try {
+            return robustMatch(template, target, minScore)
+        } finally {
+            template.release()
+            target.release()
         }
+    }
 
-        if (target.channels() > 1) {
-            Imgproc.cvtColor(target, grayTarget, Imgproc.COLOR_BGR2GRAY)
-        } else {
-            target.copyTo(grayTarget)
-        }
+    fun robustMatch(template: Mat, target: Mat, minScore: Double): Pair<Double, Point?> {
+        // 1. 分离 BGR + Alpha（OpenCV 默认 BGRA）
+        val channels = mutableListOf(Mat(), Mat(), Mat(), Mat())
+        Core.split(template, channels)
+        val b = channels[0]; val g = channels[1]; val r = channels[2]; val a = channels[3]
+        val templateBgr = Mat(); Core.merge(listOf(b, g, r), templateBgr)
+        val alphaMask = Mat()
+        Core.compare(a, Scalar(1.0), alphaMask, Core.CMP_GT) // alpha > 0 → 255
 
-        // 使用 TM_CCOEFF_NORMED 方法，对亮度变化不敏感
-        val result = Mat()
-        Imgproc.matchTemplate(grayTarget, grayTemplate, result, Imgproc.TM_CCOEFF_NORMED)
-        val mmr = Core.minMaxLoc(result)
+        // 2. 提取非透明颜色 + 计算占比
+        val (nonTransparentColors, validRatio) = getNonTransparentInfo(templateBgr, alphaMask)
+        if (nonTransparentColors.isEmpty() || validRatio <= 0) return 0.0 to null
 
-        grayTemplate.release()
-        grayTarget.release()
-        result.release()
+        // 3. 动态选色
+        val placeholderA = selectBestColor(nonTransparentColors, CANDIDATE_COLORS)
+        val placeholderB = selectBestColor(
+            nonTransparentColors + listOf(placeholderA),
+            CANDIDATE_COLORS.filter { it != placeholderA }
+        )
 
-        return mmr
+        // 4. 处理模板：非透明保留，透明→placeholderA
+        val procTemplate = Mat.zeros(templateBgr.size(), CvType.CV_8UC3)
+        templateBgr.copyTo(procTemplate, alphaMask)
+        val transparentMask = Mat()
+        Core.compare(alphaMask, Scalar(0.0), transparentMask, Core.CMP_EQ) // alpha == 0
+        procTemplate.setTo(placeholderA, transparentMask)
+
+        // 5. 处理目标图：所有 ≈ placeholderA 的像素 → placeholderB
+        val diff = Mat()
+        Core.absdiff(target, placeholderA, diff)
+        val maxDist = Math.sqrt(3.0) * 255.0 * 0.1
+        val maskA = Mat()
+        Core.compare(diff, Scalar(maxDist, maxDist, maxDist), maskA, Core.CMP_LT)
+        val procTarget = Mat.zeros(target.size(), CvType.CV_8UC3)
+        target.copyTo(procTarget)
+        procTarget.setTo(placeholderB, maskA)
+
+        // 6. 精确匹配：滑动窗口计算非透明像素匹配率
+        val (bestScoreRaw, bestPos) = findBestMatch(procTarget, procTemplate, alphaMask, validRatio)
+        val normalizedScore = if (validRatio > 0) bestScoreRaw / validRatio else 0.0
+
+        return normalizedScore to (if (normalizedScore >= minScore) bestPos else null)
     }
 
     /**
-     * 多尺度模板匹配（修复版）
-     * 尺寸范围更广，步长更小
+     * 返回 (非透明颜色列表, 非透明像素占比)
      */
-    fun multiScaleMatch(
-        template: Mat,
-        target: Mat,
-        scaleRange: ClosedRange<Double> = 0.6..1.6,
-        scaleStep: Double = 0.05,
-        debugMode: Boolean = false
-    ): Pair<Double, Double> {
-        var bestScore = 0.0
-        var bestScale = 1.0
-
-        var scale = scaleRange.start
-        while (scale <= scaleRange.endInclusive) {
-            val width = (template.cols() * scale).toInt()
-            val height = (template.rows() * scale).toInt()
-
-            // 检查尺寸是否合法
-            if (width <= 0 || height <= 0 || width > target.cols() || height > target.rows()) {
-                scale += scaleStep
-                continue
-            }
-
-            val resized = Mat()
-            Imgproc.resize(template, resized, Size(width.toDouble(), height.toDouble()), 0.0, 0.0, Imgproc.INTER_LINEAR)
-
-            val mmr = templateMatchNormalized(resized, target)
-
-            if (debugMode) {
-                println("缩放 ${String.format("%.2f", scale)}: 匹配度 ${String.format("%.4f", mmr.maxVal)}")
-            }
-
-            if (mmr.maxVal > bestScore) {
-                bestScore = mmr.maxVal
-                bestScale = scale
-            }
-
-            resized.release()
-            scale += scaleStep
-        }
-
-        if (debugMode) {
-            println("最佳缩放: ${String.format("%.2f", bestScale)}, 最高分: ${String.format("%.4f", bestScore)}")
-        }
-
-        return Pair(bestScore, bestScale)
-    }
-
-    /**
-     * 旋转不变性匹配（针对有旋转的情况）
-     */
-    fun rotationInvariantMatch(
-        template: Mat,
-        target: Mat,
-        angleRange: IntRange = -15..15,
-        angleStep: Int = 5,
-        debugMode: Boolean = false
-    ): Pair<Double, Int> {
-        var bestScore = 0.0
-        var bestAngle = 0
-
-        for (angle in angleRange step angleStep) {
-            val rotated = Mat()
-            val center = Point(template.cols() / 2.0, template.rows() / 2.0)
-            val rotMat = Imgproc.getRotationMatrix2D(center, angle.toDouble(), 1.0)
-            Imgproc.warpAffine(template, rotated, rotMat, template.size())
-
-            val mmr = templateMatchNormalized(rotated, target)
-
-            if (debugMode) {
-                println("旋转 ${angle}°: 匹配度 ${String.format("%.4f", mmr.maxVal)}")
-            }
-
-            if (mmr.maxVal > bestScore) {
-                bestScore = mmr.maxVal
-                bestAngle = angle
-            }
-
-            rotated.release()
-            rotMat.release()
-        }
-
-        if (debugMode) {
-            println("最佳旋转: ${bestAngle}°, 最高分: ${String.format("%.4f", bestScore)}")
-        }
-
-        return Pair(bestScore, bestAngle)
-    }
-
-    /**
-     * 终极鲁棒匹配：多尺度 + 旋转不变性
-     */
-    fun robustMatch(
-        template: Mat,
-        target: Mat,
-        scaleRange: ClosedRange<Double> = 0.7..1.3,
-        scaleStep: Double = 0.05,
-        angleRange: IntRange = -10..10,
-        angleStep: Int = 5,
-        debugMode: Boolean = false
-    ): Triple<Double, Double, Int> {
-        var bestScore = 0.0
-        var bestScale = 1.0
-        var bestAngle = 0
-
-        var scale = scaleRange.start
-        while (scale <= scaleRange.endInclusive) {
-            val width = (template.cols() * scale).toInt()
-            val height = (template.rows() * scale).toInt()
-
-            if (width <= 0 || height <= 0 || width > target.cols() || height > target.rows()) {
-                scale += scaleStep
-                continue
-            }
-
-            val resized = Mat()
-            Imgproc.resize(template, resized, Size(width.toDouble(), height.toDouble()))
-
-            // 对每个尺寸测试不同角度
-            for (angle in angleRange step angleStep) {
-                val rotated = Mat()
-                if (angle != 0) {
-                    val center = Point(resized.cols() / 2.0, resized.rows() / 2.0)
-                    val rotMat = Imgproc.getRotationMatrix2D(center, angle.toDouble(), 1.0)
-                    Imgproc.warpAffine(resized, rotated, rotMat, resized.size())
-                    rotMat.release()
-                } else {
-                    resized.copyTo(rotated)
+    private fun getNonTransparentInfo(bgr: Mat, alphaMask: Mat): Pair<List<Scalar>, Double> {
+        val colors = mutableListOf<Scalar>()
+        var validCount = 0L
+        for (y in 0 until bgr.rows()) {
+            for (x in 0 until bgr.cols()) {
+                if (alphaMask.get(y, x)[0] > 0) {
+                    val b = bgr.get(y, x)[0]
+                    val g = bgr.get(y, x)[1]
+                    val r = bgr.get(y, x)[2]
+                    colors.add(Scalar(b, g, r))
+                    validCount++
                 }
-
-                val mmr = templateMatchNormalized(rotated, target)
-
-                if (mmr.maxVal > bestScore) {
-                    bestScore = mmr.maxVal
-                    bestScale = scale
-                    bestAngle = angle
-                }
-
-                rotated.release()
             }
-
-            resized.release()
-            scale += scaleStep
         }
+        val total = bgr.total().toDouble()
+        val ratio = if (total > 0) validCount.toDouble() / total else 0.0
+        return colors to ratio
+    }
 
-        if (debugMode) {
-            println("最佳参数: 缩放=${String.format("%.2f", bestScale)}, 旋转=${bestAngle}°, 分数=${String.format("%.4f", bestScore)}")
+    /**
+     * 滑动窗口查找最佳匹配位置（返回 rawScore 和位置）
+     * rawScore = 匹配成功的非透明像素数 / 模板总像素数
+     */
+    private fun findBestMatch(
+        target: Mat,
+        template: Mat,
+        mask: Mat,
+        validRatio: Double
+    ): Pair<Double, Point> {
+        val tw = template.cols()
+        val th = template.rows()
+        val dw = target.cols()
+        val dh = target.rows()
+
+        var bestRawScore = 0.0
+        var bestPos = Point(0, 0)
+
+        for (ty in 0 until dh - th + 1) {
+            for (tx in 0 until dw - tw + 1) {
+                var matchCount = 0.0
+                for (y in 0 until th) {
+                    for (x in 0 until tw) {
+                        if (mask.get(y, x)[0] > 0) {
+                            val tVal = template.get(y, x)
+                            val tgVal = target.get(ty + y, tx + x)
+                            if (euclideanDist(
+                                    Scalar(tVal[0], tVal[1], tVal[2]),
+                                    Scalar(tgVal[0], tgVal[1], tgVal[2])
+                                ) < 15.0) {
+                                matchCount++
+                            }
+                        }
+                    }
+                }
+                val rawScore = matchCount / (tw * th).toDouble()
+                if (rawScore > bestRawScore) {
+                    bestRawScore = rawScore
+                    bestPos = Point(tx, ty)
+                }
+            }
         }
-
-        return Triple(bestScore, bestScale, bestAngle)
-    }
-}
-
-// 测试代码
-fun testRobustMatch() {
-    val template = Imgcodecs.imread("blueball.png")
-    if (template.empty()) {
-        println("无法读取 blueball.png")
-        return
+        return bestRawScore to bestPos
     }
 
-    println("=== 测试 493 (模板来源) ===")
-    val img493 = Imgcodecs.imread("C:\\Users\\Administrator\\Desktop\\debug\\ay493.png")
-    if (!img493.empty()) {
-        val bossRect = Rect(200, 260, 700, 200)
-        val roi493 = Mat(img493, bossRect)
-
-        // 方法1：基础匹配
-        val basic493 = RobustMatcher.templateMatchNormalized(template, roi493)
-        println("基础匹配: ${String.format("%.4f", basic493.maxVal)}")
-
-        // 方法2：多尺度匹配
-        val (score493, scale493) = RobustMatcher.multiScaleMatch(template, roi493, debugMode = false)
-        println("多尺度匹配: 分数=${String.format("%.4f", score493)}, 缩放=${String.format("%.2f", scale493)}")
-
-        roi493.release()
-        img493.release()
+    private fun selectBestColor(excludeColors: List<Scalar>, candidates: List<Scalar>): Scalar {
+        var bestDist = -1.0
+        var bestColor: Scalar? = null
+        for (cand in candidates) {
+            var minDist = Double.MAX_VALUE
+            for (col in excludeColors) {
+                val d = euclideanDist(col, cand)
+                if (d < minDist) minDist = d
+            }
+            if (minDist > bestDist) {
+                bestDist = minDist
+                bestColor = cand
+            }
+        }
+        return bestColor ?: Scalar(0.0, 0.0, 0.0)
     }
 
-    println("\n=== 测试 491 (蓝球移动后) ===")
-    val img491 = Imgcodecs.imread("C:\\Users\\Administrator\\Desktop\\debug\\ay491.png")
-    if (!img491.empty()) {
-        val bossRect = Rect(200, 260, 700, 200)
-        val roi491 = Mat(img491, bossRect)
-
-        // 方法1：基础匹配
-        val basic491 = RobustMatcher.templateMatchNormalized(template, roi491)
-        println("基础匹配: ${String.format("%.4f", basic491.maxVal)}")
-
-        // 方法2：多尺度匹配
-        val (score491, scale491) = RobustMatcher.multiScaleMatch(template, roi491, debugMode = true)
-        println("多尺度匹配: 分数=${String.format("%.4f", score491)}, 缩放=${String.format("%.2f", scale491)}")
-
-        // 方法3：终极鲁棒匹配（如果还不行就用这个）
-        println("\n尝试旋转不变性匹配：")
-        val (scoreRobust, scaleRobust, angleRobust) = RobustMatcher.robustMatch(template, roi491, debugMode = false)
-        println("鲁棒匹配: 分数=${String.format("%.4f", scoreRobust)}, 缩放=${String.format("%.2f", scaleRobust)}, 旋转=${angleRobust}°")
-
-        roi491.release()
-        img491.release()
+    private fun euclideanDist(c1: Scalar, c2: Scalar): Double {
+        val db = c1.`val`[0] - c2.`val`[0]
+        val dg = c1.`val`[1] - c2.`val`[1]
+        val dr = c1.`val`[2] - c2.`val`[2]
+        return Math.sqrt(db * db + dg * dg + dr * dr)
     }
-
-    template.release()
-}
-
-fun main() {
-    try {
-        Class.forName("nu.pattern.OpenCV")
-        nu.pattern.OpenCV.loadLocally()
-    } catch (e: Exception) {
-        System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME)
-    }
-
-    testRobustMatch()
 }

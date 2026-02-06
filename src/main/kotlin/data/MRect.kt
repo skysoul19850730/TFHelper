@@ -162,3 +162,6 @@ class MRect {
 fun Int.toHSB():FloatArray{
     return Color.RGBtoHSB(this shr 16 and 0xFF, this shr 8 and 0xFF, this  and 0xFF, null)
 }
+fun Int.toHSBFirst():Int{
+    return (Color.RGBtoHSB(this shr 16 and 0xFF, this shr 8 and 0xFF, this  and 0xFF, null)[0]*360).toInt()
+}

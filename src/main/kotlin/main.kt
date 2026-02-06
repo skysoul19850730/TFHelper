@@ -51,6 +51,7 @@ import ui.MainUIData
 import ui.launcher
 import ui.weights.MCheckBox
 import tasks.xiaka.XiaKaUtil
+import ui.caiji.IconCreatorPage
 import ui.weights.MRadioBUtton
 import utils.*
 import java.text.SimpleDateFormat
@@ -403,6 +404,14 @@ fun xiakaDialog(state: MutableState<Boolean>) {
     })
 }
 
+@Composable
+fun IconEditorDialog(state: MutableState<Boolean>){
+    MCustomDialog(state, content = {
+        IconCreatorPage(state)
+    }, onSuc = {
+
+    })
+}
 
 @Composable
 fun addJiexiHeroResult(state: MutableState<Boolean>) {
