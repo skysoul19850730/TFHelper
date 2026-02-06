@@ -1,4 +1,5 @@
 import data.Config
+import data.MRect
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -15,16 +16,22 @@ import java.io.File
 
 object TestUtil {
     suspend fun test() {
+
+        var img = getImage(MRect.createWH(100,100,100,100).scale(1.1f)).run {
+            log(this)
+            toMat()
+        }
 //        MRobot.moveFullScreen()
 
 //        CaijiUtil.saveRectByFolder(App.caijiPath+"\\pukepai",Config.AY_Puke_rect)
 //        WX59().caiji()
 //        Ay99Test().shibiePai()
 
-        val img = Utils.getWindowFolderImg("y001.png")
+//        val img = Utils.getWindowFolderImg("y001.png")
+//
+//        val diffIcon = AYUtil.getDiffIcon(img)
+//        log("diffIcon is $diffIcon")
 
-        val diffIcon = AYUtil.getDiffIcon(img)
-        log("diffIcon is $diffIcon")
 
 //        val img2 = Utils.getWindowFolderImg("y001.png").getSubImage(rect2)
 //        val transparentImage = BufferedImage(

@@ -46,7 +46,7 @@ object WX59 {
             }
 
             if(autoClick) {
-                delay(2000)
+                delay(12000)
                 list.forEach {
 
                     clickKey(it.toString())

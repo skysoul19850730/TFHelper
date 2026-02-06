@@ -4,6 +4,7 @@ import data.Config
 import data.MRect
 import getImage
 import getImageFromRes
+import getSubImage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,17 +34,17 @@ object WX89 {
         doing = true
         GlobalScope.launch {
             //适当加个delay
+            delay(15000)//16秒后出土，再开始即可
             var folder = "${Config.platName}/tezheng/xuanwo/xw89"
 
-            while (!over.invoke() && doing) {
+            while (!over.invoke() && doing) {//这里是防止队友又给转走，
                 rects.forEachIndexed { index, mRect ->
                     if(!doing){
                         return@launch
                     }
                     log("识别位置:${index}")
                     val okImg = getImageFromRes("${folder}/xw89_${index}.png").toMat()
-
-                    var img = getImage(mRect.scale(1.2f)).run {
+                    var img = getImage(mRect.scale(1.1f)).run {
                         log(this)
                         toMat()
                     }

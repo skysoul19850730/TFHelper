@@ -98,18 +98,18 @@ fun BufferedImage.toMat(): Mat {
 
 private fun convertDataBufferIntToBytes(dataBufferInt: DataBufferInt): DataBufferByte {
     val intData = dataBufferInt.data
-    // 假设每个int值代表RGBA四个字节
-    val byteSize = intData.size * 4  // 每个int有4个字节
+    // 每个int值代表RGB三个字节（去掉Alpha通道）
+    val byteSize = intData.size * 3  // 每个int有3个字节（RGB）
     val byteData = ByteArray(byteSize)
 
     for (i in intData.indices) {
         val intValue = intData[i]
-        // 将int拆分为4个字节
-        byteData[i * 4] = ((intValue shr 24) and 0xFF).toByte()     // Alpha
-        byteData[i * 4 + 1] = ((intValue shr 16) and 0xFF).toByte() // Red
-        byteData[i * 4 + 2] = ((intValue shr 8) and 0xFF).toByte()  // Green
-        byteData[i * 4 + 3] = (intValue and 0xFF).toByte()          // Blue
+        // 将int拆分为3个字节（RGB）
+        byteData[i * 3] = ((intValue shr 16) and 0xFF).toByte() // Red
+        byteData[i * 3 + 1] = ((intValue shr 8) and 0xFF).toByte()  // Green
+        byteData[i * 3 + 2] = (intValue and 0xFF).toByte()          // Blue
     }
 
     return DataBufferByte(byteData, byteData.size)
 }
+

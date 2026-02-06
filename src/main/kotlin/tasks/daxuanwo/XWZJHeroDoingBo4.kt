@@ -36,7 +36,7 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
                         upAny(zhanjiang,feiting  ,niutou,sishen)
                     }else
                     upAny(feiting,zhanjiang,  niutou,sishen)
-                } else upAny(zhanjiang)
+                } else upAny(zhanjiang,feiting)
             }
         }
 

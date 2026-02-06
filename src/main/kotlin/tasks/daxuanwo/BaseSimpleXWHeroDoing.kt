@@ -29,6 +29,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
     var auto29 = true
     var auto59 = false
+    var auto79 = true
     var auto89 = true
 
     override suspend fun onKeyDown(code: Int): Boolean {
@@ -477,24 +478,24 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             if (guan == 59) {
                 WX59.autoDo(auto59)
             }
-            if (guan == 79) {
+            if (guan == 79 && auto79) {
                 WX79.autoDo(carDoing.carps.map {
                     it.mRect.scale(0.3f)
                 }) {
                     curGuan > 79
                 }
             }
-            if (guan == 89) {
+            if (guan == 89 && auto89) {
                 WX89.autoDo {
                     curGuan > 89
                 }
             }
 
-//        if (guan in listOf(59)) {
-//            App.startAutoSave(200)
-//        } else {
-//            App.stopAutoSave()
-//        }
+        if (guan in listOf(49)) {
+            App.startAutoSave(200)
+        } else {
+            App.stopAutoSave()
+        }
         } catch (e: Exception) {
             e.printStackTrace()
         }
