@@ -11,16 +11,32 @@ import tasks.XueLiang
 //import tasks.anyue.base.Ay99Test
 import test.Utils
 import utils.AYUtil
+import utils.MRobot
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 
 object TestUtil {
     suspend fun test() {
-
-        var img = getImage(MRect.createWH(100,100,100,100).scale(1.1f)).run {
-            log(this)
-            toMat()
+        val start = System.currentTimeMillis()
+        var count = 0
+        App.startAutoSave(50)
+        GlobalScope.launch {
+            while (System.currentTimeMillis()-start<5000){
+                count++
+                MRobot.singleClick(Config.zhandou_shuaxinPoint)
+                println("点击刷新 第${count}次")
+                delay(10)
+                if((Config.rect4ShuakaColor.hasColor(Color.RED))){
+                    log("没钱了")
+                    break
+                }
+            }
         }
+//        var img = getImage(MRect.createWH(100,100,100,100).scale(1.1f)).run {
+//            log(this)
+//            toMat()
+//        }
 //        MRobot.moveFullScreen()
 
 //        CaijiUtil.saveRectByFolder(App.caijiPath+"\\pukepai",Config.AY_Puke_rect)

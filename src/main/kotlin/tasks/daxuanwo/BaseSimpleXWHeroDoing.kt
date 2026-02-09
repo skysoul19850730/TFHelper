@@ -10,6 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import log
 import tasks.Boss
 import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
@@ -18,8 +19,10 @@ import tasks.daxuanwo.utils.WX79
 import tasks.daxuanwo.utils.WX89
 import ui.zhandou.UIKeyListenerManager
 import utils.ImgUtil
+import utils.ImgUtil.slidingPixelMatch
 import utils.MRobot
 import java.awt.event.KeyEvent
+import java.io.File
 
 // 9  29 都自动执行
 abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {
@@ -286,6 +289,9 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     return@chooseHero -1
                 }
             }
+            onStart {
+                start49Listener()
+            }
             des = "需要切的时候按0，会自动下卡再上卡，收集完成后按3，切换的卡会上满"
         }
     }
@@ -351,7 +357,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             chooseHero {
                 if (g69State == 0) {
                     if (midHeros69?.all { it.isFull() } == true) {
-                        while (g69State == 0 && curGuan<70) {
+                        while (g69State == 0 && curGuan < 70) {
                             delay(200)
                             val outIndex = g69StartBoss?.invoke(this, 0) ?: -1
                             if (outIndex > -1) {
@@ -436,10 +442,10 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 //                        }
 
                         XueLiang.observerXueDown(0.5f) {
-                            g69State != 1 || curGuan>69
+                            g69State != 1 || curGuan > 69
                         }
                         delay(500)
-                        g69State=0
+                        g69State = 0
 
                         return@chooseHero ind
                     }
@@ -491,11 +497,11 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 }
             }
 
-        if (guan in listOf(49)) {
-            App.startAutoSave(200)
-        } else {
-            App.stopAutoSave()
-        }
+            if (guan in listOf(-1)) {
+                App.startAutoSave(200)
+            } else {
+                App.stopAutoSave()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -578,6 +584,64 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     }
 
     fun stop59() {
+
+    }
+
+    fun start49Listener() {
+        GlobalScope.launch {
+            delay(16000)//废话
+            val targetRect = MRect.createWH(337, 320, 424, 80)
+            val folder = "${Config.platName}/tezheng/xuanwo/xw49/"
+            val pjv = getImageFromRes("${folder}tjn_1") to "jv"
+            val psm = getImageFromRes("${folder}tsm_1.png") to "sm"
+            val psy = getImageFromRes("${folder}thy_1.png") to "sy"
+            val pzhu = getImageFromRes("${folder}tzhu_1.png") to "zhu"
+
+            val plats = listOf(pjv, psm, psy, pzhu)
+            var jvsmCount = 0
+            while (curGuan == 49 && g49 < 2) {
+
+                val img = getImage(targetRect)
+                log("开始检测49一个图")
+                plats.forEach { plat ->
+
+                    delay(100)
+                    val pair = slidingPixelMatch(plat.first, img)
+                    log(" ${pair.first} 位置${pair.second?.x} 名字;${plat.second}")
+                    if (pair.first > 0.15) {
+                        log(" ${pair.first} 位置${pair.second?.x} 名字;${plat.second}")
+
+                        if(plat == psm || plat==pjv){
+                            jvsmCount++
+                            if(carDoing.chePosition==0){//左车立马下
+                                g49 = 1
+                            }else{//右 不动
+                            }
+                            if(jvsmCount<2){
+                                delay(14000)
+                            }else{
+                                g49 = 2//出两个萨满了，就可以满卡了
+                            }
+                        }else{
+                            //海妖和猪
+                            if(carDoing.chePosition==0){
+                                delay(2800)
+                                g49 = 1
+                                delay(10500)//这里早点
+                                g49 =1
+                                delay(1000)
+                            }else{
+                                delay(8500)
+                                g49=1
+                                delay(5500)
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }
 
     }
 }

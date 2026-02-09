@@ -1,24 +1,30 @@
+import data.Config
 import data.MRect
 import data.toHSB
 import data.toHSBFirst
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import utils.ImgUtil.forEach
+import utils.MRobot
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 
 fun main() {
-    try {
-        Class.forName("nu.pattern.OpenCV")
-        nu.pattern.OpenCV.loadLocally()
-    } catch (e: Exception) {
-        System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME)
-    }
+//    try {
+//        Class.forName("nu.pattern.OpenCV")
+//        nu.pattern.OpenCV.loadLocally()
+//    } catch (e: Exception) {
+//        System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME)
+//    }
     val start = System.currentTimeMillis()
 
 
 //    WX79Test.test()
-    WX49Test.test()
+//    WX49Test.test()
 //    getKeyImg()
+
 
 
     println("耗时:${System.currentTimeMillis() - start}毫秒")
