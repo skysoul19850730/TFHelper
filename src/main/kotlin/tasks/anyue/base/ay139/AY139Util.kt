@@ -1,9 +1,11 @@
 package tasks.anyue.base.ay139
 
 import data.Config
+import data.MPoint
 import data.MRect
 import getImage
 import getImageFromRes
+import getSubImage
 import opencv.MatSearch
 import opencv.toGray
 import opencv.toMat
@@ -11,61 +13,65 @@ import org.opencv.core.Mat
 import org.opencv.core.Rect
 import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
+import utils.ImgUtil
+import utils.ImgUtil.slidingPixelMatch
 import java.awt.image.BufferedImage
 
 object AY139Util {
     var anyueFolder = "${Config.platName}/tezheng/anyue/ay139"
     private fun path(name: String) = "${anyueFolder}/$name"
     private fun getImage(name: String): BufferedImage = getImageFromRes(path(name))
-    val TOP_ICONS = listOf(//采集用的
-        Rect(375 + 4, 206 + 4, 77 - 8, 77 - 8),  // 0: 实心斧头，圆形
-        Rect(473 + 4, 168 + 4, 77 - 8, 77 - 8),  // 1: 实心法杖，方形
-        Rect(571 + 4, 169 + 4, 77 - 8, 77 - 8),  // 2: 空心法杖，方形
-        Rect(669 + 4, 208 + 4, 77 - 8, 77 - 8)   // 3: 空心法杖，圆形
-    )
-//    val TOP_ICONS = listOf(//真实判断时，略微大些也可以的
-//        Rect(374, 207, 77, 77),  //
-//        Rect(473, 168, 77, 77),  //
-//        Rect(572, 168, 77, 77),  //
-//        Rect(669, 208, 77, 77)   //
+
+    //    val TOP_ICON_RECTS = listOf(//采集用的
+//        MRect.createWH(375 + 4, 206 + 4, 77 - 8, 77 - 8),  // 0: 实心斧头，圆形
+//        MRect.createWH(473 + 4, 168 + 4, 77 - 8, 77 - 8),  // 1: 实心法杖，方形
+//        MRect.createWH(571 + 4, 169 + 4, 77 - 8, 77 - 8),  // 2: 空心法杖，方形
+//        MRect.createWH(669 + 4, 208 + 4, 77 - 8, 77 - 8)   // 3: 空心法杖，圆形
 //    )
+    val TOP_ICON_RECTS = listOf(//真实判断时，略微大些也可以的
+        MRect.createWH(374, 207, 77, 77),  //
+        MRect.createWH(473, 168, 77, 77),  //
+        MRect.createWH(572, 168, 77, 77),  //
+        MRect.createWH(669, 208, 77, 77)   //
+    )
+    val sff = getImage("ffs.png")
+    val sfe = getImage("fes.png")
+    val szf = getImage("zfs.png")
+    val sze = getImage("zes.png")
+    val ss = getImage("border_square_small.png")
+
+    val bff = getImage("ffb.png")
+    val bfe = getImage("feb.png")
+    val bzf = getImage("zfb.png")
+    val bze = getImage("zeb.png")
+    val bs = getImage("border_square.png")
 
     val bottomSize = Size(104.0, 104.0)
     val TopAllRect = MRect.createWH(350, 150, 446, 173)
 
-    enum class MatType(val futou: Int, val circle: Int, val fill: Int, val mat: Mat) {
-        Mat1(1, 1, 1, getImage("m1.png").toMat().toGray()), Mat2(
-            0,
-            0,
-            1,
-            getImage("m2.png").toMat().toGray()
-        ),
-        Mat3(0, 0, 0, getImage("m3.png").toMat().toGray()), Mat4(
-            0,
-            1,
-            0,
-            getImage("m4.png").toMat().toGray()
-        );
-//        ,Mat5(1,0,0,getImage("m5.png").toMat().toGray().binary())
-//        ,Mat6(1,0,1,getImage("m6.png").toMat().toGray().binary())
-//        ,Mat7(1,1,0,getImage("m7.png").toMat().toGray().binary())
-//        ,Mat8(1,1,1,getImage("m8.png").toMat().toGray().binary())
+//    val BottomCheckRect = MRect.createWH(340, 310, 450, 104)//测试时用，因为截图可能已经去到左边了，所以范围大些，范围大了效率就低
+    val BottomCheckRect = MRect.createWH(630, 310, 150, 104)//正式用，假设已经比较准了，那差不多刚出来就可以时识别了，增加效率
 
+    class MatType(val futou: Int, val circle: Int, val fill: Int) {
         fun toPString(): String {
             return "${if (futou == 1) "斧头" else "法杖"},${if (circle == 1) "圆" else "方形"},${if (fill == 1) "填充" else "描边"}"
         }
     }
 
+//    private fun slidingPixelMatch(
+//        template: BufferedImage,
+//        target: BufferedImage,
+//        tolerance: Int = 15,
+//    ): Pair<Double, MPoint?> {
+//        return ImgUtil.slidingPixelMatch(template, target, tolerance,30)
+//    }
 
-    fun getTopMatTypes(img2: BufferedImage?=null): List<MatType>? {
-        val img = img2?: getImage(TopAllRect)
+    fun getTopMatTypes(img2: BufferedImage? = null): List<MatType>? {
+        val img = img2 ?: getImage(App.rectWindow)
         val list = arrayListOf<MatType>()
-        TOP_ICONS.forEach {
-            val mat = img.getSubimage(it.x, it.y, it.width, it.height).toMat().toGray()
-            MatType.values().firstOrNull {
-                MatSearch.templateFit(it.mat, mat)
-            }?.apply {
-                list.add(this)
+        TOP_ICON_RECTS.forEach {
+            getOne(img.getSubImage(it))?.let {
+                list.add(it)
             }
         }
         if (list.size == 4) {
@@ -73,6 +79,70 @@ object AY139Util {
         }
 
         return null
+    }
+
+    private fun getOne(target: BufferedImage): MatType? {
+        var futou = -1
+        var circle = -1
+        var fill = -1
+
+        var max = 0.0
+
+        var r = slidingPixelMatch(sff, target)
+        if(r.first>max){
+            max = r.first
+            futou = 1
+            fill = 1
+        }
+
+        r = slidingPixelMatch(sfe, target)
+        if(r.first>max){
+            max = r.first
+            futou = 1
+            fill = 0
+        }
+        r = slidingPixelMatch(szf, target)
+        if(r.first>max){
+            max = r.first
+            futou = 0
+            fill = 1
+        }
+        r = slidingPixelMatch(sze, target)
+        if(r.first>max){
+            max = r.first
+            futou = 0
+            fill = 0
+        }
+
+//        if (slidingPixelMatch(sff, target).first > 0.3) {
+//            futou = 1
+//            fill = 1
+//
+//        } else if (slidingPixelMatch(sfe, target).first > 0.6) {
+//            futou = 1
+//            fill = 0
+//        } else if (slidingPixelMatch(szf, target).first > 0.6) {
+//            futou = 0
+//            fill = 1
+//        } else if (slidingPixelMatch(sze, target).first > 0.6) {
+//            futou = 0
+//            fill = 0
+//        }
+
+        if (slidingPixelMatch(ss, target).first > 0.6) {
+            circle = 0
+        } else {
+            circle = 1
+        }
+
+        if (futou > -1 && max>0.6) {
+            return MatType(futou, circle, fill).apply {
+                println("${this.toPString()}")
+            }
+        }
+        println("未识别到")
+        return null
+
     }
 
     fun theDifferentMat(mats: List<MatType>): MatType {
@@ -97,21 +167,53 @@ object AY139Util {
         return mats.first { it.fill == 0 }
     }
 
-    /**
-     * boss出过的不会再出，所以一开始list是find的4个，每次出一个就可以减少一个
-     */
-    fun getBottomRunningMat(mats: List<MatType>, img: BufferedImage? = null): MatType? {
-        val rect = MRect.createWH(390, 290, 150, 150)
-//        val rect = MRect.createWH(500, 300, 350, 132)
-        val target = (img ?: getImage(rect)).toMat().toGray()
+    fun getBottomRunningMat(target: BufferedImage? = null): MatType? {
 
-//500 300  130 130
+        val target = target?.getSubImage(BottomCheckRect) ?: getImage(BottomCheckRect)
+        var futou = -1
+        var circle = -1
+        var fill = -1
 
-        return mats.firstOrNull {
-            var modelScale = Mat()
-            Imgproc.resize(it.mat, modelScale, bottomSize, 0.5, 0.5, Imgproc.INTER_AREA)
-            MatSearch.templateFit(modelScale, target, 0.7)
+        var max = 0.0
+
+        var r = slidingPixelMatch(bff, target)
+        if(r.first>max){
+            max = r.first
+            futou = 1
+            fill = 1
         }
 
+        r = slidingPixelMatch(bfe, target)
+        if(r.first>max){
+            max = r.first
+            futou = 1
+            fill = 0
+        }
+        r = slidingPixelMatch(bzf, target)
+        if(r.first>max){
+            max = r.first
+            futou = 0
+            fill = 1
+        }
+        r = slidingPixelMatch(bze, target)
+        if(r.first>max){
+            max = r.first
+            futou = 0
+            fill = 0
+        }
+
+        if (slidingPixelMatch(bs, target).first > 0.6) {
+            circle = 0
+        } else {
+            circle = 1
+        }
+
+        if (futou > -1 && max>0.6) {
+            return MatType(futou, circle, fill)
+        }
+        return null
+
     }
+
+
 }
