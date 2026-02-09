@@ -7,10 +7,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import log
 import tasks.XueLiang
+import tasks.anyue.base.An49
 import tasks.anyue.base.An69
+import tasks.anyue.base.BaseAnYueHeroDoing
 import java.awt.event.KeyEvent
 
-class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
+class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
 
     val tieqi = HeroCreator.tieqi.create()
     val zhanjiang = HeroCreator.zhanjiang.create()
@@ -53,22 +55,17 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseSimpleAnYueHeroDoing() {
         addGuanDealWithHerosFull(38, listOf(tianshi), delay = 2000)
 
 
-        guanDealList.add(
-            GuanDeal(39, isOver = { false },
-                chooseHero = {
-                    deal39(this)
-                }, onGuanDealStart = {
-                    heros39Up4.clear()
-                    heros39Up4.addAll(carDoing.carps.subList(2, 5).map { it.mHeroBean!! })
-                })
-        )
+        add39()
+
         addGuanDealWithHerosFull(
             40,
             listOf(zhanjiang, tieqi, sishen, niutou, jiaonv, tuling, feiting),
             downHeros = listOf(tianshi),
             { yandou })
 
-        changeZhuangbei(50) { qiangxi }
+        add49()
+
+        changeZhuangbei(52) { qiangxi }
 
         An69(this, listOf(huanqiu)).addToHeroDoing()
         addGuanDealWithHerosFull(70, listOf(tianshi), listOf(niutou))

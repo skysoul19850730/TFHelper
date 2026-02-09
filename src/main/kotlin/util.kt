@@ -16,7 +16,7 @@ fun colorCompare(c1: java.awt.Color, c2: java.awt.Color, sim: Int = 10): Boolean
             && abs(c1.blue - c2.blue) <= sim)
 }
 
-fun getImage(rect: MRect,window: WinDef.HWND? = App.tfWindow): BufferedImage {
+fun getImage(rect: MRect = App.rectWindow,window: WinDef.HWND? = App.tfWindow): BufferedImage {
     var img2 =
 //        if (houtai && window!=null && window == WxUtil.wxWindow) {
 //            GDI32Util.getScreenshot(window).getSubImage(rect)

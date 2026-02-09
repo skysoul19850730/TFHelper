@@ -8,6 +8,7 @@ import getSubImage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import log
 import opencv.MatSearch
 import opencv.toMat
 import org.apache.commons.compress.harmony.pack200.PackingUtils.log
@@ -20,21 +21,27 @@ import java.awt.image.BufferedImage
 import java.io.File
 import kotlin.math.abs
 
-class An49(val heroDoing: BaseAnYueHeroDoing) : AnSub {
+class An49(val heroDoing: BaseAnYueHeroDoing ,val test:Boolean = true) : AnSub {
 
     var state = 0//0冰  1停止冰
 
     override fun addToHeroDoing() {
         heroDoing.apply {
             an49 = this@An49
-            gudingShuaQiuTask("bingqiu",49,2500, customOverJudge = {
-                state==1 || curGuan>49
-            }, onGuanDealStart = {
+            if( test){
                 GlobalScope.launch {
                     shibieQiu()
                 }
+            }else {
+                gudingShuaQiuTask("bingqiu", 49, 2500, customOverJudge = {
+                    state == 1 || curGuan > 49
+                }, onGuanDealStart = {
+                    GlobalScope.launch {
+                        shibieQiu()
+                    }
 
-            })
+                })
+            }
         }
     }
 
@@ -77,6 +84,7 @@ class An49(val heroDoing: BaseAnYueHeroDoing) : AnSub {
                         same = true
                     }
 
+                    log(img)
                     if(same){
                         log("同色")
                         XueLiang.observerXueDown { curGuan > 49 }

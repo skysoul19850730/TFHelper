@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import colorCompare
 import data.MPoint
 import data.MRect
+import data.toHSBFirst
 import foreach
 import getImage
 import getImageFromRes
@@ -166,7 +167,8 @@ object ImgUtil {
     fun slidingPixelMatch(
         template: BufferedImage,
         target: BufferedImage,
-        tolerance: Int = 15
+        tolerance: Int = 15,
+        hsvFirst:Int = 30,//这个设置时就也会用它来判断，调用处自行决定是否需要严格用模板色值
     ): Pair<Double, MPoint?> {
         val tw = template.width
         val th = template.height
@@ -202,7 +204,7 @@ object ImgUtil {
                     val px = tx + tx0
                     val py = ty + ty0
                     val targetColor = Color(target.getRGB(px, py))
-                    if (colorCompare(tmplColor, targetColor, tolerance)) {
+                    if (colorCompare(tmplColor, targetColor, tolerance) || abs(targetColor.rgb.toHSBFirst()- tmplColor.rgb.toHSBFirst())<hsvFirst) {
                         matchCount++
                     }
                 }
@@ -213,6 +215,10 @@ object ImgUtil {
                 }
             }
         }
+
+//        if(bestRate<0.6) {
+            println("bestRate si ${bestRate}")
+//        }
 
         return bestRate to bestPos
     }
