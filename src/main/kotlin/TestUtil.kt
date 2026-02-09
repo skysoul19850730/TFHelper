@@ -17,17 +17,24 @@ import java.awt.image.BufferedImage
 import java.io.File
 
 fun main() {
-//    try {
-//        Class.forName("nu.pattern.OpenCV")
-//        nu.pattern.OpenCV.loadLocally()
-//    } catch (e: Exception) {
-//        System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME)
-//    }
+    try {
+        Class.forName("nu.pattern.OpenCV")
+        nu.pattern.OpenCV.loadLocally()
+    } catch (e: Exception) {
+        System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME)
+    }
     val start = System.currentTimeMillis()
 
     WX89.autoDo {
         System.currentTimeMillis()-start>10000
     }
+
+    GlobalScope.launch {
+        delay(4000)
+        WX89.doing = false
+    }
+
+
 //    Ay139Test.test()
 //    WX79Test.test()
 //    WX49Test.test()
