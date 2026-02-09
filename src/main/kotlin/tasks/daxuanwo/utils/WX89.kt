@@ -5,8 +5,11 @@ import data.MRect
 import getImage
 import getImageFromRes
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import log
 import opencv.MatSearch
 import opencv.toMat
@@ -28,6 +31,26 @@ object WX89 {
 
     var doing = false
 
+    // 共享队列用于接收点击请求
+    private val clickChannel = Channel<MRect>(Channel.UNLIMITED)
+
+    // 互斥锁，确保同一时间只有一个协程执行点击操作
+    private val clickMutex = Mutex()
+
+    // 启动一个协程专门处理点击任务
+    init {
+        GlobalScope.launch {
+            for (request in clickChannel) {
+                clickMutex.withLock {
+                    request.clickPoint.click()
+                    // 延迟 100ms
+                    delay(50)
+                }
+            }
+        }
+    }
+
+
     fun autoDo(over:()->Boolean) {
         MainData.curGuanKaDes.value = "开启了自动点击，按0键可以终止"
         doing = true
@@ -40,25 +63,28 @@ object WX89 {
                     if(!doing){
                         return@launch
                     }
-                    log("识别位置:${index}")
-                    val okImg = getImageFromRes("${folder}/xw89_${index}.png").toMat()
+                    GlobalScope.launch {
+                        log("识别位置:${index}")
+                        val okImg = getImageFromRes("${folder}/xw89_${index}.png").toMat()
 
-                    var img = getImage(mRect.scale(1.2f)).run {
-                        log(this)
-                        toMat()
-                    }
-                    var count = 0
-                    while (!MatSearch.templateFit(okImg, img) && doing) {
-                        count++
-                        log("识别失败,点击旋转第${count}次")
-                        mRect.clickPoint.click()
-                        delay(300)
-                        img = getImage(mRect.scale(1.2f)).run {
+                        var img = getImage(mRect.scale(1.2f)).run {
                             log(this)
                             toMat()
                         }
+                        var count = 0
+                        while (!MatSearch.templateFit(okImg, img) && doing) {
+                            count++
+                            log("位置${index}识别失败,点击旋转第${count}次")
+                            clickChannel.send(mRect)
+                            delay(400)
+                            img = getImage(mRect.scale(1.2f)).run {
+                                log(this)
+                                toMat()
+                            }
+                        }
+                        log("识别成功,共点击$count 次")
                     }
-                    log("识别成功,共点击$count 次")
+
                 }
             }
 

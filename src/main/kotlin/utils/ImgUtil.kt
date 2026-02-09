@@ -168,7 +168,7 @@ object ImgUtil {
         template: BufferedImage,
         target: BufferedImage,
         tolerance: Int = 15,
-        hsvFirst:Int = 30,//这个设置时就也会用它来判断，调用处自行决定是否需要严格用模板色值
+        hsvFirst:Int = 0,//这个设置时就也会用它来判断，调用处自行决定是否需要严格用模板色值
     ): Pair<Double, MPoint?> {
         val tw = template.width
         val th = template.height

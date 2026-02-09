@@ -58,13 +58,13 @@ object AY139Util {
         }
     }
 
-//    private fun slidingPixelMatch(
-//        template: BufferedImage,
-//        target: BufferedImage,
-//        tolerance: Int = 15,
-//    ): Pair<Double, MPoint?> {
-//        return ImgUtil.slidingPixelMatch(template, target, tolerance,30)
-//    }
+    private fun slidingPixelMatch(
+        template: BufferedImage,
+        target: BufferedImage,
+        tolerance: Int = 15,
+    ): Pair<Double, MPoint?> {
+        return ImgUtil.slidingPixelMatch(template, target, tolerance,30)
+    }
 
     fun getTopMatTypes(img2: BufferedImage? = null): List<MatType>? {
         val img = img2 ?: getImage(App.rectWindow)

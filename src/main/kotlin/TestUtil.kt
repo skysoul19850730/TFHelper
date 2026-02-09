@@ -2,8 +2,10 @@ import androidx.compose.ui.window.WindowPosition.PlatformDefault.y
 import data.MRect
 import data.toHSB
 import data.toHSBFirst
+import kotlinx.coroutines.delay
 import net.sourceforge.tess4j.util.ImageHelper.getScaledInstance
 import org.opencv.core.Rect
+import tasks.daxuanwo.utils.WX89
 import utils.ImgUtil.forEach
 import java.awt.Color
 import java.awt.image.BufferedImage
@@ -12,11 +14,18 @@ import java.io.File
 fun main() {
     val start = System.currentTimeMillis()
 
-    Ay139Test.test()
+    WX89.autoDo {
+        System.currentTimeMillis()-start>10000
+    }
+//    Ay139Test.test()
 //    WX79Test.test()
 //    WX49Test.test()
 //    getKeyImg()
 //    getSmallImg()
+
+    while(System.currentTimeMillis() - start<10000){
+        Thread.sleep(1000)
+    }
 
     println("耗时:${System.currentTimeMillis() - start}毫秒")
 
