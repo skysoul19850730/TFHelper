@@ -24,6 +24,7 @@ object WX79 {
         doing = true
         GlobalScope.launch {
             //适当加个delay
+            delay(9000) //大约9秒开打
             val platImg = getImageFromRes("${Config.platName}/tezheng/xuanwo/xw79.png")
 
             while(!over.invoke() && doing){
@@ -34,7 +35,7 @@ object WX79 {
                     val it = rects[index]
                     val tarImg = img.getSubImage(it)
                     val rate = ImgUtil.slidingPixelMatch(platImg,tarImg).first
-                    if(rate>0.75){
+                    if(rate>0.5){
                         println("识别到气泡在位置:${index}")
                         log(img)
                         it.clickPoint.click()

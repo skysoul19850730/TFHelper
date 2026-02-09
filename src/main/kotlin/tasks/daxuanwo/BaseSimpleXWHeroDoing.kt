@@ -10,6 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import log
 import tasks.Boss
 import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
@@ -18,8 +19,10 @@ import tasks.daxuanwo.utils.WX79
 import tasks.daxuanwo.utils.WX89
 import ui.zhandou.UIKeyListenerManager
 import utils.ImgUtil
+import utils.ImgUtil.slidingPixelMatch
 import utils.MRobot
 import java.awt.event.KeyEvent
+import java.io.File
 
 // 9  29 都自动执行
 abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerManager.UIKeyListener {
@@ -29,6 +32,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
     var auto29 = true
     var auto59 = false
+    var auto79 = true
     var auto89 = true
 
     override suspend fun onKeyDown(code: Int): Boolean {
@@ -216,10 +220,10 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
         addGuanDeal(49) {
             over {
-                curGuan > 49 || (g49 == 2 && heroDown49!!.isFull() && g49StartBoss == null)
+                curGuan > 49
             }
             chooseHero {
-                if (heroDown49!!.isFull() && g49StartBoss != null) {
+                if (heroDown49!!.isFull()) {
                     g49 = 3
                 }
 
@@ -229,7 +233,17 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                         lastQiu49 = System.currentTimeMillis()
                         return@chooseHero mo
                     } else {
-                        return@chooseHero g49StartBoss?.invoke(this) ?: -1
+                        if (g49StartBoss != null) {
+                            return@chooseHero g49StartBoss?.invoke(this) ?: -1
+                        } else {
+                            if (mo > -1) {
+                                delay(qiu49Time - 1000 - (System.currentTimeMillis() - lastQiu49))
+                                lastQiu49 = System.currentTimeMillis()
+                                return@chooseHero mo
+                            } else {
+                                return@chooseHero -1
+                            }
+                        }
                     }
                 } else if (g49 == 2) {//打完融合，boss和满herodown的两个阶段都不再需要打魔球了，鱼人战将基本都够攻速了，打魔没效果了。
                     return@chooseHero upAny(heroDown49!!)
@@ -274,6 +288,9 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     //如果上面都没走，证明没特殊情况，所以至少也要刷出魔球来，这里就返回-1去刷出魔球了需要
                     return@chooseHero -1
                 }
+            }
+            onStart {
+                start49Listener()
             }
             des = "需要切的时候按0，会自动下卡再上卡，收集完成后按3，切换的卡会上满"
         }
@@ -340,16 +357,16 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             chooseHero {
                 if (g69State == 0) {
                     if (midHeros69?.all { it.isFull() } == true) {
-                        while (g69State == 0) {
+                        while (g69State == 0 && curGuan < 70) {
                             delay(200)
-                            val outIndex = g69StartBoss?.invoke(heros, 0) ?: -1
+                            val outIndex = g69StartBoss?.invoke(this, 0) ?: -1
                             if (outIndex > -1) {
                                 return@chooseHero outIndex
                             }
                         }
                     } else {
 
-                        val outIndex = g69StartBoss?.invoke(heros, 0) ?: -1
+                        val outIndex = g69StartBoss?.invoke(this, 0) ?: -1
                         if (outIndex > -1) {
                             return@chooseHero outIndex
                         }
@@ -404,7 +421,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     }
                 }
                 if (g69State == 1) {
-                    val outIndex = g69StartBoss?.invoke(heros, 0) ?: -1
+                    val outIndex = g69StartBoss?.invoke(this, 0) ?: -1
                     if (outIndex == -2) {
                         return@chooseHero -1
                     } else if (outIndex > -1) {
@@ -425,8 +442,10 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 //                        }
 
                         XueLiang.observerXueDown(0.5f) {
-                            g69State != 1
+                            g69State != 1 || curGuan > 69
                         }
+                        delay(500)
+                        g69State = 0
 
                         return@chooseHero ind
                     }
@@ -465,24 +484,24 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             if (guan == 59) {
                 WX59.autoDo(auto59)
             }
-            if (guan == 79) {
+            if (guan == 79 && auto79) {
                 WX79.autoDo(carDoing.carps.map {
                     it.mRect.scale(0.3f)
                 }) {
                     curGuan > 79
                 }
             }
-            if (guan == 89) {
+            if (guan == 89 && auto89) {
                 WX89.autoDo {
                     curGuan > 89
                 }
             }
 
-//        if (guan in listOf(59)) {
-//            App.startAutoSave(200)
-//        } else {
-//            App.stopAutoSave()
-//        }
+            if (guan in listOf(-1)) {
+                App.startAutoSave(200)
+            } else {
+                App.stopAutoSave()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -565,6 +584,64 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     }
 
     fun stop59() {
+
+    }
+
+    fun start49Listener() {
+        GlobalScope.launch {
+            delay(16000)//废话
+            val targetRect = MRect.createWH(337, 320, 424, 80)
+            val folder = "${Config.platName}/tezheng/xuanwo/xw49/"
+            val pjv = getImageFromRes("${folder}tjn_1") to "jv"
+            val psm = getImageFromRes("${folder}tsm_1.png") to "sm"
+            val psy = getImageFromRes("${folder}thy_1.png") to "sy"
+            val pzhu = getImageFromRes("${folder}tzhu_1.png") to "zhu"
+
+            val plats = listOf(pjv, psm, psy, pzhu)
+            var jvsmCount = 0
+            while (curGuan == 49 && g49 < 2) {
+
+                val img = getImage(targetRect)
+                log("开始检测49一个图")
+                plats.forEach { plat ->
+
+                    delay(100)
+                    val pair = slidingPixelMatch(plat.first, img)
+                    log(" ${pair.first} 位置${pair.second?.x} 名字;${plat.second}")
+                    if (pair.first > 0.15) {
+                        log(" ${pair.first} 位置${pair.second?.x} 名字;${plat.second}")
+
+                        if(plat == psm || plat==pjv){
+                            jvsmCount++
+                            if(carDoing.chePosition==0){//左车立马下
+                                g49 = 1
+                            }else{//右 不动
+                            }
+                            if(jvsmCount<2){
+                                delay(14000)
+                            }else{
+                                g49 = 2//出两个萨满了，就可以满卡了
+                            }
+                        }else{
+                            //海妖和猪
+                            if(carDoing.chePosition==0){
+                                delay(2800)
+                                g49 = 1
+                                delay(10500)//这里早点
+                                g49 =1
+                                delay(1000)
+                            }else{
+                                delay(8500)
+                                g49=1
+                                delay(5500)
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }
 
     }
 }

@@ -4,6 +4,7 @@ import data.Config
 import data.MRect
 import getImage
 import getImageFromRes
+import getSubImage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -56,9 +57,10 @@ object WX89 {
         doing = true
         GlobalScope.launch {
             //适当加个delay
+            delay(15000)//16秒后出土，再开始即可
             var folder = "${Config.platName}/tezheng/xuanwo/xw89"
 
-            while (!over.invoke() && doing) {
+            while (!over.invoke() && doing) {//这里是防止队友又给转走，
                 rects.forEachIndexed { index, mRect ->
                     if(!doing){
                         return@launch

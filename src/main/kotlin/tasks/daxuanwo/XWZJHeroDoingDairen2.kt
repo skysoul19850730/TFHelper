@@ -54,7 +54,9 @@ class XWZJHeroDoingDairen2 : BaseSimpleXWHeroDoing() {
     override fun initHeroes() {
         super.initHeroes()
         auto59 = true
-
+//        g49StartBoss = {
+//           -1
+//        }
         g69StartBoss = {list,step->
            g69(list,step)
         }

@@ -30,6 +30,7 @@ class ZhanXin5HeroDoing : SimpleHeZuoHeroDoing() {//默认赋值0，左边，借
 
 
     override fun initHeroes() {
+        userNewShuaxin = true
         heros = arrayListOf(zhanjiang, tieqi, gugu, yuren, niutou2, gongjiang, maomi, guangqiu, huanqiu, baoku)
 
         guanDealList.add(GuanDeal(0, { fulls(zhanjiang, tieqi, gugu, niutou2, gongjiang, baoku, yuren) }, {

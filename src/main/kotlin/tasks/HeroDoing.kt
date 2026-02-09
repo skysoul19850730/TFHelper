@@ -33,6 +33,8 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
         val FLAG_KEYEVENT = 0x00000010
     }
 
+    var userNewShuaxin = false
+
     //在InitHero里更改吧。这个就是天空的时候发现车有偏移，与合作和寒冰的车的坐标有出入，但大小没变，所以暂时只改偏移就行
     var carPosOffset = 0
 
@@ -206,6 +208,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 
     protected suspend fun checkCar() {
         log("开始检测车")
+        delay(2000)
         carDoing.carps.get(0).click()
         delay(2000)
         if (Recognize.saleRect.isFit()) {//是自己，啥也不用干，开始初始化得位置就是对得
@@ -405,6 +408,10 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 
     private suspend fun clickShuaxinAndWaitYuxuanChanged2(): List<HeroBean?>? {
 
+        if (userNewShuaxin) {
+            return clickShuaxinAndWaitYuxuanChanged3()
+        }
+
         //先确保变了
 //        clickShuaxinAndWaitYuxuanChanged()
 
@@ -427,10 +434,10 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
                         } else if (ths!!.zip(lastHeroPres!!).count { it.first != null && it.first != it.second } > 0) {
                             //发现一个和预选不一样的就是刷成功了
                             shuaxinClicked = false
-                        } else if(ths!!.all { it != null }){
+                        } else if (ths!!.all { it != null }) {
                             //如果ths已经全识别到了，代表没刷新（和last一样，如果有不一样的就走上面条件了）
                             break
-                        }else{
+                        } else {
                             //这里可能比如说时间太短 前两个一样，但可能第三个会不一样，所以这里要再继续识别，不处理即可
                         }
 
@@ -467,6 +474,37 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
             ths = getPreHeros(700)
         }
         return ths
+    }
+
+    var lastShuaxinTime = 0L
+    private suspend fun clickShuaxinAndWaitYuxuanChanged3(): List<HeroBean?>? {
+
+        var shuaxinClicked = true
+
+        while (shuaxinClicked && running) {
+            delay(620 - (System.currentTimeMillis() - lastShuaxinTime))
+            MRobot.singleClick(Config.zhandou_shuaxinPoint)
+            var tmpLastShuaTime = System.currentTimeMillis()
+            withTimeoutOrNull(150) {//点完刷新等白的方式,3个预选卡都变的很白，而且大约100ms左右就白了，就可以证明点了刷新了
+                while (shuaxinClicked) {
+                    val whiteCount = Config.zhandou_hero1CheckRect.hasColorCount(Color.WHITE)
+//                    log("whiteCount = $whiteCount")
+                    if (whiteCount > 3200) {
+                        shuaxinClicked = false
+                    }
+                    delay(20)
+                }
+            }
+
+            if (shuaxinClicked) {
+                log("刷新点击没成功，再点一次2")
+            } else {
+                //刷到一个不一样的，就代表刷新了,但可能 比如  只有第三个识别到女王，前两个还没识别到呢，但可以确认已经ok了，那么就用之前方式获取
+                //但如果hs本身就3个都有，且和之前不同，那么就可以直接用了，就不用再识别一次
+                lastShuaxinTime = tmpLastShuaTime
+            }
+        }
+        return getPreHeros(700)
     }
 
     var yubeiHeroBean: HeroBean? = null

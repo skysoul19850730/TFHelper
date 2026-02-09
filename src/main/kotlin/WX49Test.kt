@@ -13,13 +13,21 @@ import java.io.File
 
 object WX49Test {
 
+    val user = "sqc"
+//    val user = "Administrator"
     fun test() {
-
-        val targetRect = MRect.createWH(337,274,424,164)
-        val pjv = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug3\\plat_jv.png")) to "jv"
-        val psm = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug3\\plat_sm.png")) to "sm"
-        val psy = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug3\\plat_sy.png")) to "sy"
-        val pzhu = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug3\\plat_zhu.png")) to "zhu"
+//        val rect = MRect.createWH(395,320,60,80)
+//
+//    getImageFromFile(File("C:\\Users\\$user\\Desktop\\debug3\\xw49\\aaa12313.png")).saveSubTo( MRect.createWH(395,320,60,80), File("C:\\Users\\$user\\Desktop\\debug3\\xw49\\tsm.png"))
+//    getImageFromFile(File("C:\\Users\\$user\\Desktop\\debug3\\xw49\\wx_20260206125513.png")).saveSubTo( MRect.createWH(435,320,60,80), File("C:\\Users\\$user\\Desktop\\debug3\\xw49\\thy.png"))
+//    getImageFromFile(File("C:\\Users\\$user\\Desktop\\debug3\\xw49\\wx_20260206125513.png")).saveSubTo( MRect.createWH(665,320,60,80), File("C:\\Users\\$user\\Desktop\\debug3\\xw49\\tjn.png"))
+//    getImageFromFile(File("C:\\Users\\$user\\Desktop\\debug3\\xw49\\aaa12333.png")).saveSubTo( MRect.createWH(437,320,60,80), File("C:\\Users\\$user\\Desktop\\debug3\\xw49\\tzhu.png"))
+//return
+        val targetRect = MRect.createWH(337,320,424,80)
+        val pjv = getImageFromFile(File("C:\\Users\\$user\\Desktop\\debug3\\tjn_1.png")) to "jv"
+        val psm = getImageFromFile(File("C:\\Users\\$user\\Desktop\\debug3\\tsm_1.png")) to "sm"
+        val psy = getImageFromFile(File("C:\\Users\\$user\\Desktop\\debug3\\thy_1.png")) to "sy"
+        val pzhu = getImageFromFile(File("C:\\Users\\$user\\Desktop\\debug3\\tzhu_1.png")) to "zhu"
 
         val plats = listOf(pjv, psm, psy, pzhu)
 
@@ -30,7 +38,7 @@ object WX49Test {
 //        val img = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug3\\aaa123134.png"))
 //            .getSubImage(MRect.createWH(337,284,424,144))
 
-        File("C:\\Users\\Administrator\\Desktop\\debug3\\xw49").listFiles().forEach {
+        File("C:\\Users\\$user\\Desktop\\debug3\\xw49").listFiles().forEach {
 
             val img = getImageFromFile(it).getSubImage(targetRect)
 

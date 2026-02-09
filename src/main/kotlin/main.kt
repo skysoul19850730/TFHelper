@@ -742,11 +742,11 @@ private fun customScreenDialog(window: ComposeWindow, customScreen: MutableState
                     }
                 }.onPointerEvent(PointerEventType.Move) {
                     movePoint.value = it.awtEvent.point!!
-                    try {
-                        img.setRGB(movePoint.value!!.x, movePoint.value!!.y, Color.Red.toArgb())
-                    }catch (e:Exception){
-
-                    }
+//                    try {
+//                        img.setRGB(movePoint.value!!.x, movePoint.value!!.y, Color.Red.toArgb())
+//                    }catch (e:Exception){
+//
+//                    }
 
 //                    text = "x:${curPoint.value.x} y:${curPoint.value.y}"
                 }, alignment = Alignment.TopStart

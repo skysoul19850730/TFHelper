@@ -1,17 +1,28 @@
+import data.Config
 import androidx.compose.ui.window.WindowPosition.PlatformDefault.y
 import data.MRect
 import data.toHSB
 import data.toHSBFirst
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.sourceforge.tess4j.util.ImageHelper.getScaledInstance
 import org.opencv.core.Rect
 import tasks.daxuanwo.utils.WX89
 import utils.ImgUtil.forEach
+import utils.MRobot
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 
 fun main() {
+//    try {
+//        Class.forName("nu.pattern.OpenCV")
+//        nu.pattern.OpenCV.loadLocally()
+//    } catch (e: Exception) {
+//        System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME)
+//    }
     val start = System.currentTimeMillis()
 
     WX89.autoDo {
@@ -26,6 +37,7 @@ fun main() {
     while(System.currentTimeMillis() - start<10000){
         Thread.sleep(1000)
     }
+
 
     println("耗时:${System.currentTimeMillis() - start}毫秒")
 
