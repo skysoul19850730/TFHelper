@@ -1,10 +1,7 @@
 import data.MPoint
 import data.MRect
 import model.CarDoing
-import opencv.MatSearch
-import opencv.saveToImg
-import opencv.subMat
-import opencv.toMat
+import opencv.*
 import org.opencv.core.Core
 import org.opencv.core.Mat
 import org.opencv.core.Scalar
@@ -17,38 +14,59 @@ import java.io.File
 object WX79Test {
 
     fun test() {
+        //耗时：82
+        //耗时：44 1.0
+        //slidingPixelMatch 还是快一些
 
-        val mat = Imgcodecs.imread("C:\\Users\\sqc\\Desktop\\debug3\\ttt.png",Imgcodecs.IMREAD_UNCHANGED)
-        val mat2 = Imgcodecs.imread("C:\\Users\\sqc\\Desktop\\debug3\\a79t.png",Imgcodecs.IMREAD_UNCHANGED)
+        //修正
+        // 耗时：23
+        //耗时：42 1.0
+        //上面是因为start记录在前面，第一个打印包含了读两个文件的时间。。。。。，还是opencv快啊
 
-        // 1. 分离 ARGB -> BGR + Alpha
-        val channels = mutableListOf<Mat>()
-        Core.split(mat, channels)
-        val b = channels[0]
-        val g = channels[1]
-        val r = channels[2]
-        val a = channels[3]
-        // 2. 构建 mask：alpha > 0 的区域为 255，否则 0
-        val mask = Mat()
-        Core.compare(a, Scalar(1.0), mask, Core.CMP_GT) // alpha > 0 → 255
-        // 3. 构建 templateBGR：仅保留 alpha > 0 的像素，其余置黑
-//    val templateBgr = Mat()
-//    Core.merge(listOf(b, g, r), templateBgr)
-//    val maskNot = Mat()
-//    Core.bitwise_not(mask, maskNot)
-//    templateBgr.setTo(Scalar.all(0.0), maskNot)
+//        val start = System.currentTimeMillis()
+        val img = getImageFromFile(File("C:\\Users\\sqc\\Desktop\\debug3\\ttt.png"))
+        val bigImage = getImageFromFile(File("C:\\Users\\sqc\\Desktop\\debug3\\a79t.png"))
+        val start = System.currentTimeMillis()
+        val fit = bigImage.hasImage(img,true)
 
-        // 4. 执行带 mask 的模板匹配
-        val result = Mat()
-//        Imgproc.matchTemplate(
-//            mat2,
-//            mat,
-//            result,
-//            Imgproc.TM_CCORR_NORMED, // 支持 mask
-//            mask
-//        )
-        Imgproc.matchTemplate(mat2, mat, result, Imgproc.TM_CCOEFF_NORMED)
-        val rrr = Core.minMaxLoc(result)
+        val s2 = System.currentTimeMillis()
+        println("耗时：${s2 - start}")
+
+        val fit2 = slidingPixelMatch(img,bigImage)
+        val s3 = System.currentTimeMillis()
+        println("耗时：${s3 - s2} ${fit2.first}")
+
+//        val mat = Imgcodecs.imread("C:\\Users\\sqc\\Desktop\\debug3\\ttt.png",Imgcodecs.IMREAD_UNCHANGED)
+//        val mat2 = Imgcodecs.imread("C:\\Users\\sqc\\Desktop\\debug3\\a79t.png",Imgcodecs.IMREAD_UNCHANGED)
+//
+//        // 1. 分离 ARGB -> BGR + Alpha
+//        val channels = mutableListOf<Mat>()
+//        Core.split(mat, channels)
+//        val b = channels[0]
+//        val g = channels[1]
+//        val r = channels[2]
+//        val a = channels[3]
+//        // 2. 构建 mask：alpha > 0 的区域为 255，否则 0
+//        val mask = Mat()
+//        Core.compare(a, Scalar(1.0), mask, Core.CMP_GT) // alpha > 0 → 255
+//        // 3. 构建 templateBGR：仅保留 alpha > 0 的像素，其余置黑
+////    val templateBgr = Mat()
+////    Core.merge(listOf(b, g, r), templateBgr)
+////    val maskNot = Mat()
+////    Core.bitwise_not(mask, maskNot)
+////    templateBgr.setTo(Scalar.all(0.0), maskNot)
+//
+//        // 4. 执行带 mask 的模板匹配
+//        val result = Mat()
+////        Imgproc.matchTemplate(
+////            mat2,
+////            mat,
+////            result,
+////            Imgproc.TM_CCORR_NORMED, // 支持 mask
+////            mask
+////        )
+//        Imgproc.matchTemplate(mat2, mat, result, Imgproc.TM_CCOEFF_NORMED)
+//        val rrr = Core.minMaxLoc(result)
 
         val aaaaa = 0
 

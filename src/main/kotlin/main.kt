@@ -1191,7 +1191,7 @@ fun test() {
     GlobalScope.launch {
 
         measureTimeMillis {
-//            TestUtil.test()
+            TestUtil.test()
 //testHerosUI()
 //            var subFoler = "${Config.platName}/xuanwo/"
 //            val xw_pangxie = getImageFromRes("${subFoler}xw_pangxie.png")

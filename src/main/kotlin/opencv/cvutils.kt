@@ -7,7 +7,7 @@ import org.opencv.core.*
 import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
 import java.awt.image.BufferedImage
-import java.awt.image.BufferedImage.TYPE_INT_ARGB
+import java.awt.image.BufferedImage.*
 import java.awt.image.DataBufferByte
 import java.awt.image.DataBufferInt
 import java.io.File
@@ -82,20 +82,6 @@ private fun MatOfPoint.saveImg(roi: Mat) {
     getImageFromFile(File(path))
 }
 
-fun BufferedImage.toMat(): Mat {
-    val img = BufferedImage(this.width, this.height, this.type)
-    img.graphics.drawImage(this, 0, 0, null)
-
-    val mat = Mat(this.height, this.width, CvType.CV_8UC3)
-    var imgbuffer = img.raster.dataBuffer as? DataBufferByte
-    if (imgbuffer == null) {
-        imgbuffer = convertDataBufferIntToBytes(img.raster.dataBuffer as DataBufferInt)
-    }
-    val data = imgbuffer.data
-    mat.put(0, 0, data)
-    return mat
-}
-
 
 private fun convertDataBufferIntToBytes(dataBufferInt: DataBufferInt): DataBufferByte {
     val intData = dataBufferInt.data
@@ -123,7 +109,7 @@ private fun convertDataBufferIntToBytes4(dataBufferInt: DataBufferInt): DataBuff
     for (i in intData.indices) {
         val intValue = intData[i]
         // 将int拆分为4个字节
-        byteData[i * 4] =(intValue and 0xFF).toByte()          // Blue
+        byteData[i * 4] = (intValue and 0xFF).toByte()          // Blue
         byteData[i * 4 + 1] = ((intValue shr 8) and 0xFF).toByte()  // Green
         byteData[i * 4 + 2] = ((intValue shr 16) and 0xFF).toByte() // Red
         byteData[i * 4 + 3] = ((intValue shr 24) and 0xFF).toByte()     // Alpha
@@ -131,4 +117,94 @@ private fun convertDataBufferIntToBytes4(dataBufferInt: DataBufferInt): DataBuff
 
     return DataBufferByte(byteData, byteData.size)
 }
+
+
+fun BufferedImage.toMat3(): Mat {
+    val img = BufferedImage(this.width, this.height, BufferedImage.TYPE_3BYTE_BGR)
+    img.graphics.drawImage(this, 0, 0, null)
+    val mat = Mat(this.height, this.width, CvType.CV_8UC3)
+    var imgbuffer = img.raster.dataBuffer as DataBufferByte
+    val data = imgbuffer.data
+    mat.put(0, 0, data)
+    return mat
+}
+
+/**
+ * 尽量只具有透明特征的模板图使用mat4通道，配合mask只对比非透明部分，防止背景干扰，比如很多球状的模板
+ * 模板使用mat4后，target也要用mat4
+ */
+fun BufferedImage.toMat4(): Mat {
+    val img = BufferedImage(this.width, this.height, BufferedImage.TYPE_4BYTE_ABGR)
+    img.graphics.drawImage(this, 0, 0, null)
+    val mat = Mat(this.height, this.width, CvType.CV_8UC4)
+    var imgbuffer = img.raster.dataBuffer as DataBufferByte
+    val data = imgbuffer.abgrToBgra().data
+    mat.put(0, 0, data)
+    return mat
+}
+
+fun DataBufferByte.abgrToBgra(): DataBufferByte {
+    val originalData = this.data
+    val pixelCount = originalData.size / 4
+    val bgraData = ByteArray(originalData.size)
+
+    for (i in 0 until pixelCount) {
+        bgraData[i * 4] = originalData[i * 4 + 1]     // Blue
+        bgraData[i * 4 + 1] = originalData[i * 4 + 2] // Green
+        bgraData[i * 4 + 2] = originalData[i * 4 + 3] // Red
+        bgraData[i * 4 + 3] = originalData[i * 4]     // Alpha
+    }
+
+    return DataBufferByte(bgraData, bgraData.size)
+}
+
+/**
+ * 根据原图通道数量构建mat，但比较时比如一个透明一个不透明是会报错的，要两个mat一样，所以如果确定不一样，想强制一样的话，就用toMat3和toMat4
+ */
+fun BufferedImage.toMat(): Mat {
+    val newType = when (this.type) {
+        TYPE_INT_ARGB, TYPE_4BYTE_ABGR -> BufferedImage.TYPE_4BYTE_ABGR
+        else -> TYPE_3BYTE_BGR
+    }
+    val matType = when (this.type) {
+        TYPE_INT_ARGB, TYPE_4BYTE_ABGR -> CvType.CV_8UC4
+        else -> CvType.CV_8UC3
+    }
+    val img = BufferedImage(this.width, this.height, newType)
+    img.graphics.drawImage(this, 0, 0, null)
+
+    val mat = Mat(this.height, this.width, matType)
+    var imgbuffer = img.raster.dataBuffer as DataBufferByte
+    if(matType == CvType.CV_8UC4){
+        imgbuffer = imgbuffer.abgrToBgra()
+    }
+    val data = imgbuffer.data
+    mat.put(0, 0, data)
+    return mat
+}
+
+fun BufferedImage.hasImage(template: BufferedImage,isAlpha:Boolean=false,rate: Double = 0.75):Boolean{
+    if(isAlpha){
+        val mat = template.toMat4()
+        val channels = mutableListOf<Mat>()
+        Core.split(mat, channels)
+        val a = channels[3]
+        // 2. 构建 mask：alpha > 0 的区域为 255，否则 0
+        val mask = Mat()
+        Core.compare(a, Scalar(1.0), mask, Core.CMP_GT) // alpha > 0 → 255
+        val result = Mat()
+        Imgproc.matchTemplate(
+            this.toMat4(),
+            mat,
+            result,
+            Imgproc.TM_CCORR_NORMED, // 支持 mask
+            mask
+        )
+        val rrr = Core.minMaxLoc(result)
+        return rrr.maxVal>=rate
+    }else{
+        return MatSearch.templateFit(template.toMat3(), this.toMat3(),rate)
+    }
+}
+
 
