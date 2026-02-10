@@ -35,7 +35,7 @@ object WX89 {
     var doing = false
 
     // 共享队列用于接收点击请求
-    private val clickChannel = Channel<Pair<MRect,CompletableDeferred<Unit>>>(Channel.UNLIMITED)
+    private val clickChannel = Channel<Pair<MRect, CompletableDeferred<Unit>>>(Channel.UNLIMITED)
 
     // 互斥锁，确保同一时间只有一个协程执行点击操作
     private val clickMutex = Mutex()
@@ -60,7 +60,53 @@ object WX89 {
         doing = true
         GlobalScope.launch {
             //适当加个delay
-            delay(2000)
+//            delay(2000)
+            delay(15000)//16秒后出土，再开始即可
+            var folder = "${Config.platName}/tezheng/xuanwo/xw89"
+
+            while (!over.invoke() && doing) {//这里是防止队友又给转走，
+                rects.forEachIndexed { index, mRect ->
+                    if (!doing) {
+                        return@launch
+                    }
+                    GlobalScope.launch {
+                        log("识别位置:${index}")
+                        val okImg = getImageFromRes("${folder}/xw89_${index}.png").toMat()
+
+                        var img = getImage(mRect.scale(1.2f)).run {
+                            log(this)
+                            toMat()
+                        }
+                        var count = 0
+                        while (!MatSearch.templateFit(okImg, img) && doing && !over.invoke()) {
+                            count++
+                            log("位置${index}识别失败,点击旋转第${count}次")
+                            val completed = CompletableDeferred<Unit>()
+                            clickChannel.send(mRect to completed)
+                            completed.await()
+                            delay(400)
+                            log("位置${index}识别失败,延迟后重新获取图片")
+                            img = getImage(mRect.scale(1.2f)).run {
+                                log(this)
+                                toMat()
+                            }
+                        }
+                        log("识别成功,共点击$count 次")
+                    }
+
+                }
+            }
+
+        }
+
+    }
+
+    fun testOne(over: () -> Boolean) {
+        MainData.curGuanKaDes.value = "开启了自动点击，按0键可以终止"
+        doing = true
+        GlobalScope.launch {
+            //适当加个delay
+//            delay(2000)
 //            delay(15000)//16秒后出土，再开始即可
             var folder = "${Config.platName}/tezheng/xuanwo/xw89"
 
@@ -74,7 +120,7 @@ object WX89 {
                     val okImg = getImageFromRes("${folder}/xw89_${index}.png").toMat()
 
                     var img = getImage(mRect.scale(1.2f)).run {
-                        log(this)
+//                        log(this)
                         toMat()
                     }
                     var count = 0
@@ -85,8 +131,8 @@ object WX89 {
                         clickChannel.send(mRect to completed)
                         completed.await()
                         delay(400)
+                        log("位置${index}识别失败,延迟后重新获取图片")
                         img = getImage(mRect.scale(1.2f)).run {
-                            log(this)
                             toMat()
                         }
                     }
@@ -99,5 +145,4 @@ object WX89 {
         }
 
     }
-
 }

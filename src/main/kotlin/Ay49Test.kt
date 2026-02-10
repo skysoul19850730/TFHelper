@@ -8,6 +8,7 @@ import opencv.toMat
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import tasks.XueLiang
+import tasks.daxuanwo.utils.WX89
 //import tasks.anyue.base.Ay99Test
 import test.Utils
 import utils.AYUtil
@@ -19,20 +20,23 @@ import java.io.File
 object TestUtil {
     suspend fun test() {
         val start = System.currentTimeMillis()
-        var count = 0
-        App.startAutoSave(50)
-        GlobalScope.launch {
-            while (System.currentTimeMillis()-start<5000){
-                count++
-                MRobot.singleClick(Config.zhandou_shuaxinPoint)
-                println("点击刷新 第${count}次")
-                delay(10)
-                if((Config.rect4ShuakaColor.hasColor(Color.RED))){
-                    log("没钱了")
-                    break
-                }
-            }
+        WX89.testOne {
+            false
         }
+//        var count = 0
+//        App.startAutoSave(50)
+//        GlobalScope.launch {
+//            while (System.currentTimeMillis()-start<5000){
+//                count++
+//                MRobot.singleClick(Config.zhandou_shuaxinPoint)
+//                println("点击刷新 第${count}次")
+//                delay(10)
+//                if((Config.rect4ShuakaColor.hasColor(Color.RED))){
+//                    log("没钱了")
+//                    break
+//                }
+//            }
+//        }
 //        var img = getImage(MRect.createWH(100,100,100,100).scale(1.1f)).run {
 //            log(this)
 //            toMat()

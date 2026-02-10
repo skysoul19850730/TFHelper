@@ -686,7 +686,8 @@ fun showOtherWindow(customScreen: MutableState<Boolean>) {
 @ExperimentalComposeUiApi
 @Composable
 private fun customScreenDialog(window: ComposeWindow, customScreen: MutableState<Boolean>) {
-    val img = getImage(App.rectWindow)
+//    val img = getImage(App.rectWindow)
+    val img = getImageFromFile(File("C:\\Users\\sqc\\Desktop\\xw89test\\testjt.png"))
     window.setBounds(0, 0, img.width, img.height)
     var startPoint: Point? = null
     val movePoint = remember { mutableStateOf<Point?>(null) }
@@ -1190,7 +1191,7 @@ fun test() {
     GlobalScope.launch {
 
         measureTimeMillis {
-            TestUtil.test()
+//            TestUtil.test()
 //testHerosUI()
 //            var subFoler = "${Config.platName}/xuanwo/"
 //            val xw_pangxie = getImageFromRes("${subFoler}xw_pangxie.png")

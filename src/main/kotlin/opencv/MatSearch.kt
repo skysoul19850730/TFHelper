@@ -1,6 +1,7 @@
 package opencv
 
 import getImageFromRes
+import log
 import org.opencv.core.Core
 import org.opencv.core.Mat
 import org.opencv.core.Scalar
@@ -27,14 +28,14 @@ object MatSearch {
 
     fun templateFit(template: Mat, target: Mat,rate: Double = 0.75):Boolean{
         val result = templateMatch(template,target)
-        println("fit rate ${result.maxVal}")
+        log("fit rate ${result.maxVal}")
         return result.maxVal >= rate
     }
 
 
     fun templateFitWithMask(template: Mat, target: Mat,rate: Double = 0.75):Boolean{
         val result = templateMatchWithMask(template,target)
-        println("fit rate ${result?.maxVal?:0}")
+        log("fit rate ${result?.maxVal?:0}")
         return (result?.maxVal?:0.0) >= rate
     }
 

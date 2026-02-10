@@ -5,7 +5,11 @@ import opencv.MatSearch
 import opencv.saveToImg
 import opencv.subMat
 import opencv.toMat
+import org.opencv.core.Core
+import org.opencv.core.Mat
+import org.opencv.core.Scalar
 import org.opencv.imgcodecs.Imgcodecs
+import org.opencv.imgproc.Imgproc
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
@@ -14,61 +18,39 @@ object WX79Test {
 
     fun test() {
 
+        val mat = Imgcodecs.imread("C:\\Users\\sqc\\Desktop\\debug3\\ttt.png",Imgcodecs.IMREAD_UNCHANGED)
+        val mat2 = Imgcodecs.imread("C:\\Users\\sqc\\Desktop\\debug3\\a79t.png",Imgcodecs.IMREAD_UNCHANGED)
 
-        val platPath = "C:\\Users\\Administrator\\Desktop\\debug3\\ttt.png"
-        val platImg = getImageFromFile(File(platPath))
+        // 1. 分离 ARGB -> BGR + Alpha
+        val channels = mutableListOf<Mat>()
+        Core.split(mat, channels)
+        val b = channels[0]
+        val g = channels[1]
+        val r = channels[2]
+        val a = channels[3]
+        // 2. 构建 mask：alpha > 0 的区域为 255，否则 0
+        val mask = Mat()
+        Core.compare(a, Scalar(1.0), mask, Core.CMP_GT) // alpha > 0 → 255
+        // 3. 构建 templateBGR：仅保留 alpha > 0 的像素，其余置黑
+//    val templateBgr = Mat()
+//    Core.merge(listOf(b, g, r), templateBgr)
+//    val maskNot = Mat()
+//    Core.bitwise_not(mask, maskNot)
+//    templateBgr.setTo(Scalar.all(0.0), maskNot)
 
-        val car = CarDoing(1).apply {
-            initPositions()
-        }
-        val template = Imgcodecs.imread(platPath, Imgcodecs.IMREAD_UNCHANGED)
-        val files = File("C:\\Users\\Administrator\\Desktop\\debug3\\test79\\che1").listFiles()
-            .forEach {
-                val img = getImageFromFile(it)
+        // 4. 执行带 mask 的模板匹配
+        val result = Mat()
+//        Imgproc.matchTemplate(
+//            mat2,
+//            mat,
+//            result,
+//            Imgproc.TM_CCORR_NORMED, // 支持 mask
+//            mask
+//        )
+        Imgproc.matchTemplate(mat2, mat, result, Imgproc.TM_CCOEFF_NORMED)
+        val rrr = Core.minMaxLoc(result)
 
-                //使用opencv 耗时8887 ms  但可能ai给的代码有问题，里面处理了一堆前置后，还是滑动实现的
-//                car.carps.forEach {
-//                    val tti = img.getSubImage(it.mRect.scale(0.3f))
-//
-//
-//                    val target = tti.toMat()
-//
-//                    val pair = RobustMatcher.robustMatch(template, target, 0.1)
-//                    println("${pair.first} ${pair.second}")
-//
-//
-//                }
-
-                //使用image的8个图 耗时777ms
-                car.carps.forEach {
-                    val tti = img.getSubImage(it.mRect.scale(0.3f))
-                    val pair = slidingPixelMatch(platImg, tti)
-                    println("${pair.first}")
-                    val has = (pair.first > 0.5)
-                    println("has:$has")
-                }
-                println("\n\n")
-
-            }
-
-
-//       val platImg = Imgcodecs.imread("C:\\Users\\Administrator\\Desktop\\debug3\\ttt.png",Imgcodecs.IMREAD_UNCHANGED)
-
-//       val car = CarDoing(0).apply {
-//            initPositions()
-//        }
-//
-//        car.carps.forEach {
-//            val tti = img.getSubImage(it.mRect.scale(0.3f))
-//            val pair = slidingPixelMatch(platImg,tti)
-//            println("${pair.first}")
-//            val has =(pair.first>0.5)
-//            println("has:$has")
-//        }
-
-//        val has = MatSearch.templateFit(platImg,img,0.3)
-//        println("has:$has")
-//75 340 55
+        val aaaaa = 0
 
     }
 

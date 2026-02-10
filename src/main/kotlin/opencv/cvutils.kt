@@ -7,47 +7,48 @@ import org.opencv.core.*
 import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
 import java.awt.image.BufferedImage
+import java.awt.image.BufferedImage.TYPE_INT_ARGB
 import java.awt.image.DataBufferByte
 import java.awt.image.DataBufferInt
 import java.io.File
 
-fun Mat.toGray(autoRelease:Boolean = true):Mat{
+fun Mat.toGray(autoRelease: Boolean = true): Mat {
     val gray = Mat()
-    Imgproc.cvtColor(this, gray,Imgproc.COLOR_BGR2GRAY)
-    if(autoRelease){
+    Imgproc.cvtColor(this, gray, Imgproc.COLOR_BGR2GRAY)
+    if (autoRelease) {
         this.release()
     }
     return gray
 }
 
-fun String.toMat():Mat = Imgcodecs.imread(this)
+fun String.toMat(): Mat = Imgcodecs.imread(this)
 
 /**
  * 裁剪小的，一般可能原图还继续处理，比如继续裁剪其他图标，所以不自动释放
  */
-fun Mat.subMat(rect: MRect,autoRelease:Boolean = false):Mat{
-    val mat = Mat(this, Rect(rect.left,rect.top,rect.width,rect.height)).clone()
-    if(autoRelease){
+fun Mat.subMat(rect: MRect, autoRelease: Boolean = false): Mat {
+    val mat = Mat(this, Rect(rect.left, rect.top, rect.width, rect.height)).clone()
+    if (autoRelease) {
         this.release()
     }
     return mat
 }
 
-fun Mat.binary(autoRelease:Boolean = true):Mat{
+fun Mat.binary(autoRelease: Boolean = true): Mat {
     val binary = Mat()
     Imgproc.threshold(this, binary, 0.0, 255.0, Imgproc.THRESH_BINARY + Imgproc.THRESH_OTSU)
-    if(autoRelease){
+    if (autoRelease) {
         this.release()
     }
     return binary
 }
 
-fun Mat.saveToImg(src:Mat?=null,path:String?=null):BufferedImage?{
+fun Mat.saveToImg(src: Mat? = null, path: String? = null): BufferedImage? {
 
-    val path = if(path==null) "${System.getProperty("user.dir")}/temp.png"
-    else if(path.contains(File.separatorChar)){
-         path
-    }else "${System.getProperty("user.dir")}/${path}.png"
+    val path = if (path == null) "${System.getProperty("user.dir")}/temp.png"
+    else if (path.contains(File.separatorChar)) {
+        path
+    } else "${System.getProperty("user.dir")}/${path}.png"
 
     try {
 
@@ -56,7 +57,7 @@ fun Mat.saveToImg(src:Mat?=null,path:String?=null):BufferedImage?{
 // 绘制所有轮廓到新图像并保存（便于查看）
         if (this is MatOfPoint && src != null) {
             this.saveImg(src)
-        }else{
+        } else {
             return null
         }
     }
@@ -64,7 +65,7 @@ fun Mat.saveToImg(src:Mat?=null,path:String?=null):BufferedImage?{
     return getImageFromFile(File(path))
 }
 
-private fun MatOfPoint.saveImg(roi:Mat){
+private fun MatOfPoint.saveImg(roi: Mat) {
     val mask = Mat.zeros(roi.size(), CvType.CV_8UC1)
 // ✅ 关键：thickness = -1 表示实心填充！
     Imgproc.drawContours(mask, listOf(this), -1, Scalar(255.0), -1)
@@ -87,7 +88,7 @@ fun BufferedImage.toMat(): Mat {
 
     val mat = Mat(this.height, this.width, CvType.CV_8UC3)
     var imgbuffer = img.raster.dataBuffer as? DataBufferByte
-    if(imgbuffer == null){
+    if (imgbuffer == null) {
         imgbuffer = convertDataBufferIntToBytes(img.raster.dataBuffer as DataBufferInt)
     }
     val data = imgbuffer.data
@@ -104,14 +105,15 @@ private fun convertDataBufferIntToBytes(dataBufferInt: DataBufferInt): DataBuffe
 
     for (i in intData.indices) {
         val intValue = intData[i]
-        // 将int拆分为3个字节（RGB）
-        byteData[i * 3] = ((intValue shr 16) and 0xFF).toByte() // Red
+        // 将int拆分为3个字节（RGB）mat 顺序是bgr，
+        byteData[i * 3] = (intValue and 0xFF).toByte()          // Blue
         byteData[i * 3 + 1] = ((intValue shr 8) and 0xFF).toByte()  // Green
-        byteData[i * 3 + 2] = (intValue and 0xFF).toByte()          // Blue
+        byteData[i * 3 + 2] = ((intValue shr 16) and 0xFF).toByte() // Red
     }
 
     return DataBufferByte(byteData, byteData.size)
 }
+
 private fun convertDataBufferIntToBytes4(dataBufferInt: DataBufferInt): DataBufferByte {
     val intData = dataBufferInt.data
     // 假设每个int值代表RGBA四个字节
@@ -121,10 +123,10 @@ private fun convertDataBufferIntToBytes4(dataBufferInt: DataBufferInt): DataBuff
     for (i in intData.indices) {
         val intValue = intData[i]
         // 将int拆分为4个字节
-        byteData[i * 4] = ((intValue shr 24) and 0xFF).toByte()     // Alpha
-        byteData[i * 4 + 1] = ((intValue shr 16) and 0xFF).toByte() // Red
-        byteData[i * 4 + 2] = ((intValue shr 8) and 0xFF).toByte()  // Green
-        byteData[i * 4 + 3] = (intValue and 0xFF).toByte()          // Blue
+        byteData[i * 4] =(intValue and 0xFF).toByte()          // Blue
+        byteData[i * 4 + 1] = ((intValue shr 8) and 0xFF).toByte()  // Green
+        byteData[i * 4 + 2] = ((intValue shr 16) and 0xFF).toByte() // Red
+        byteData[i * 4 + 3] = ((intValue shr 24) and 0xFF).toByte()     // Alpha
     }
 
     return DataBufferByte(byteData, byteData.size)

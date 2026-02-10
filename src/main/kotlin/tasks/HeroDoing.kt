@@ -33,7 +33,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
         val FLAG_KEYEVENT = 0x00000010
     }
 
-    var userNewShuaxin = false
+    var userNewShuaxin = true
 
     //在InitHero里更改吧。这个就是天空的时候发现车有偏移，与合作和寒冰的车的坐标有出入，但大小没变，所以暂时只改偏移就行
     var carPosOffset = 0

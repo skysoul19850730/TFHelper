@@ -19,7 +19,9 @@ fun main() {
     } catch (e: Exception) {
         System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME)
     }
-    val img = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug3\\aa.png"))
+    val start = System.currentTimeMillis()
+
+
 
     val rect1 = MRect.createWH(
         460,
@@ -86,28 +88,51 @@ fun main() {
         )
     val rects = listOf(rect1, rect2, rect3, rect4, rect5, rect6, rect7, rect8, rect9)
 
-
-    val imgTest = getImageFromFile(File("C:\\Users\\Administrator\\Desktop\\debug3\\test.png"))
+//    val imgTest = getImageFromFile(File("E:\\ideaspace\\TFHelperHome\\tfres\\logs\\xuanwo\\26_02_09\\10_46_15\\24213324.png"))
     var anyueFolder = "${Config.platName}/tezheng/xuanwo/xw89"
-    val start = System.currentTimeMillis()
-    rects.forEachIndexed { i, it ->
-        val okImg = getImageFromRes("${anyueFolder}/xw89_${i}.png").toMat()
+//    val okImg = getImageFromRes("${anyueFolder}/xw89_${4}.png").toMat()
 
-        var mImg = imgTest.getSubImage(it)
-        var count = 0
-        while (!MatSearch.templateFit(okImg,imgTest.getSubImage(it.scale(1.2f)).toMat())) {
-            count++
-            mImg = rotateImage(mImg, 90.0)
+//    val r = MatSearch.templateFit(okImg,imgTest.toMat())
 
-            mImg.foreach { i, i2 ->
-
-                imgTest.setRGB(it.left + i, it.top + i2, mImg.getRGB(i, i2))
-                false
+    File("C:\\Users\\sqc\\Desktop\\xw89test").listFiles().forEachIndexed { index, file ->
+        val okImg = getImageFromRes("${anyueFolder}/xw89_${index}.png").toMat()
+        println("folder :${file.name}")
+        file.listFiles().forEach {
+            val target = getImageFromFile(it).toMat()
+            if(MatSearch.templateFit(okImg,target)){
+                println(" ${it.name} 第${index + 1}位成功")
+            }else{
+                println(" ${it.name} 第${index + 1}位失败")
             }
-            imgTest
         }
-        println("第${i + 1}位，需要旋转${count}次")
+        println("\n\n\n")
     }
+    return
+
+//
+//    rects.forEachIndexed { i, it ->
+//        val okImg = getImageFromRes("${anyueFolder}/xw89_${i}.png").toMat()
+//
+//        var mImg = imgTest.getSubImage(it)
+//        var count = 0
+//        while (!MatSearch.templateFit(okImg,imgTest.getSubImage(it.scale(1.2f)).toMat())) {
+//            count++
+//            mImg = rotateImage(mImg, 90.0)
+//
+//            mImg.foreach { i, i2 ->
+//
+//                imgTest.setRGB(it.left + i, it.top + i2, mImg.getRGB(i, i2))
+//                false
+//            }
+//            imgTest
+//        }
+////        if(MatSearch.templateFit(okImg,imgTest.getSubImage(it.scale(1.2f)).toMat())){
+////            println("第${i + 1}位成功")
+////        }else{
+////            println("第${i + 1}位失败")
+////        }
+//        println("第${i + 1}位，需要旋转${count}次")
+//    }
     println("耗时: ${System.currentTimeMillis() - start}")
 
 
