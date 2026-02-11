@@ -36,6 +36,8 @@ dependencies {
     implementation("com.alibaba:fastjson:1.2.76")
         implementation("org.projectlombok:lombok:1.18.24") // 使用最新版本
 //        annotationProcessor 'org.projectlombok:lombok:1.18.24' // 使用最新版本
+    implementation("org.usb4java:usb4java:1.3.0")
+
 
 }
 
