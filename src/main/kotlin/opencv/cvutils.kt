@@ -201,6 +201,12 @@ fun BufferedImage.hasImage(template: BufferedImage,isAlpha:Boolean=false,rate: D
             mask
         )
         val rrr = Core.minMaxLoc(result)
+        mat.release()
+        mask.release()
+        channels.forEach {
+            it.release()
+        }
+        result.release()
         return rrr.maxVal>=rate
     }else{
         return MatSearch.templateFit(template.toMat3(), this.toMat3(),rate)
