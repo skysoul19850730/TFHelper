@@ -307,6 +307,9 @@ object App {
             log("未检测到窗口")
             return false
         }
+
+//        WeChatWindowHelper.removeWindowBorderCompletely(tf)
+
         val rect = Window.getWindowRect(tf)
         val info = WinUser.WINDOWINFO()
         User32.INSTANCE.GetWindowInfo(tf, info)
