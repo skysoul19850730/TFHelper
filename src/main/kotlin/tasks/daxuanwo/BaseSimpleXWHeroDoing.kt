@@ -1,5 +1,6 @@
 package tasks.daxuanwo
 
+import MainData
 import data.Config
 import data.HeroBean
 import data.MPoint
@@ -475,11 +476,15 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         GlobalScope.launch {
             while(curGuan == 69 && running){
                 val img = getImage(checkRect)
-
+                MainData.curGuanKaDes.value="69关，正在检测标记"
+                log(MainData.curGuanKaDes.value,true)
                 if(img.hasImage(platImg,true)){
-
+                    MainData.curGuanKaDes.value="检测到标记，4秒后下卡"
+                    log(MainData.curGuanKaDes.value)
                     delay(4000)
                     g69State = 1
+                    MainData.curGuanKaDes.value="发出下卡指令，10秒后再检测"
+                    log(MainData.curGuanKaDes.value,true)
                     delay(10000)//等10秒再验，可能不止10秒，得普攻4下左右吧
                 }
                 delay(200)
