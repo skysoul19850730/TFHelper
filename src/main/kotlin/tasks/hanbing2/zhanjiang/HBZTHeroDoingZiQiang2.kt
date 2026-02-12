@@ -10,7 +10,7 @@ import ui.zhandou.hanbing.HanBingModel
 import java.awt.event.KeyEvent
 
 class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
-    val isRenwu = true
+    val isRenwu = false
 
 
     val zhanjiang = HeroCreator.zhanjiang.create()
@@ -53,7 +53,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
             }
         }
 
-        addGuanDealWithHerosFull(19, listOf(zhanjiang, gugu, jiaonv, tieqi, wangjiang, feiting),null,{ longxin })
+        addGuanDealWithHerosFull(19, listOf(zhanjiang, gugu, jiaonv, tieqi, wangjiang, feiting), null, { longxin })
 
         addGuanDeal(39) {
             over {
@@ -192,14 +192,18 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
             if (tianshi.isFull()) {
                 carDoing.downHero(tianshi)
             }
-            if(yuren.isFull()){
+            if (yuren.isFull()) {
                 carDoing.downHero(yuren)
             }
 
-            if (tieqi.currentLevel < 3 || tianshi.currentLevel < 3 || yuren.currentLevel<3) {
-                val list = listOf(tieqi, tianshi, yuren).filter { it.currentLevel<3 }
-                val useGuang = list.size == 3 //不等3代表有的已经到3了，不能用光了
-                heros.upAny(list, useGuang = useGuang)
+            if (tieqi.currentLevel < 3 || tianshi.currentLevel < 3 || yuren.currentLevel < 3) {
+                val list = arrayListOf(tieqi, tianshi, yuren).filter {
+                    val r = it.currentLevel < 3
+                    log("判断 ${it.heroName} 是否可以上，结果为 $r")
+                    r
+                }
+                val useGuang = (list.size == 3) //不等3代表有的已经到3了，不能用光了
+                return heros.upAny(list, useGuang = useGuang)
 
             } else {
                 //等点名
