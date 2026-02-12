@@ -62,7 +62,8 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
 
         add49WithQiu(gugu,moqiu,5000)
 
-        add69()
+        add50(listOf(zhanjiang,feiting,tieqi,niutou,gugu,yuren,haiyao), listOf(haiyao,yuren))
+        add69(auto = true)
         curGuanDeal = guanDealList.get(0)
     }
 

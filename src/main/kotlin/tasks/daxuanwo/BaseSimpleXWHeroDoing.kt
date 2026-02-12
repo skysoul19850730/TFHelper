@@ -622,7 +622,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             delay(16000)//废话
             val targetRect = MRect.createWH(337, 320, 424, 80)
             val folder = "${Config.platName}/tezheng/xuanwo/xw49/"
-            val pjv = getImageFromRes("${folder}tjn_1") to "jv"
+            val pjv = getImageFromRes("${folder}tjn_1.png") to "jv"
             val psm = getImageFromRes("${folder}tsm_1.png") to "sm"
             val psy = getImageFromRes("${folder}thy_1.png") to "sy"
             val pzhu = getImageFromRes("${folder}tzhu_1.png") to "zhu"
