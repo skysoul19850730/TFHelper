@@ -163,5 +163,14 @@ fun Int.toHSB():FloatArray{
     return Color.RGBtoHSB(this shr 16 and 0xFF, this shr 8 and 0xFF, this  and 0xFF, null)
 }
 fun Int.toHSBFirst():Int{
-    return (Color.RGBtoHSB(this shr 16 and 0xFF, this shr 8 and 0xFF, this  and 0xFF, null)[0]*360).toInt()
+    return (toHSB()[0]*360).toInt()
+}
+
+fun Int.rgbIsRed(dt:Int=15):Boolean{
+    val hsb = this.toHSB()
+    if(hsb[1] >0.5 && hsb[2] >0.5){
+        val ff = (hsb[0]*360).toInt()
+        return ff in 0..dt || ff in 360-dt..360
+    }
+    return false
 }

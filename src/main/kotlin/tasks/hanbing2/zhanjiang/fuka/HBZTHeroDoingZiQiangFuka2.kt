@@ -207,7 +207,7 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
                 "白球撞上后 按3 进入监听点名，期间可以按数字键盘进行下卡，点名结束后，可以按3重新进入白球卡阶段（下萨满补到3星）"
         })
 
-        addGuan210(arrayListOf(yuren, niutou, dianfa, xiaoye, tianshi, sishen))
+        addGuan210(arrayListOf(yuren, niutou, sishen, xiaoye, tianshi, dianfa))
         curGuanDeal = guanDealList.first()
     }
 

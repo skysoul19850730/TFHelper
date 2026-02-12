@@ -193,8 +193,9 @@ fun BufferedImage.hasImage(template: BufferedImage,isAlpha:Boolean=false,rate: D
         val mask = Mat()
         Core.compare(a, Scalar(1.0), mask, Core.CMP_GT) // alpha > 0 → 255
         val result = Mat()
+        val target = this.toMat4()
         Imgproc.matchTemplate(
-            this.toMat4(),
+            target,
             mat,
             result,
             Imgproc.TM_CCORR_NORMED, // 支持 mask
@@ -206,10 +207,17 @@ fun BufferedImage.hasImage(template: BufferedImage,isAlpha:Boolean=false,rate: D
         channels.forEach {
             it.release()
         }
+        target.release()
         result.release()
         return rrr.maxVal>=rate
     }else{
-        return MatSearch.templateFit(template.toMat3(), this.toMat3(),rate)
+        val tM3 = template.toMat3()
+        val target = this.toMat3()
+
+        val result = MatSearch.templateFit(tM3, target,rate)
+        tM3.release()
+        target.release()
+        return result
     }
 }
 

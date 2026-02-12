@@ -1,5 +1,6 @@
 package tasks.daxuanwo
 
+import MainData
 import data.Config
 import data.HeroBean
 import data.MPoint
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import log
+import opencv.hasImage
 import tasks.Boss
 import tasks.SimpleHeZuoHeroDoing
 import tasks.XueLiang
@@ -31,7 +33,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     var midHeros69: List<HeroBean>? = null
 
     var auto29 = true
-    var auto59 = false
+    var auto59 = true
     var auto79 = true
     var auto89 = true
 
@@ -83,8 +85,9 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     }
 
 
-    fun add50(fullsHeros: List<HeroBean>, midHeros: List<HeroBean>) {
+    fun add50(fullsHeros: List<HeroBean>, midHeros: List<HeroBean>,onlySetMid:Boolean = false) {
         midHeros69 = midHeros
+        if(onlySetMid)return
         //这里要晚一点
         addGuanDeal(52) {
             over {
@@ -340,7 +343,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
         super.onGuangqiuPost()
     }
 
-    fun add69(fixeMidHeros: List<HeroBean>? = null, hunqiu: HeroBean? = null) {
+    fun add69(fixeMidHeros: List<HeroBean>? = null, hunqiu: HeroBean? = null,auto:Boolean = false) {
         if (fixeMidHeros != null) {//这种是为了 类似天使这种只能68，69再上，防止抢兵的，中间先上别的，68的时候再修正成天使
 
             addGuanDealWithHerosFull(68, fixeMidHeros, midHeros69?.filter {
@@ -359,14 +362,14 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                     if (midHeros69?.all { it.isFull() } == true) {
                         while (g69State == 0 && curGuan < 70) {
                             delay(200)
-                            val outIndex = g69StartBoss?.invoke(this, 0) ?: -1
+                            val outIndex = g69StartBoss?.invoke(this, 2) ?: -1
                             if (outIndex > -1) {
                                 return@chooseHero outIndex
                             }
                         }
                     } else {
 
-                        val outIndex = g69StartBoss?.invoke(this, 0) ?: -1
+                        val outIndex = g69StartBoss?.invoke(this, 1) ?: -1
                         if (outIndex > -1) {
                             return@chooseHero outIndex
                         }
@@ -457,11 +460,38 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 g69allNeedStar = midHeros69!!.sumOf {
                     it.fullStarNum
                 }
+                if(auto) {
+                    start69Listener()
+                }
             }
 
             des = "69关，按0依次执行 下中间两个或上满中间两个"
         }
     }
+
+    private fun start69Listener(){
+
+        val checkRect = MRect.createWH(78, 326, 205, 55)
+        val platImg = getImageFromRes("${Config.platName}/tezheng/xuanwo/xw69.png")
+        GlobalScope.launch {
+            while(curGuan == 69 && running){
+                val img = getImage(checkRect)
+                MainData.curGuanKaDes.value="69关，正在检测标记"
+                log(MainData.curGuanKaDes.value,true)
+                if(img.hasImage(platImg,true)){
+                    MainData.curGuanKaDes.value="检测到标记，4秒后下卡"
+                    log(MainData.curGuanKaDes.value)
+                    delay(4000)
+                    g69State = 1
+                    MainData.curGuanKaDes.value="发出下卡指令，10秒后再检测"
+                    log(MainData.curGuanKaDes.value,true)
+                    delay(10000)//等10秒再验，可能不止10秒，得普攻4下左右吧
+                }
+                delay(200)
+            }
+        }
+    }
+
 
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
@@ -600,12 +630,12 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
             val plats = listOf(pjv, psm, psy, pzhu)
             var jvsmCount = 0
             while (curGuan == 49 && g49 < 2) {
-
+                delay(100)
                 val img = getImage(targetRect)
                 log("开始检测49一个图")
                 plats.forEach { plat ->
 
-                    delay(100)
+
                     val pair = slidingPixelMatch(plat.first, img)
                     log(" ${pair.first} 位置${pair.second?.x} 名字;${plat.second}")
                     if (pair.first > 0.15) {
