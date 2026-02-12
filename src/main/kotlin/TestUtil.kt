@@ -40,9 +40,9 @@ fun main() {
 //        WX89.doing = false
 //    }
 
-
+    WX69Test.test()
 //    Ay139Test.test()
-    WX79Test.test()
+//    WX79Test.test()
 //    WX49Test.test()
 //    getKeyImg()
 //    getSmallImg()

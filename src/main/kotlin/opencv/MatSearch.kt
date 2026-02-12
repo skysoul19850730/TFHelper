@@ -23,7 +23,9 @@ object MatSearch {
     fun templateMatch(template: Mat, target: Mat): Core.MinMaxLocResult {
         val result = Mat()
         Imgproc.matchTemplate(target, template, result, Imgproc.TM_CCOEFF_NORMED)
-        return Core.minMaxLoc(result)
+        val rr = Core.minMaxLoc(result)
+        result.release()
+        return rr
     }
 
     fun templateFit(template: Mat, target: Mat,rate: Double = 0.75):Boolean{

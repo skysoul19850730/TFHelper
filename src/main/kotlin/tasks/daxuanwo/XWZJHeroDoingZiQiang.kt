@@ -62,6 +62,7 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
 
         add49WithQiu(gugu,moqiu,5000)
 
+        add69()
         curGuanDeal = guanDealList.get(0)
     }
 
