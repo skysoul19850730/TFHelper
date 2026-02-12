@@ -1,3 +1,4 @@
+import com.skysoul.pdftool.WeChatWindowHelper
 import data.Config
 import data.MRect
 import kotlinx.coroutines.GlobalScope
@@ -20,9 +21,15 @@ import java.io.File
 object TestUtil {
     suspend fun test() {
         val start = System.currentTimeMillis()
-        WX89.testOne {
-            false
-        }
+        val img = WeChatWindowHelper.captureWindow(App.tfWindow!!,false)
+        val end1 = System.currentTimeMillis()
+        log("耗时：${end1-start}")
+        val img2 = getImage(App.rectWindow)
+        val end2 = System.currentTimeMillis()
+        log("耗时：${end2-end1}")
+//        WX89.testOne {
+//            false
+//        }
 //        var count = 0
 //        App.startAutoSave(50)
 //        GlobalScope.launch {
