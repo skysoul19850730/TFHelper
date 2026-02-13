@@ -56,8 +56,8 @@ abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
     fun add109(){
         An109(this).addToHeroDoing()
     }
-    fun add139(){
-        Ay139(this).addToHeroDoing()
+    fun add139(test:Boolean = true){
+        Ay139(this,test).addToHeroDoing()
     }
 
 

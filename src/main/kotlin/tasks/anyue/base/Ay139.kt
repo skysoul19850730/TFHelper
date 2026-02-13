@@ -35,7 +35,12 @@ class Ay139(val heroDoing: BaseAnYueHeroDoing, val test: Boolean = true) : AnSub
         heroDoing.apply {
 
             if (test) {
-                autoShibie()
+                addGuanDeal(139){
+                    onlyDo {
+                        autoShibie()
+                    }
+                }
+
             } else {
                 val bingqiu = heros.firstOrNull { it.heroName == "bingqiu" } ?: return //没冰球就不控
                 addGuanDeal(139) {

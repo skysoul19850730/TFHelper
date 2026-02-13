@@ -29,8 +29,12 @@ class An49(val heroDoing: BaseAnYueHeroDoing ,val test:Boolean = true) : AnSub {
         heroDoing.apply {
             an49 = this@An49
             if( test){
-                GlobalScope.launch {
-                    shibieQiu()
+                addGuanDeal(49){
+                    onlyDo {
+                        GlobalScope.launch {
+                            shibieQiu()
+                        }
+                    }
                 }
             }else {
                 gudingShuaQiuTask("bingqiu", 49, 2500, customOverJudge = {
