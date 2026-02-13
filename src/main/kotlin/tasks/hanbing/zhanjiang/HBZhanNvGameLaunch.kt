@@ -16,6 +16,7 @@ import tasks.hanbing2.zhanjiang.fuka.HBZTHeroDoingZiQiangFuka2
 import tasks.shenhai.tianshi.SHTSHeroDoingJing
 import tasks.shenhai.zhanjiang.SHTSHeroDoingBo
 import tasks.shenhai.zhanjiang.SHZJHeroDoingBo
+import ui.MainUIData
 
 class HBZhanNvGameLaunch : IGameLaunch {
 
@@ -107,6 +108,9 @@ class HBZhanNvGameLaunch : IGameLaunch {
             Recognize.BtnOk.click()
             delay(delayLong)
             delay(delayLong)
+            MainUIData.curZDModel.value = null
+            App.stop()
+            isRunning = false
             isHezuoIng = false
         }
     }

@@ -20,9 +20,9 @@ fun colorCompare(c1: java.awt.Color, c2: java.awt.Color, sim: Int = 10): Boolean
 
 fun getImage(rect: MRect = App.rectWindow,window: WinDef.HWND? = App.tfWindow): BufferedImage {
     var img2 =
-        if (houtai ) {
-            WeChatWindowHelper.captureWindow(window!!)!!.getSubImage(rect)
-        } else
+//        if (houtai ) {
+//            WeChatWindowHelper.captureWindow(window!!)!!.getSubImage(rect)
+//        } else
             MRobot.robot.createScreenCapture(Rectangle().apply {
                 x = rect.left
                 y = rect.top
