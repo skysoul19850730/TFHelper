@@ -1,7 +1,9 @@
+import com.skysoul.pdftool.WeChatWindowHelper
 import com.sun.jna.platform.win32.WinDef
 import data.Config
 import data.MRect
 import utils.MRobot
+import utils.MRobot.houtai
 import java.awt.Rectangle
 import java.awt.image.BufferedImage
 import java.io.File
@@ -18,9 +20,9 @@ fun colorCompare(c1: java.awt.Color, c2: java.awt.Color, sim: Int = 10): Boolean
 
 fun getImage(rect: MRect = App.rectWindow,window: WinDef.HWND? = App.tfWindow): BufferedImage {
     var img2 =
-//        if (houtai && window!=null && window == WxUtil.wxWindow) {
-//            GDI32Util.getScreenshot(window).getSubImage(rect)
-//        } else
+        if (houtai ) {
+            WeChatWindowHelper.captureWindow(window!!)!!.getSubImage(rect)
+        } else
             MRobot.robot.createScreenCapture(Rectangle().apply {
                 x = rect.left
                 y = rect.top
