@@ -579,8 +579,8 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
         logOnly("上卡的index 是 ${heroChoose}")
         lastHeroPres = hs
         if (heroChoose > -1) {
-            lastHeroPres = null
             doUpHero(hs.get(heroChoose)!!, heroChoose)
+            lastHeroPres = null
         } else {
             doAfterNoHeroSelected()
         }
@@ -654,9 +654,35 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
                 var changeOne = changeHeroWhenNoSpace(heroBean)
                 if (changeOne != null) {//钱不够扩建时，是否需要替换已在车上的卡
                     log("没钱扩建，替换英雄")
-                    carDoing.downHero(changeOne)
-                    delay(50)
-                    doUpHeroDeal(rect)
+                    var needKuo = false
+                    if(changeOne.isInCar()) {//返回的在车上，代表替换，下卡再上
+                        carDoing.downHero(changeOne)
+                        delay(50)
+                    }else{
+                        //否则代表换上其他卡，此时主要是魔球，土球，暗球等，当然也可以换成其他在车上的可能
+                        lastHeroPres?.let {
+                            val reIndex = it.indexOf(changeOne)
+                            if(reIndex>-1) {
+                                rect = when (reIndex) {
+                                    0 -> Config.zhandou_hero1CheckRect
+                                    1 -> Config.zhandou_hero2CheckRect
+                                    else -> Config.zhandou_hero3CheckRect
+                                }
+                                if(changeOne.needCar) { //也可能changeHeroWhenNoSpace返回的不在车上
+                                    needKuo = true
+                                }
+                            }else{//如果返回的 不在预选里，那就阔建了
+                                needKuo = true
+                            }
+                        }
+                    }
+                    if(needKuo){
+                        while (Config.rect4KuojianColor.hasColor(Color.RED)) {
+                            delay(50)
+                        }
+                        log("点击扩建")
+                    }
+                    doUpHeroDeal(rect,needKuo)
 //                    MRobot.singleClick(MPoint(rect.clickPoint.x, rect.clickPoint.y + 25))
                 } else {//不替换就等钱够
                     while (Config.rect4KuojianColor.hasColor(Color.RED)) {

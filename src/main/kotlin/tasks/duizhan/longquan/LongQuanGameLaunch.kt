@@ -1,5 +1,6 @@
 package tasks.duizhan.longquan
 
+import androidx.compose.runtime.mutableStateOf
 import data.Config
 import data.Config.adv_point
 import data.Config.delayLong
@@ -10,13 +11,18 @@ import kotlinx.coroutines.*
 import log
 import logOnly
 import tasks.IGameLaunch
+import tasks.duizhan.zhanjiang.ZhanjiangHeroDoing2
 
 class LongQuanGameLaunch : IGameLaunch {
+
+    companion object {
+        val danci = mutableStateOf(false)
+    }
 
     var isRunning = false
     var kaida = false
 
-    var heroDoing: LongQuanHeroDoing2? = null
+    var heroDoing: ZhanjiangHeroDoing2? = null
 
     var mJob: Job? = null
 
@@ -102,6 +108,14 @@ class LongQuanGameLaunch : IGameLaunch {
 
     private suspend fun checkDuizhan() {
         log("checkDuizhan")
+
+        if (danci.value) {
+            kaida = true
+//            withContext(Dispatchers.Main){
+            startOneGame()
+            return
+        }
+
         if (Duizhan.isFit()) {
             log("checkDuizhan ok")
 //            while (Duizhan.isFit()) {
@@ -126,6 +140,8 @@ class LongQuanGameLaunch : IGameLaunch {
             log("checkIfEnd ok")
             stopOneGame()
             delay(100)
+
+            if (danci.value) return
 
             if (DuiZhanResultSuc.isFit()) {
                 log("战斗胜利")
@@ -242,7 +258,7 @@ class LongQuanGameLaunch : IGameLaunch {
     private suspend fun startOneGame() {
         var renji = failCount >= 2
         renji = false
-        heroDoing = LongQuanHeroDoing2(renji)
+        heroDoing = ZhanjiangHeroDoing2(renji)
         heroDoing!!.init()
         heroDoing!!.start()
     }

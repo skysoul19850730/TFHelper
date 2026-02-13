@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import data.Config
+import tasks.duizhan.longquan.LongQuanGameLaunch
 import ui.weights.MCheckBox
 import ui.zhandou.data.ZhanDouModel
 import ui.zhandou.hanbing.HanBingModel
@@ -43,6 +44,7 @@ class DuiZhanModel() : ZhanDouModel("对战") {
             }
             MCheckBox("看失败广告", Config.viewFailAdv)
             MCheckBox("投降", Config.touxiangAuto)
+            MCheckBox("单次对战(仅龙拳)",LongQuanGameLaunch.danci)
             if (Config.touxiangAuto.value) {
                 MCheckBox("全投降", Config.touxiangAll)
             }

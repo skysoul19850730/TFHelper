@@ -74,10 +74,8 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
         if (heroBean.needCar) {
             mChePositionCount = max(mChePositionCount, heroCountInCar())
         }
-        if (heroBean == xiaolu) {
+        if (heroBean == xiaolu || heroBean == bingnv) {
             carDoing.downHero(heroBean)
-        } else if (heroBean == bingnv) {
-            carDoing.downHero(bingnv)
         }
         if (renji) {
         } else {
@@ -100,22 +98,52 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
 
 
     override suspend fun dealHero(heros: List<HeroBean?>): Int {
-
+        val listBeforeZJ = listOf(xiaochou, wangjiang)
         val zj = heros.upAny(zhangjiang)
-        if (zj >= -1) return zj
+        if (zj >= -1) {
+            //战将没满时，如果有之前上了防止刷不到战将的，就下来
+            listBeforeZJ.forEach {
+                carDoing.downHero(it)
+            }
+            return zj
+        }
+
         if (zhangjiang.isFull()) {
-            val nvw = heros.upAny(nvwang,shengqi)
+            val list = listOf(nvwang, shengqi, niutou, xiaochou, wangjiang)
+            val inCar = list.filter { it.isInCar() }
+            val notInCar = list.filter { !it.isInCar() }
+            val upList = arrayListOf<HeroBean>().apply {
+                addAll(notInCar)
+                addAll(inCar)
+            }
+            val nvw = heros.upAny(upList)
             if (nvw > -1) {
                 return nvw
             }
         }
         val cf = heros.upAny(xiaolu, bingnv)
         if (cf >= -1) return cf
+        val tu = heros.indexOf(tuqiu)
+        if (tu > -1) {
+            return tu
+        }
+
+        if (!zhangjiang.isInCar()) {
+            val list = listOf(xiaochou, wangjiang)//这里去掉女王，女王攻速慢，而且一下清兵太多，抢战将兵
+            if (list.any { it.isInCar() }) {//没战将时，上面的也都没走，就先上一个输出
+                return -1
+            }
+            return heros.upAny(list)
+        }
 
         return -1
     }
 
     override fun changeHeroWhenNoSpace(heroBean: HeroBean): HeroBean? {
+        if (mChePositionCount >= 4) {
+            //遇到上不了的，就尝试土球
+            return tuqiu
+        }
         return null
     }
 
