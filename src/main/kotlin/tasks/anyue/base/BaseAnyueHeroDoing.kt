@@ -35,9 +35,9 @@ abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
 
         An39(this).addToHeroDoing()
     }
-    fun add49() {
+    fun add49(test:Boolean = true) {
 
-        An49(this).addToHeroDoing()
+        An49(this,test).addToHeroDoing()
     }
 
     fun add69(qius69: List<HeroBean>){

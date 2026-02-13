@@ -90,6 +90,16 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
         })
     }
 
+    fun downHero(guan:Int,vararg heros:HeroBean){
+        addGuanDeal(guan) {
+            onlyDo {
+                heros.forEach {
+                    carDoing.downHero(it)
+                }
+            }
+        }
+    }
+
     fun addGuanDealWithHerosFull(
         guan: Int,
         fullHeros: List<HeroBean>,
@@ -258,6 +268,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
                 }
             },
             chooseHero = {
+                //这里需要增加一个外面终止后，这里delay后还要刷最后一个的问题，尤其冰球
                 var index = indexOfFirst {
                     it?.heroName == name
                 }

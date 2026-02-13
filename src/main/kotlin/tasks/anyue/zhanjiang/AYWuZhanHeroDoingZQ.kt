@@ -18,7 +18,7 @@ class AYWuZhanHeroDoingZQ : BaseAnYueHeroDoing() {
     val xiaoye = HeroCreator.xiaoye.create()
     val feiting = HeroCreator.feiting.create()
 
-    val tuling = HeroCreator.tuling.create()
+    val guangqiu = HeroCreator.guangqiu.create()
     val dijing = HeroCreator.dijing.create()
     val tianshi = HeroCreator.tianshi.create()
 
@@ -26,7 +26,7 @@ class AYWuZhanHeroDoingZQ : BaseAnYueHeroDoing() {
 
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, tieqi, tuling, tianshi, gugu, feiting, xiaoye, dijing, bingqiu, yuren)
+        heros = arrayListOf(zhanjiang, tieqi, guangqiu, tianshi, gugu, feiting, xiaoye, dijing, bingqiu, yuren)
 
         addGuanDeal(0) {
             over {
@@ -47,18 +47,28 @@ class AYWuZhanHeroDoingZQ : BaseAnYueHeroDoing() {
 
         add39()
 
-        addGuanDealWithHerosFull(40, listOf(tuling), listOf(tianshi))
 
-        add49()
+        downHero(40,tianshi)
+        addGuanDealWithHerosFull(48, listOf(tianshi))
+
+
+
+        add49(false)
+        downHero(50,tianshi)
+        addGuanDealWithHerosFull(59, listOf(tianshi))
+        downHero(60,tianshi)
+        addGuanDealWithHerosFull(68, listOf(tianshi))
 
 
         add69(listOf(bingqiu))
+
+        downHero(70,tianshi)
         add79()
         add89()
         add99()
 
 
-        addGuanDealWithHerosFull(100, listOf(tianshi), listOf(yuren))
+        addGuanDealWithHerosFull(100, listOf(tianshi))
 
         add109()
 
