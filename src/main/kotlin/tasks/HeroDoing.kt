@@ -364,6 +364,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
                 )
             )
         }
+
         return hs!!
     }
 
@@ -875,6 +876,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
                     it.resume(arrayListOf(h1, h2, h3))
                 }
             } catch (e: Exception) {
+                log(getImage(App.rectWindow))
                 if (h1 == null && h2 == null && h3 == null) {
                     it.resume(null)
                 } else {

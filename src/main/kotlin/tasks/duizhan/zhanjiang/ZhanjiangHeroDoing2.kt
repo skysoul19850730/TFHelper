@@ -24,7 +24,7 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
     val niutou = HeroCreator.niutou.create()
     val xiaochou = HeroCreator.xiaochou.create()
 
-    val tuqiu = HeroCreator.tuqiu.create()
+    val tuqiu = HeroCreator.dijing.create()
 
 
     fun isGaojiMengyan(): Boolean {
@@ -100,7 +100,7 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
     override suspend fun dealHero(heros: List<HeroBean?>): Int {
         val listBeforeZJ = listOf(xiaochou, wangjiang)
         val zj = heros.upAny(zhangjiang)
-        if (zj >= -1) {
+        if (zj > -1) {
             //战将没满时，如果有之前上了防止刷不到战将的，就下来
             listBeforeZJ.forEach {
                 carDoing.downHero(it)
@@ -123,10 +123,10 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
         }
         val cf = heros.upAny(xiaolu, bingnv)
         if (cf >= -1) return cf
-        val tu = heros.indexOf(tuqiu)
-        if (tu > -1) {
-            return tu
-        }
+//        val tu = heros.indexOf(tuqiu)
+//        if (tu > -1) {
+//            return tu
+//        }
 
         if (!zhangjiang.isInCar()) {
             val list = listOf(xiaochou, wangjiang)//这里去掉女王，女王攻速慢，而且一下清兵太多，抢战将兵
@@ -140,10 +140,10 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
     }
 
     override fun changeHeroWhenNoSpace(heroBean: HeroBean): HeroBean? {
-        if (mChePositionCount >= 4) {
-            //遇到上不了的，就尝试土球
-            return tuqiu
-        }
+//        if (mChePositionCount >= 4) {
+//            //遇到上不了的，就尝试土球
+//            return tuqiu
+//        }
         return null
     }
 

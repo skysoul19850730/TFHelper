@@ -16,6 +16,7 @@ import org.opencv.core.Scalar
 import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
 import tasks.daxuanwo.utils.WX89
+import utils.ImgUtil
 import utils.ImgUtil.forEach
 import utils.MRobot
 import java.awt.Color
@@ -31,6 +32,10 @@ fun main() {
     }
     val start = System.currentTimeMillis()
 
+    val img = getImageFromRes("xiaochengxu/heros/xiaolu/xiaolu/xiaolu0.png")
+    val img2 = getImageFromRes("xiaochengxu/heros/tuqiu/tuqiu/tuqiu0.png")
+
+    val r= ImgUtil.isImageSim(img,img2)
 //    WX89.autoDo {
 //        System.currentTimeMillis()-start>10000
 //    }

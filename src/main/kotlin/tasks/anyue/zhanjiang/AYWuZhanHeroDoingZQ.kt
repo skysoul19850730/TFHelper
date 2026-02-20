@@ -62,13 +62,13 @@ class AYWuZhanHeroDoingZQ : BaseAnYueHeroDoing() {
 
         add69(listOf(bingqiu))
 
-        downHero(70,tianshi)
+//        downHero(70,tianshi)
         add79()
         add89()
         add99()
 
 
-        addGuanDealWithHerosFull(100, listOf(tianshi))
+//        addGuanDealWithHerosFull(100, listOf(tianshi))
 
         add109()
 

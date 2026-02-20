@@ -16,7 +16,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
 
     val tieqi = HeroCreator.tieqi.create()
     val zhanjiang = HeroCreator.zhanjiang.create()
-    val tuling = HeroCreator.tuling.create()
+    val dijing = HeroCreator.dijing.create()
     val sishen = HeroCreator.sishen.create()
     val feiting = HeroCreator.feiting.create()
     val tianshi = HeroCreator.tianshi.create()
@@ -33,15 +33,15 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
     }
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, tieqi, tianshi, jiaonv, sishen, feiting, tuling, niutou, guangqiu, huanqiu)
+        heros = arrayListOf(zhanjiang, tieqi, tianshi, jiaonv, sishen, feiting, dijing, niutou, guangqiu, huanqiu)
 
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang, sishen, jiaonv, niutou, feiting)
+                fulls(zhanjiang,dijing, sishen, jiaonv, niutou, feiting)
             }
             chooseHero {
                 if (zhanjiang.isInCar()) {
-                    upAny(zhanjiang, jiaonv, niutou, sishen, feiting)
+                    upAny(zhanjiang,dijing, jiaonv, niutou, sishen, feiting)
                 } else {
                     upAny(zhanjiang)
                 }
@@ -52,14 +52,14 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
 
         changeZhuangbei(30) { qiangxi }
 
-        addGuanDealWithHerosFull(38, listOf(tianshi), delay = 2000)
+        addGuanDealWithHerosFull(38, listOf(tianshi), listOf(dijing), delay = 2000)
 
 
         add39()
 
         addGuanDealWithHerosFull(
             40,
-            listOf(zhanjiang, tieqi, sishen, niutou, jiaonv, tuling, feiting),
+            listOf(zhanjiang, tieqi, sishen, niutou, jiaonv, dijing, feiting),
             downHeros = listOf(tianshi),
             { yandou })
 
@@ -68,7 +68,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
         changeZhuangbei(52) { qiangxi }
 
         An69(this, listOf(huanqiu)).addToHeroDoing()
-        addGuanDealWithHerosFull(70, listOf(tianshi), listOf(niutou))
+        addGuanDealWithHerosFull(70, listOf(tianshi), listOf(dijing))
 
 
         guanDealList.add(GuanDeal(111, onlyDoSomething = {
@@ -142,7 +142,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
         }
 
         //这里不能150，因为149的over态也是150（>149)所以会并发，这里触发下卡，149触发上飞艇，导致飞艇计数错误
-        addGuanDealWithHerosFull(152, listOf(niutou, feiting), listOf(tuling))
+        addGuanDealWithHerosFull(152, listOf( feiting), listOf())
 
         guanDealList.add(GuanDeal(179, isOver = {
             curGuan > 179
@@ -173,7 +173,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
         }
 //        addGuanDeal(180){
 //            over {
-//                tuling.currentLevel==2 &&
+//                dijing.currentLevel==2 &&
 //            }
 //        }
 
