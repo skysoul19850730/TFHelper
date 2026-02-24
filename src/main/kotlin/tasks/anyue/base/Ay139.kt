@@ -86,7 +86,7 @@ class Ay139(val heroDoing: BaseAnYueHeroDoing, val test: Boolean = true) : AnSub
                     delay(200)
                 } else {
                     log("底部结果：${bottom.toPString()}")
-                    if (bottom == differentMat) {//但这个不用操作，本身就一直冰
+                    if (bottom.toPString() == differentMat?.toPString()) {//但这个不用操作，本身就一直冰
                         log("底部与不同一致,停止冰")
                         //是不同的那个
                         state = 0
