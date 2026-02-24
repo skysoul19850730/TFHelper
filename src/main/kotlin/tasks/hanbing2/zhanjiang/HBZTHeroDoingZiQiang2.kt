@@ -238,7 +238,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
             if (carDoing.hasAllOpenSpace() || carDoing.hasNotFull()) {
                 return heros.upAny(zhanjiang, yuren, jiaonv, tieqi, tianshi, gugu, feiting)
             } else {
-                while (step199 == 2 && curGuan == 199) {
+                while (step199 == 2 && curGuan == 199 && running) {
                     var dianmingIndex = carDoing.getHB199Selected()
                     other = otherCarDoing.getHB199Selected()
                     if (position199 > -1 || dianmingIndex > -1 || other > -1) {

@@ -49,10 +49,12 @@ object XueLiang {
             var checkPoint = MPoint(x, y)
             if (colorCompare(Color(Image.getRGB(checkPoint.x, checkPoint.y)), blackColor)) {
                 log("getXueLiang end")
+                img?.flush()
                 return (x - mRect.left).toFloat() / mRect.width
             }
         }
         log("getXueLiang end")
+        img?.flush()
         return 1f
     }
 
@@ -63,8 +65,8 @@ object XueLiang {
     suspend fun xueNotBack(xueLess: Float = 0.95f, over: (() -> Boolean)? = null) {
         var xueState = 0
         var startTimt = System.currentTimeMillis()
-        while (xueState<5 && over?.invoke() != true) {
-            if(System.currentTimeMillis() - startTimt >5*60* 1000){//防止外面异常结束，over一直不true
+        while (xueState < 5 && over?.invoke() != true) {
+            if (System.currentTimeMillis() - startTimt > 5 * 60 * 1000) {//防止外面异常结束，over一直不true
                 return
             }
             val curXue = getXueLiang()
@@ -87,10 +89,12 @@ object XueLiang {
             if (colorCompare(Color(Image.getRGB(checkPoint.x, checkPoint.y)), blackColor)) {
                 var xue = (mRectBoss.right - x).toFloat() / mRectBoss.width
                 log("getXueLiang end:${xue}")
+                img?.flush()
                 return xue
             }
         }
         log("getXueLiang end")
+        img?.flush()
         return 1f
 
     }

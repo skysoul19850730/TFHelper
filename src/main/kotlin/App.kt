@@ -128,7 +128,8 @@ object App {
         GlobalScope.launch {
             while(true){
                 checkMemory()
-                delay(10*60*1000)
+//                delay(10*60*1000)
+                delay(1000)
             }
         }
     }

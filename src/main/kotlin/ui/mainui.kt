@@ -300,6 +300,7 @@ fun mCarInfo() {
     var autoFreshName = mutableStateOf("huanqiu")
     Column(Modifier.width(180.dp).padding(12.dp).border(1.dp,Color.Gray, RoundedCornerShape(4.dp)).padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         VSpace(6)
+        Text(MainData.memoryDes.value)
         Text("战车信息：第${MainData.guan.value}波")
         VSpace(16)
         Row {

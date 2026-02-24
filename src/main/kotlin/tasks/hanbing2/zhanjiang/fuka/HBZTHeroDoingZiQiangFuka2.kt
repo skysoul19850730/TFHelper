@@ -290,7 +290,7 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
             if (carDoing.hasAllOpenSpace() || carDoing.hasNotFull()) {
                 return heros.upBase()
             } else {
-                while (step199Super == 2 && curGuan == 199) {
+                while (step199Super == 2 && curGuan == 199 && running) {
                     var dianmingIndex = carDoing.getHB199Selected()
                     if (position199 > -1 || dianmingIndex > -1) {
                         carDoing.downPosition(position199)

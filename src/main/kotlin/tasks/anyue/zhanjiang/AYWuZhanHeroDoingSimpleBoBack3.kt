@@ -37,11 +37,15 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
 
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang,dijing, sishen, jiaonv, niutou, feiting)
+                fulls(zhanjiang, dijing, sishen, jiaonv, niutou, feiting)
             }
             chooseHero {
                 if (zhanjiang.isInCar()) {
-                    upAny(zhanjiang,dijing, jiaonv, niutou, sishen, feiting)
+                    if (dijing.isInCar()) {
+                        upAny(zhanjiang, dijing, niutou, sishen, feiting, jiaonv)
+                    } else {
+                        upAny(dijing, zhanjiang, niutou, sishen, feiting, jiaonv)
+                    }
                 } else {
                     upAny(zhanjiang)
                 }
@@ -63,7 +67,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
             downHeros = listOf(tianshi),
             { yandou })
 
-        add49()
+//        add49()
 
         changeZhuangbei(52) { qiangxi }
 
@@ -101,6 +105,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
 
                 }
                 GlobalScope.launch {
+                    delay(15000)
                     check129Xue()
                 }
             })
@@ -142,7 +147,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
         }
 
         //这里不能150，因为149的over态也是150（>149)所以会并发，这里触发下卡，149触发上飞艇，导致飞艇计数错误
-        addGuanDealWithHerosFull(152, listOf( feiting), listOf())
+        addGuanDealWithHerosFull(152, listOf(feiting), listOf())
 
         guanDealList.add(GuanDeal(179, isOver = {
             curGuan > 179
@@ -196,7 +201,7 @@ class AYWuZhanHeroDoingSimpleBoBack3 : BaseAnYueHeroDoing() {
     //3  特殊态7，冰球触发后按7上土灵，下一轮前按0回初始态。
     var isChecked179 = false
     suspend fun List<HeroBean?>.deal179(): Int {
-        if(tianshi.isFull()){
+        if (tianshi.isFull()) {
             waiting = true
         }
         if (tianshi.currentLevel == 3 && !isChecked179) {
