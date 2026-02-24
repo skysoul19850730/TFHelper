@@ -125,6 +125,12 @@ object App {
         DataManager.init()
         AYUtil.doInit()
         MatSearch.init()
+        GlobalScope.launch {
+            while(true){
+                checkMemory()
+                delay(10*60*1000)
+            }
+        }
     }
 
     fun restartGame() {

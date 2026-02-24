@@ -336,6 +336,8 @@ object MainData {
     var job79TimeDt = mutableStateOf(0L)
 
     var kuangjiangUpTime = mutableStateOf(500L)
+
+    val memoryDes = mutableStateOf("")
 }
 
 
