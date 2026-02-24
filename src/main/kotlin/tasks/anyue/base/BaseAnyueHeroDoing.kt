@@ -24,7 +24,7 @@ abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
 
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
-        if(guan in listOf(49,139,149,159)){
+        if(guan in listOf(-1)){
             App.startAutoSave(200)
         }else{
             App.stopAutoSave()

@@ -54,6 +54,7 @@ fun BufferedImage.saveTo(file: File) {
         file.parentFile.mkdirs()
     }
     ImageIO.write(this, "png", file)
+    this.flush()
 //    log(this)
 }
 fun doDebug(call:()->Unit){
@@ -151,3 +152,18 @@ fun cropImgs(folder:File,rect: MRect){
         getImageFromFile(it).getSubImage(rect).saveTo(File(it.parentFile,"${index}.png"))
     }
 }
+
+
+fun checkMemory() {
+    val runtime = Runtime.getRuntime()
+    val usedMemory = runtime.totalMemory() - runtime.freeMemory()
+    val maxMemory = runtime.maxMemory()
+
+    MainData.memoryDes.value = "maxMemory:${maxMemory / 1024 / 1024}m,usedMemory:${usedMemory / 1024 / 1024}m"
+    if (usedMemory > maxMemory * 0.8) {
+        println("内存使用超过80%，强制GC")
+        System.gc()
+        Thread.sleep(100)
+    }
+}
+
