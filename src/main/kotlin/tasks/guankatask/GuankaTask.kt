@@ -67,7 +67,7 @@ class GuankaTask {
                             setCurGuanIndex(i)
                             has = true
                             //识别到管卡变化，就延迟多点再循环
-//                            delay(2000)
+                            delay(1500)
                             break
                         }
                     }
@@ -77,7 +77,7 @@ class GuankaTask {
 //                    log(curImg)
                 }
 
-                delay(50)
+                delay(200)
             }
         }
     }
