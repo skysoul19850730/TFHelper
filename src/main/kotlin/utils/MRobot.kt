@@ -1,6 +1,7 @@
 package utils
 
 import App
+import com.skysoul.pdftool.WeChatWindowHelper
 import com.sun.jna.platform.unix.X11.XButtonEvent
 import com.sun.jna.platform.win32.BaseTSD
 import com.sun.jna.platform.win32.GDI32
@@ -300,7 +301,13 @@ object MRobot {
 
     suspend fun WinDef.HWND.clickPoint(point: MPoint) {
         withContext(Dispatchers.Main) {
-            var value: Long = ((point.y shl 16) or point.x).toLong()
+            //使用临时x，防止方法在哪里进行了递归调用等情况，可能会让point.x一直加border
+            var x = point.x
+            var y = point.y
+            if(this == App.tfWindow){
+                x += WeChatWindowHelper.borderWidth//如果是游戏窗体，因为窗体可能有border（根据微信版本，如果继续之前覆盖安装的方式，那borderWidth获取的值应该也是0）
+            }
+            var value: Long = ((y shl 16) or x).toLong()
            val result = User32.INSTANCE.SendMessage(this@clickPoint, 0x0201, WinDef.WPARAM(0x0001), WinDef.LPARAM(value.toLong()))
             delay(30)
             val result1 = User32.INSTANCE.SendMessage(this@clickPoint, 0x0202, WinDef.WPARAM(0x0001), WinDef.LPARAM(value.toLong()))

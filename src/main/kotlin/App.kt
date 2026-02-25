@@ -1,5 +1,6 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import com.skysoul.pdftool.WeChatWindowHelper
 import com.sun.jna.platform.win32.User32
 import com.sun.jna.platform.win32.WinDef
 import com.sun.jna.platform.win32.WinUser
@@ -119,7 +120,8 @@ object App {
 
     fun init() {
         doSomeTest()
-        findTfAndMoveTo00()
+//        findTfAndMoveTo00()
+        WeChatWindowHelper.initWindow()
 //        thisWindow = Window.findWindowWithName("塔防助手")
         addKeyListener()
         DataManager.init()

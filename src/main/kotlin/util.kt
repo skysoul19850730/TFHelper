@@ -20,8 +20,8 @@ fun colorCompare(c1: java.awt.Color, c2: java.awt.Color, sim: Int = 10): Boolean
 
 fun getImage(rect: MRect = App.rectWindow,window: WinDef.HWND? = App.tfWindow): BufferedImage {
     var img2 =
-//        if (houtai ) {
-//            WeChatWindowHelper.captureWindow(window!!)!!.getSubImage(rect)
+//        if (houtai && window != null) {//虽然可以后台直接用window截图，但window只能截取整个屏幕，然后再裁剪rect的区域，还是用以前方式
+//            WeChatWindowHelper.captureWindow(window)!!.getSubImage(rect)
 //        } else
             MRobot.robot.createScreenCapture(Rectangle().apply {
                 x = rect.left

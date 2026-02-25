@@ -1,5 +1,6 @@
 package com.skysoul.pdftool
 
+import App
 import com.sun.jna.Native
 import com.sun.jna.Memory
 import com.sun.jna.Pointer
@@ -13,6 +14,9 @@ import com.sun.jna.platform.win32.WinUser
 import com.sun.jna.platform.win32.WinGDI
 import com.sun.jna.platform.win32.GDI32
 import com.sun.jna.ptr.IntByReference
+import data.MRect
+import getSubImage
+import log
 import java.awt.image.BufferedImage
 import java.awt.Robot
 import java.awt.Rectangle
@@ -22,10 +26,17 @@ import java.awt.Rectangle
  */
 @Structure.FieldOrder("cxLeftWidth", "cxRightWidth", "cyTopHeight", "cyBottomHeight")
 class MARGINS : Structure() {
-    @JvmField var cxLeftWidth: Int = 0
-    @JvmField var cxRightWidth: Int = 0
-    @JvmField var cyTopHeight: Int = 0
-    @JvmField var cyBottomHeight: Int = 0
+    @JvmField
+    var cxLeftWidth: Int = 0
+
+    @JvmField
+    var cxRightWidth: Int = 0
+
+    @JvmField
+    var cyTopHeight: Int = 0
+
+    @JvmField
+    var cyBottomHeight: Int = 0
 }
 
 /**
@@ -40,14 +51,25 @@ object WeChatWindowHelper {
     private const val DWMNCRP_DISABLED = 1
     private const val DWMWA_EXTENDED_FRAME_BOUNDS = 9
 
+    var borderWidth = 0
+    var finalWidth = 0
+    var finalHeight = 0
+
     // 加载 dwmapi.dll
     private val dwmapi by lazy {
         try {
             Native.load("dwmapi", DwmApi::class.java)
         } catch (e: Exception) {
-            println("警告: 无法加载 dwmapi.dll, 某些功能可能不可用")
+            log("警告: 无法加载 dwmapi.dll, 某些功能可能不可用")
             null
         }
+    }
+
+    fun initWindow() {
+        val hwnd = findWeChatWindow("塔防精灵")?:return
+        App.tfWindow = hwnd
+        setWindowSize(hwnd,1000,607)
+
     }
 
     /**
@@ -56,7 +78,7 @@ object WeChatWindowHelper {
      * @param title 窗口标题（部分匹配）
      * @return 窗口句柄，未找到返回 null
      */
-    fun findWeChatWindow(title: String? = null): HWND? {
+    private fun findWeChatWindow(title: String? = null): HWND? {
         val windows = mutableListOf<HWND>()
 
         User32.INSTANCE.EnumWindows({ hwnd, _ ->
@@ -85,140 +107,10 @@ object WeChatWindowHelper {
     /**
      * 获取窗口标题
      */
-    fun getWindowTitle(hwnd: HWND): String {
+    private fun getWindowTitle(hwnd: HWND): String {
         val buffer = CharArray(512)
         User32.INSTANCE.GetWindowText(hwnd, buffer, buffer.size)
         return String(buffer).trim('\u0000')
-    }
-
-    /**
-     * 移除窗口阴影（视觉效果）
-     *
-     * @param hwnd 窗口句柄
-     * @return 是否成功
-     */
-    fun removeWindowShadow(hwnd: HWND): Boolean {
-        return try {
-            if (dwmapi == null) {
-                println("DWM API 不可用，尝试使用样式方法")
-                return removeWindowShadowByStyle(hwnd)
-            }
-
-            // 禁用 DWM 非客户区渲染（移除阴影）
-            val policy = IntByReference(DWMNCRP_DISABLED)
-            val result = dwmapi!!.DwmSetWindowAttribute(
-                hwnd,
-                DWMWA_NCRENDERING_POLICY,
-                policy.pointer,
-                4
-            )
-
-            if (result == 0) {
-                println("✓ 成功移除窗口阴影")
-                true
-            } else {
-                println("✗ 移除窗口阴影失败，错误码: $result")
-                false
-            }
-        } catch (e: Exception) {
-            println("移除阴影异常: ${e.message}")
-            false
-        }
-    }
-
-    /**
-     * 彻底移除窗口阴影和占位空间
-     * 使窗口真实大小 = 设置的大小（无任何阴影占位）
-     *
-     * @param hwnd 窗口句柄
-     * @return 是否成功
-     */
-    fun removeWindowShadowCompletely(hwnd: HWND): Boolean {
-        return try {
-            if (dwmapi == null) {
-                println("DWM API 不可用")
-                return false
-            }
-
-            println("开始彻底移除窗口阴影和占位...")
-
-            // 1. 禁用 DWM 阴影渲染
-            val policy = IntByReference(DWMNCRP_DISABLED)
-            val result1 = dwmapi!!.DwmSetWindowAttribute(
-                hwnd,
-                DWMWA_NCRENDERING_POLICY,
-                policy.pointer,
-                4
-            )
-            if (result1 == 0) {
-                println("  ✓ 已禁用 DWM 阴影渲染")
-            } else {
-                println("  ✗ 禁用渲染失败，错误码: $result1")
-            }
-
-            // 2. 设置零边距（关键！移除阴影占位空间）
-            val margins = MARGINS().apply {
-                cxLeftWidth = 0
-                cxRightWidth = 0
-                cyTopHeight = 0
-                cyBottomHeight = 0
-            }
-            val result2 = dwmapi!!.DwmExtendFrameIntoClientArea(hwnd, margins)
-            if (result2 == 0) {
-                println("  ✓ 已设置零边距，移除阴影占位")
-            } else {
-                println("  ✗ 设置边距失败，错误码: $result2")
-            }
-
-            // 3. 移除扩展样式
-            val exStyle = User32.INSTANCE.GetWindowLong(hwnd, WinUser.GWL_EXSTYLE)
-            val newExStyle = exStyle and (WinUser.WS_EX_LAYERED or 0x02000000).inv() // WS_EX_COMPOSITED
-            User32.INSTANCE.SetWindowLong(hwnd, WinUser.GWL_EXSTYLE, newExStyle)
-            println("  ✓ 已移除扩展样式")
-
-            // 4. 强制刷新窗口
-            User32.INSTANCE.SetWindowPos(
-                hwnd, null, 0, 0, 0, 0,
-                WinUser.SWP_NOMOVE or WinUser.SWP_NOSIZE or
-                        WinUser.SWP_NOZORDER or WinUser.SWP_FRAMECHANGED
-            )
-            println("  ✓ 已刷新窗口")
-
-            println("✓ 窗口阴影和占位已彻底移除")
-            true
-        } catch (e: Exception) {
-            println("彻底移除阴影异常: ${e.message}")
-            false
-        }
-    }
-
-    /**
-     * 通过修改窗口样式移除阴影（备用方法）
-     */
-    private fun removeWindowShadowByStyle(hwnd: HWND): Boolean {
-        return try {
-            // 获取当前扩展样式
-            val exStyle = User32.INSTANCE.GetWindowLong(hwnd, WinUser.GWL_EXSTYLE)
-
-            // 移除可能导致阴影的样式
-            val newExStyle = exStyle and WinUser.WS_EX_LAYERED.inv()
-
-            // 设置新样式
-            User32.INSTANCE.SetWindowLong(hwnd, WinUser.GWL_EXSTYLE, newExStyle)
-
-            // 强制刷新窗口
-            User32.INSTANCE.SetWindowPos(
-                hwnd, null, 0, 0, 0, 0,
-                WinUser.SWP_NOMOVE or WinUser.SWP_NOSIZE or
-                        WinUser.SWP_NOZORDER or WinUser.SWP_FRAMECHANGED
-            )
-
-            println("✓ 通过样式修改移除阴影")
-            true
-        } catch (e: Exception) {
-            println("样式修改失败: ${e.message}")
-            false
-        }
     }
 
     /**
@@ -227,10 +119,10 @@ object WeChatWindowHelper {
      * @param hwnd 窗口句柄
      * @return 窗口矩形，失败返回 null
      */
-    fun getWindowRealBounds(hwnd: HWND): RECT? {
+    private fun getWindowRealBounds(hwnd: HWND): RECT? {
         return try {
             if (dwmapi == null) {
-                println("DWM API 不可用，返回普通窗口矩形")
+                log("DWM API 不可用，返回普通窗口矩形")
                 val rect = RECT()
                 User32.INSTANCE.GetWindowRect(hwnd, rect)
                 return rect
@@ -246,7 +138,7 @@ object WeChatWindowHelper {
 
             if (result == 0) rect else null
         } catch (e: Exception) {
-            println("获取窗口边界失败: ${e.message}")
+            log("获取窗口边界失败: ${e.message}")
             null
         }
     }
@@ -263,56 +155,33 @@ object WeChatWindowHelper {
      * @param removeCompletely 是否彻底移除阴影占位（默认 false）
      * @param useClientArea 是否使用客户区尺寸（默认 false）。如果为 true，则 x,y,width,height 表示客户区的位置和大小
      */
-    fun moveWindow(
+    private fun setWindowSize(
         hwnd: HWND,
-        x: Int,
-        y: Int,
         width: Int,
         height: Int,
-        removeShadow: Boolean = true,
-        removeCompletely: Boolean = false,
-        useClientArea: Boolean = false
     ) {
-        println("移动窗口: ${getWindowTitle(hwnd)}")
+        log("移动窗口: ${getWindowTitle(hwnd)}")
 
         // 如果使用客户区尺寸，需要先获取当前边框信息
-        var finalX = x
-        var finalY = y
-        var finalWidth = width
-        var finalHeight = height
+        var finalX = 0
+        var finalY = 0
 
-        if (useClientArea) {
-            println("  客户区模式: 目标位置 ($x, $y), 目标大小 ${width}x${height}")
 
-            // 获取当前窗口信息以计算边框
-            val info = getWindowInfo(hwnd)
-            val borderWidth = info.getBorderWidth()
-            val titleBarHeight = info.getTitleBarHeight()
+        // 获取当前窗口信息以计算边框
+        val info = getWindowInfo(hwnd)
+        borderWidth = info.getBorderWidth()
+        val titleBarHeight = info.getTitleBarHeight()
 
-            println("  边框宽度: ${borderWidth}px, 标题栏高度: ${titleBarHeight}px")
+        log("  边框宽度: ${borderWidth}px, 标题栏高度: ${titleBarHeight}px")
 
-            // 调整窗口位置和大小以实现客户区目标
-            finalX = x - borderWidth
-            finalY = y - titleBarHeight
-            finalWidth = width + borderWidth * 2
-            finalHeight = height + titleBarHeight + borderWidth
+        // 调整窗口位置和大小以实现客户区目标
+        finalX = info.realX - borderWidth
+        finalY = info.realY - titleBarHeight
+        finalWidth = width + borderWidth * 2
+        finalHeight = height + titleBarHeight + borderWidth
 
-            println("  实际窗口: 位置 ($finalX, $finalY), 大小 ${finalWidth}x${finalHeight}")
-        } else {
-            println("  位置: ($x, $y)")
-            println("  大小: ${width}x${height}")
-        }
+        log("  实际窗口: 位置 ($finalX, $finalY), 大小 ${finalWidth}x${finalHeight}")
 
-        println("  彻底移除: $removeCompletely")
-
-        // 移除阴影
-        if (removeShadow) {
-            if (removeCompletely) {
-                removeWindowShadowCompletely(hwnd)
-            } else {
-                removeWindowShadow(hwnd)
-            }
-        }
 
         // 等待一下让系统更新
         Thread.sleep(100)
@@ -324,62 +193,12 @@ object WeChatWindowHelper {
             finalX, finalY, finalWidth, finalHeight,
             WinUser.SWP_NOZORDER or WinUser.SWP_NOACTIVATE
         )
-
+        // 等待一下让系统更新
+        Thread.sleep(200)
         if (success) {
-            println("✓ 窗口移动成功")
-
-            // 等待窗口更新
-            Thread.sleep(100)
-
-            if (useClientArea) {
-                // 客户区模式：验证客户区位置和大小
-                val updatedInfo = getWindowInfo(hwnd)
-                println("  窗口位置: (${updatedInfo.x}, ${updatedInfo.y})")
-                println("  窗口大小: ${updatedInfo.width}x${updatedInfo.height}")
-                println("  客户区位置: (${updatedInfo.clientX}, ${updatedInfo.clientY})")
-                println("  客户区大小: ${updatedInfo.clientWidth}x${updatedInfo.clientHeight}")
-
-                val posMatch = updatedInfo.clientX == x && updatedInfo.clientY == y
-                val sizeMatch = updatedInfo.clientWidth == width && updatedInfo.clientHeight == height
-
-                if (posMatch && sizeMatch) {
-                    println("✓ 客户区位置和大小完全匹配！")
-                } else {
-                    if (!posMatch) {
-                        println("⚠ 客户区位置偏差: X ${updatedInfo.clientX - x}px, Y ${updatedInfo.clientY - y}px")
-                    }
-                    if (!sizeMatch) {
-                        println("⚠ 客户区大小偏差: 宽 ${updatedInfo.clientWidth - width}px, 高 ${updatedInfo.clientHeight - height}px")
-                    }
-                }
-            } else {
-                // 窗口模式：验证窗口位置和大小
-                val rect = RECT()
-                User32.INSTANCE.GetWindowRect(hwnd, rect)
-                val actualX = rect.left
-                val actualY = rect.top
-                val actualWidth = rect.right - rect.left
-                val actualHeight = rect.bottom - rect.top
-
-                println("  实际位置: ($actualX, $actualY)")
-                println("  实际大小: ${actualWidth}x${actualHeight}")
-
-                val posMatch = actualX == finalX && actualY == finalY
-                val sizeMatch = actualWidth == finalWidth && actualHeight == finalHeight
-
-                if (posMatch && sizeMatch) {
-                    println("✓ 窗口位置和大小完全匹配！")
-                } else {
-                    if (!posMatch) {
-                        println("⚠ 位置偏差: X ${actualX - finalX}px, Y ${actualY - finalY}px")
-                    }
-                    if (!sizeMatch) {
-                        println("⚠ 大小偏差: 宽 ${actualWidth - finalWidth}px, 高 ${actualHeight - finalHeight}px")
-                    }
-                }
-            }
+            log("✓ 窗口移动成功")
         } else {
-            println("✗ 窗口移动失败")
+            log("✗ 窗口移动失败")
         }
     }
 
@@ -390,15 +209,20 @@ object WeChatWindowHelper {
      * @param useScreenCapture 是否使用屏幕截图方式（默认 false，优先使用 PrintWindow）
      * @return 窗口截图，失败返回 null
      */
+    @Deprecated("废弃")
     fun captureWindow(hwnd: HWND, useScreenCapture: Boolean = false): BufferedImage? {
         return try {
+            val info = getWindowInfo(hwnd)
+            if(info.width != finalWidth || info.height != finalHeight || info.x != -borderWidth){
+                setWindowSize(hwnd,1000,607)
+            }
             if (useScreenCapture) {
                 captureWindowByScreenshot(hwnd)
             } else {
                 captureWindowByPrintWindow(hwnd) ?: captureWindowByScreenshot(hwnd)
             }
         } catch (e: Exception) {
-            println("截图失败: ${e.message}")
+            log("截图失败: ${e.message}")
             e.printStackTrace()
             null
         }
@@ -410,15 +234,17 @@ object WeChatWindowHelper {
      */
     private fun captureWindowByPrintWindow(hwnd: HWND): BufferedImage? {
         return try {
+            log("captureWindowByPrintWindow start")
             val rect = RECT()
             User32.INSTANCE.GetWindowRect(hwnd, rect)
             val width = rect.right - rect.left
             val height = rect.bottom - rect.top
 
             if (width <= 0 || height <= 0) {
-                println("窗口大小无效: ${width}x${height}")
+                log("窗口大小无效: ${width}x${height}")
                 return null
             }
+            log("captureWindowByPrintWindow getInfo")
 
             // 创建兼容DC和位图
             val hdcWindow = User32.INSTANCE.GetDC(hwnd)
@@ -456,7 +282,7 @@ object WeChatWindowHelper {
 
                     if (dibResult == 0 || dibResult == WinGDI.BI_RGB) {
                         // GetDIBits 失败
-                        println("GetDIBits 失败，降级到屏幕截图")
+                        log("GetDIBits 失败，降级到屏幕截图")
                         null
                     } else {
                         // 从 Memory 读取数据并创建 BufferedImage
@@ -474,15 +300,15 @@ object WeChatWindowHelper {
                             }
                         }
 
-                        println("✓ 使用 PrintWindow 截图成功: ${width}x${height}")
-                        img
+                        log("✓ 使用 PrintWindow 截图成功: ${width}x${height}")
+                        img.getSubImage(MRect.createWH(borderWidth,0,App.rectWindow.width,App.rectWindow.height))
                     }
                 } catch (e: Exception) {
-                    println("转换位图失败: ${e.message}, 降级到屏幕截图")
+                    log("转换位图失败: ${e.message}, 降级到屏幕截图")
                     null
                 }
             } else {
-                println("PrintWindow 失败，尝试屏幕截图方式")
+                log("PrintWindow 失败，尝试屏幕截图方式")
                 null
             }
 
@@ -494,7 +320,7 @@ object WeChatWindowHelper {
 
             image
         } catch (e: Exception) {
-            println("PrintWindow 截图异常: ${e.message}")
+            log("PrintWindow 截图异常: ${e.message}")
             null
         }
     }
@@ -513,7 +339,7 @@ object WeChatWindowHelper {
             val height = rect.bottom - rect.top
 
             if (width <= 0 || height <= 0) {
-                println("窗口大小无效: ${width}x${height}")
+                log("窗口大小无效: ${width}x${height}")
                 return null
             }
 
@@ -521,10 +347,10 @@ object WeChatWindowHelper {
             val robot = Robot()
             val image = robot.createScreenCapture(Rectangle(x, y, width, height))
 
-            println("✓ 使用屏幕截图成功: ${width}x${height} at ($x, $y)")
+            log("✓ 使用屏幕截图成功: ${width}x${height} at ($x, $y)")
             image
         } catch (e: Exception) {
-            println("屏幕截图异常: ${e.message}")
+            log("屏幕截图异常: ${e.message}")
             null
         }
     }
@@ -558,7 +384,7 @@ object WeChatWindowHelper {
 
             result
         } catch (e: Exception) {
-            println("获取客户区失败: ${e.message}")
+            log("获取客户区失败: ${e.message}")
             null
         }
     }
@@ -570,7 +396,7 @@ object WeChatWindowHelper {
         return try {
             val clientBounds = getClientAreaBounds(hwnd)
             if (clientBounds == null) {
-                println("无法获取客户区边界")
+                log("无法获取客户区边界")
                 return null
             }
 
@@ -580,7 +406,7 @@ object WeChatWindowHelper {
             val height = clientBounds.bottom - clientBounds.top
 
             if (width <= 0 || height <= 0) {
-                println("客户区大小无效: ${width}x${height}")
+                log("客户区大小无效: ${width}x${height}")
                 return null
             }
 
@@ -588,10 +414,10 @@ object WeChatWindowHelper {
             val robot = Robot()
             val image = robot.createScreenCapture(Rectangle(x, y, width, height))
 
-            println("✓ 截取客户区成功: ${width}x${height} at ($x, $y)")
+            log("✓ 截取客户区成功: ${width}x${height} at ($x, $y)")
             image
         } catch (e: Exception) {
-            println("截取客户区异常: ${e.message}")
+            log("截取客户区异常: ${e.message}")
             null
         }
     }
@@ -599,7 +425,7 @@ object WeChatWindowHelper {
     /**
      * 获取窗口信息
      */
-    fun getWindowInfo(hwnd: HWND): WindowInfo {
+    private fun getWindowInfo(hwnd: HWND): WindowInfo {
         val title = getWindowTitle(hwnd)
         val rect = RECT()
         User32.INSTANCE.GetWindowRect(hwnd, rect)
@@ -623,45 +449,6 @@ object WeChatWindowHelper {
             clientWidth = clientBounds?.let { it.right - it.left } ?: (rect.right - rect.left),
             clientHeight = clientBounds?.let { it.bottom - it.top } ?: (rect.bottom - rect.top)
         )
-    }
-
-    /**
-     * 监控微信窗口（检测阴影重新出现）
-     */
-    fun monitorAndFixShadow(title: String, intervalMs: Long = 1000) {
-        println("开始监控微信窗口: $title")
-        println("检测间隔: ${intervalMs}ms")
-
-        var lastHwnd: HWND? = null
-
-        while (true) {
-            try {
-                val hwnd = findWeChatWindow(title)
-
-                if (hwnd != null) {
-                    // 检测是否是新窗口（重启后）
-                    if (hwnd != lastHwnd) {
-                        println("\n检测到窗口变化，重新移除阴影")
-                        removeWindowShadow(hwnd)
-                        lastHwnd = hwnd
-                    }
-
-                    // 定期检查并移除阴影
-                    val info = getWindowInfo(hwnd)
-                    if (info.hasShadow()) {
-                        println("\n检测到阴影重新出现，移除中...")
-                        removeWindowShadow(hwnd)
-                    }
-                }
-
-                Thread.sleep(intervalMs)
-            } catch (e: InterruptedException) {
-                println("监控已停止")
-                break
-            } catch (e: Exception) {
-                println("监控异常: ${e.message}")
-            }
-        }
     }
 
     /**
@@ -750,61 +537,6 @@ interface DwmApi : com.sun.jna.Library {
         hwnd: HWND,
         margins: MARGINS
     ): Int
-}
-
-/**
- * 主函数示例
- */
-fun main() {
-    println("=" * 60)
-    println("微信小程序窗口助手")
-    println("=" * 60)
-    println()
-
-    // 查找微信窗口
-    print("请输入窗口标题（部分匹配，留空查找所有微信窗口）: ")
-    val title = readLine()?.takeIf { it.isNotBlank() }
-
-    val hwnd = WeChatWindowHelper.findWeChatWindow(title)
-
-    if (hwnd == null) {
-        println("未找到匹配的窗口")
-        return
-    }
-
-    // 显示窗口信息
-    val info = WeChatWindowHelper.getWindowInfo(hwnd)
-    println(info)
-    println()
-
-    // 选择操作
-    println("请选择操作:")
-    println("1. 移除阴影")
-    println("2. 移动窗口（移除阴影）")
-    println("3. 监控窗口（自动移除阴影）")
-    print("请选择 (1-3): ")
-
-    when (readLine()) {
-        "1" -> {
-            WeChatWindowHelper.removeWindowShadow(hwnd)
-        }
-        "2" -> {
-            print("X 坐标 (默认 0): ")
-            val x = readLine()?.toIntOrNull() ?: 0
-            print("Y 坐标 (默认 0): ")
-            val y = readLine()?.toIntOrNull() ?: 0
-            print("宽度 (默认 1000): ")
-            val width = readLine()?.toIntOrNull() ?: 1000
-            print("高度 (默认 670): ")
-            val height = readLine()?.toIntOrNull() ?: 670
-
-            WeChatWindowHelper.moveWindow(hwnd, x, y, width, height)
-        }
-        "3" -> {
-            val windowTitle = WeChatWindowHelper.getWindowTitle(hwnd)
-            WeChatWindowHelper.monitorAndFixShadow(windowTitle)
-        }
-    }
 }
 
 private operator fun String.times(count: Int) = repeat(count)

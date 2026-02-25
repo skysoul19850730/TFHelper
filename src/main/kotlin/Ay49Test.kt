@@ -20,13 +20,13 @@ import java.io.File
 
 object TestUtil {
     suspend fun test() {
-        val start = System.currentTimeMillis()
-        val img = WeChatWindowHelper.captureWindow(App.tfWindow!!,false)
-        val end1 = System.currentTimeMillis()
-        log("耗时：${end1-start}")
-        val img2 = getImage(App.rectWindow)
-        val end2 = System.currentTimeMillis()
-        log("耗时：${end2-end1}")
+//        val start = System.currentTimeMillis()
+//        val img = WeChatWindowHelper.captureWindow(App.tfWindow!!,false)
+//        val end1 = System.currentTimeMillis()
+//        log("耗时：${end1-start}")
+//        val img2 = getImage(App.rectWindow)
+//        val end2 = System.currentTimeMillis()
+//        log("耗时：${end2-end1}")
 //        WX89.testOne {
 //            false
 //        }
