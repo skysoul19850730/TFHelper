@@ -80,7 +80,7 @@ class Ay139(val heroDoing: BaseAnYueHeroDoing, val test: Boolean = true) : AnSub
 
             log("顶部结果：${top4.joinToString(";") { it.toPString() }} 不同的是:${differentMat?.toPString()}")
 
-            while (heroDoing.curGuan == 139 && state < 2) {
+            while (heroDoing.curGuan == 139 && state < 2 && running) {
                 val bottom = AY139Util.getBottomRunningMat()
                 if (bottom == null) {
                     delay(200)

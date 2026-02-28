@@ -293,7 +293,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 }
             }
             onStart {
-                start49Listener()
+//                start49Listener()
             }
             des = "需要切的时候按0，会自动下卡再上卡，收集完成后按3，切换的卡会上满"
         }
@@ -629,7 +629,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
 
             val plats = listOf(pjv, psm, psy, pzhu)
             var jvsmCount = 0
-            while (curGuan == 49 && g49 < 2) {
+            while (curGuan == 49 && g49 < 2 && running) {
                 delay(100)
                 val img = getImage(targetRect)
                 log("开始检测49一个图")
