@@ -4,20 +4,21 @@ import data.HeroCreator
 
 class HFHHero1 : BaseHFH() {
 
-    var bingqi = HeroCreator.bingqi.create()
+    var shuiling = HeroCreator.shuiling.create()
     var gugu = HeroCreator.gugu.create()
-    var hugong = HeroCreator.hugong.create()
-    var niutou = HeroCreator.niutou.create()
-    var dianfa = HeroCreator.dianfa.create()
-    var yuren = HeroCreator.yuren.create()
-    var xiaochou = HeroCreator.xiaochou.create()
-    var guangqiu = HeroCreator.guangqiu.create()
-    var moqiu = HeroCreator.moqiu.create()
+    var huoling = HeroCreator.huoling.create()
+    var lvgong = HeroCreator.lvgong.create()
+    var xiaoye = HeroCreator.xiaoye.create()
+    var fengling = HeroCreator.fengling.create()
     var shexian = HeroCreator.shexian.create()
 
+    var shenv = HeroCreator.shenv.create()
+    var guangqiu = HeroCreator.guangqiu.create()
+    var moqiu = HeroCreator.moqiu.create()
+
     override fun initHeroes() {
-        heros = arrayListOf(bingqi, gugu, hugong, niutou, dianfa, yuren, xiaochou, guangqiu, moqiu, shexian)
-        upHeros = arrayListOf(bingqi, gugu, hugong, dianfa, yuren, xiaochou, shexian)
+        heros = arrayListOf(shuiling, gugu, huoling, shenv, lvgong, xiaoye, fengling, guangqiu, moqiu, shexian)
+        upHeros = arrayListOf(shuiling, gugu, huoling, lvgong, xiaoye, fengling, shexian)
         qiu = moqiu
         qiuTime = 5000L
 
