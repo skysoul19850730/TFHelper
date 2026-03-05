@@ -5,43 +5,45 @@ import kotlinx.coroutines.delay
 import log
 import tasks.SimpleHeZuoHeroDoing
 
-open class BaseHFH:SimpleHeZuoHeroDoing() {
+open class BaseHFH : SimpleHeZuoHeroDoing() {
 
 
-   lateinit var upHeros: List<HeroBean>
-    var qiuTime:Long = 2000L
-    var qiu:HeroBean? = null
+    lateinit var upHeros: List<HeroBean>
+    var qiuTime: Long = 2000L
+    var qiu: HeroBean? = null
+
+    var state = 0
+
     override fun initHeroes() {
-        lastQiuTime = System.currentTimeMillis() +55000
-        addGuanDeal(0){
-            over { false }
+        lastQiuTime = System.currentTimeMillis() + 55000
+        addGuanDeal(0) {
+            over { !running }
             chooseHero {
-                var index = upAny(*upHeros.toTypedArray(), useGuang = false)
-                var gindex = this.indexOfFirst { it?.heroName=="guangqiu" }
-                if(index>-1){
-                    index
-                }else{
-                   if(qiu!=null){
-                       index = indexOf(qiu!!)
-                       if(index>-1){
-                           if(System.currentTimeMillis()> lastQiuTime+qiuTime){
-                               log("first qiu when lastQiutime is ${lastQiuTime}")
-                               lastQiuTime=System.currentTimeMillis()
-                               index
-                           }else {
-                               delay(300)
-                               gindex
-                           }
-                       }else gindex
-                   }else gindex
+                if (state == 0) {
+                    if (fulls(*upHeros.toTypedArray())) {
+                        state = 1
+                    }
+                }
+                if (state == 0) {
+                    upAny(upHeros)
+                } else {
+                    if (qiu != null) {
+                        val index = indexOf(qiu!!)
+                        if (index > -1) {
+                            if (System.currentTimeMillis() > lastQiuTime + qiuTime) {
+                                log("first qiu when lastQiutime is ${lastQiuTime}")
+                                lastQiuTime = System.currentTimeMillis()
+                                index
+                            } else {
+                                delay(lastQiuTime + qiuTime - System.currentTimeMillis())
+                                lastQiuTime = System.currentTimeMillis()
+                                index
+                            }
+                        } else -1
+                    } else -1
                 }
 
             }
-            //直接塞进来得guandeal 0 的 onStart不走。。。。
-//            onStart {
-//                lastQiuTime = System.currentTimeMillis() +55000
-//                log("onStart lastqiutime is ${lastQiuTime}")
-//            }
         }
 
         curGuanDeal = guanDealList[0]
