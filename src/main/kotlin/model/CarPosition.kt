@@ -95,7 +95,7 @@ data class CarPosition(
     }
 
 
-    suspend fun downHero(downEvey:Boolean = false) {
+    suspend fun downHero(downEvey: Boolean = false) {
         if (mHeroBean != null || downEvey) {
             withContext(Dispatchers.Main) {
                 log("车位:$mPos 下卡开始 ${mHeroBean?.heroName}")
@@ -351,7 +351,7 @@ data class CarPosition(
     }
 
 
-    fun isHB199Selected(imgTest: BufferedImage,is210:Boolean = false): Boolean {
+    fun isHB199Selected(imgTest: BufferedImage, is210: Boolean = false): Boolean {
 //        MRect.createPointR(mRect.clickPoint, 3).forEach { i, i2 ->
 //            imgTest.setRGB(i,i2,Color.RED.rgb)
 //        }
@@ -376,7 +376,10 @@ data class CarPosition(
         }
 
         logOnly("car:${carDoing.chePosition} position:${mPos} hb199 hasCount :$hasCount")
-        if (hasCount > if(is210) 200 else 300) {
+        if (hasCount > 130) {//这里实际查看没点的都少于50，遮挡挺多的也能扫描出150多个/这里优化130试试
+            //另外试验时想到，如果有的英雄衣服天然黑怎么办，这里先记录下思路，比如在199开始check前，先把每个位置的黑色记一下
+            //比如含黑较多的英雄count是160了。那点名时肯定变成200多这样，可以算前后偏差。
+            //再就是这里是这个阶段后一直检测，可以采集然后寻找“真的”需要识别的时刻，然后找里面黑色最多的（或前后偏差最大的）这样就不会误判了
 //            App.save()
             return true
         }

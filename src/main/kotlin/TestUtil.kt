@@ -7,6 +7,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import model.CarDoing
 import net.sourceforge.tess4j.util.ImageHelper.getScaledInstance
 import opencv.*
 import org.opencv.core.Core
@@ -32,10 +33,32 @@ fun main() {
     }
     val start = System.currentTimeMillis()
 
-    val img = getImageFromRes("xiaochengxu/heros/xiaolu/xiaolu/xiaolu0.png")
-    val img2 = getImageFromRes("xiaochengxu/heros/tuqiu/tuqiu/tuqiu0.png")
+    var carDoing = CarDoing(0, CarDoing.CheType_MaChe)
+    carDoing.initPositions()
+    var carDoing2 = CarDoing(1, CarDoing.CheType_MaChe)
+    carDoing2.initPositions()
 
-    val r= ImgUtil.isImageSim(img,img2)
+    File("C:\\Users\\Administrator\\Desktop\\tmphb199").listFiles().forEach {
+
+        println("file:${it.name}")
+
+        val img = getImageFromFile(it)
+
+        carDoing.getHB199Selected(img)
+        println("")
+        carDoing2.getHB199Selected(img)
+        println("")
+        println("")
+
+    }
+
+
+
+
+//    val img = getImageFromRes("xiaochengxu/heros/xiaolu/xiaolu/xiaolu0.png")
+//    val img2 = getImageFromRes("xiaochengxu/heros/tuqiu/tuqiu/tuqiu0.png")
+//
+//    val r= ImgUtil.isImageSim(img,img2)
 //    WX89.autoDo {
 //        System.currentTimeMillis()-start>10000
 //    }
@@ -45,7 +68,7 @@ fun main() {
 //        WX89.doing = false
 //    }
 
-    WX69Test.test()
+//    WX69Test.test()
 //    Ay139Test.test()
 //    WX79Test.test()
 //    WX49Test.test()
