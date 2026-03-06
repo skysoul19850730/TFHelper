@@ -1,5 +1,6 @@
 package tasks.duizhan.faqiang
 
+import androidx.compose.runtime.mutableStateOf
 import data.Config
 import data.Config.delayLong
 import data.Config.delayNor
@@ -10,8 +11,13 @@ import log
 import logOnly
 import tasks.Hero
 import tasks.IGameLaunch
+import tasks.duizhan.zhanjiang.ZhanjiangHeroDoing2
 
 class FaQiangGameLaunch : IGameLaunch {
+
+    companion object {
+        val danci = mutableStateOf(false)
+    }
 
     var isRunning = false
     var kaida = false
@@ -19,6 +25,13 @@ class FaQiangGameLaunch : IGameLaunch {
     var heroDoing: FaQiangHeroDoing? = null
 
     var mJob: Job? = null
+
+    var allSucCount = 0
+    var allFailCount = 0
+
+    var failCount = 0
+
+    var lastSuc = false
 
     override fun init() {
     }
@@ -47,18 +60,69 @@ class FaQiangGameLaunch : IGameLaunch {
     override fun stop() {
         isRunning = false
         mJob?.cancel("tuichu")
-        heroDoing?.stop()
+        stopOneGame()
         kaida = false
+    }
+
+    //0打  1认输阵容
+    var mCurrentZhen = -1
+    private suspend fun changeToFailZhen() {
+        if (mCurrentZhen == 1) return
+        Config.pointHeroChoose.click()
+        delay(500)
+        Config.pointHeroDuiZhanFail.click()
+        delay(delayNor)
+        Config.pointHeroChooseBack.click()
+        delay(delayNor)
+        mCurrentZhen = 1
+
+    }
+
+    private suspend fun changeToSucZhen() {
+        if (mCurrentZhen == 0) return
+        Config.pointHeroChoose.click()
+        delay(500)
+        Config.pointHeroDuiZhan.click()
+        delay(delayNor)
+        Config.pointHeroChooseBack.click()
+        delay(delayNor)
+        mCurrentZhen = 0
+    }
+
+    private suspend fun changeZhenrong() {
+        if (Config.touxiangAuto.value) {
+            if (Config.touxiangAll.value) {
+                changeToFailZhen()
+            } else {
+                if (failCount < 2) {
+                    //切认输
+                    changeToFailZhen()
+                } else {
+                    changeToSucZhen()
+                }
+            }
+        } else {
+            changeToSucZhen()
+        }
     }
 
     private suspend fun checkDuizhan() {
         log("checkDuizhan")
+
+        if (danci.value) {
+            kaida = true
+//            withContext(Dispatchers.Main){
+            startOneGame()
+            return
+        }
+
         if (Duizhan.isFit()) {
             log("checkDuizhan ok")
 //            while (Duizhan.isFit()) {
+            changeZhenrong()
             delay(delayNor)
             Duizhan.click()
-            delay(delayNor)
+            delay(1000)
 //            }
 
             Pipei.click()
@@ -76,6 +140,22 @@ class FaQiangGameLaunch : IGameLaunch {
             log("checkIfEnd ok")
             stopOneGame()
             delay(100)
+
+            if (danci.value) return
+
+            if (DuiZhanResultSuc.isFit()) {
+                log("战斗胜利")
+                allSucCount++
+                MainData.sucCount.value++
+                failCount = 0
+            } else {
+                log("战斗失败")
+                allFailCount++
+                MainData.failCount.value++
+                failCount++
+            }
+            log("战斗胜利： $allSucCount 失败：$allFailCount 胜率：${(allSucCount * 100f) / (allSucCount + allFailCount)}%")
+
             while (BtnOk.isFit()) {
                 BtnOk.click()
                 delay(1000)
@@ -87,26 +167,92 @@ class FaQiangGameLaunch : IGameLaunch {
             stopOneGame()
             delay(100)
             checkAdv()
+        } else {
+            if (Config.touxiangAuto.value && Config.touxiangAll.value) {
+                touxiang()
+            } else if (Config.touxiangAuto.value && failCount < 2) {
+                touxiang()
+            }
         }
+    }
+
+    private suspend fun touxiang() {
+        delay(500)
+        Config.pointDuiZhanRenshu.click()
+        delay(500)
+        Config.pointDuiZhanRenshuOk.click()
     }
 
     private suspend fun checkAdv() {
         log("checkAdv")
-        if (CanreJujue.isFit()) {
-//            CanreJujue.click()
-            Config.adv_point.click()
-            delay(17000)
-            Config.adv_close.click()
-            delay(2000)
-            MPoint(100,130).click()
+        //failCount = 0 可以认为是 胜利。
+        if (failCount == 0) {//胜利
+            seeAdv()
+        } else {//失败
+            if (Config.viewFailAdv.value) {
+                seeAdv()
+            } else {
+                if (CanreJujue.isFit() || CanreJujueFail.isFit()) {
+                    delay(delayNor)
+                    CanreJujue.click()
+                }
+            }
         }
         delay(delayNor)
-        kaida=false
+        kaida = false
 //        if (CanreJujue.isFit()) {
 //        CanreJujue.click()
 //        delay(delayNor)
 //        kaida = false
 //        }
+    }
+
+    private suspend fun seeAdv() {
+        if (CanreJujue.isFit() || CanreJujueFail.isFit()) {
+            Config.adv_point.click()
+            log("1")
+            delay(6000)
+            while (CanreJujue.isFit() || CanreJujueFail.isFit()) {
+                Config.adv_point.click()
+                delay(6000)
+                if (NoAdvOk.isFit()) {
+                    NoAdvOk.click()
+                    log("4")
+                    delay(3000)
+                    MPoint(100, 130).click()
+                    return
+                }
+            }
+            log("2")
+//            if (CanreJujue.isFit() || CanreJujueFail.isFit()) {//点了广告后，但未请求到
+//                CanreJujue.click()
+//                log("3")
+//                return
+//            }
+            if (NoAdvOk.isFit()) {
+                NoAdvOk.click()
+                log("4")
+            } else {
+
+                var ll = withTimeoutOrNull(30000) {
+                    while (!CanreJujue.isFit() && !CanreJujueFail.isFit()) {
+                        delay(1000)
+                    }
+                    CanreJujue.click()
+                    1
+                }
+
+                log("5")
+                if (ll == 1) {
+                    log("6")
+                    return
+                }
+                log("7")
+                Config.adv_close.click()
+            }
+            delay(3000)
+            MPoint(100, 130).click()
+        }
     }
 
     private suspend fun startOneGame() {
@@ -117,5 +263,6 @@ class FaQiangGameLaunch : IGameLaunch {
 
     private fun stopOneGame() {
         heroDoing?.stop()
+        heroDoing = null
     }
 }
