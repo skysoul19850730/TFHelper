@@ -110,6 +110,7 @@ object Config {
 
 
     val adv_close = MPoint(956, 73)
+    val adv_close2 = MPoint(950, 59)
     val adv_point = MPoint(500, 510)
 
     val Color_ChuangZhang = Color(7, 250, 210)
