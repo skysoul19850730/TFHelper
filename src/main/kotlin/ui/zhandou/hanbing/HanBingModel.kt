@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toPainter
 import androidx.compose.ui.unit.dp
 import button
+import ui.weights.MCheckBox
 import ui.zhandou.UIKeyListenerManager
 import ui.zhandou.data.ZhanDouModel
 import ui.zhandou.hezuoControl
@@ -25,12 +26,14 @@ import java.awt.image.BufferedImage
 
 class HanBingModel() : ZhanDouModel("寒冰") {
     //    override var subModels = arrayListOf("1","2")
-    override var subModels: SnapshotStateList<String> = mutableStateListOf("战女任务", "5战自强","5战自强副卡","5战波儿","火灵波儿")
+    override var subModels: SnapshotStateList<String> =
+        mutableStateListOf("战女任务", "5战自强", "5战自强副卡", "5战波儿", "火灵波儿")
     override var subSelected: MutableState<String> = mutableStateOf("5战自强")
 
     companion object {
         val imgs = mutableStateListOf<BufferedImage>()
         val renwuKa = mutableStateOf<String>("xiaoye")
+        val useRenwuKa = mutableStateOf(false)
     }
 
     override fun onStartPre() {
@@ -47,13 +50,16 @@ class HanBingModel() : ZhanDouModel("寒冰") {
             "5战自强" -> {
                 App.setLaunchModel(App.model_hanbing_5zhan_ziqiang)
             }
+
             "5战自强副卡" -> {
                 App.setLaunchModel(App.model_hanbing_5zhan_ziqiang_fuka)
             }
+
             "5战波儿" -> {
                 App.setLaunchModel(App.model_hanbing_5zhan_boer)
             }
-            "火灵波儿" ->{
+
+            "火灵波儿" -> {
                 App.setLaunchModel(App.model_hanbing_huoling_boer)
             }
 
@@ -67,13 +73,12 @@ class HanBingModel() : ZhanDouModel("寒冰") {
     override fun doMainPage() {
         Column(Modifier.focusable(true)) {
             hezuoControl()
-            if (subSelected.value == "战女任务") {
-                Row {
-                    Text("任务卡:")
-                    OutlinedTextField(renwuKa.value, {
-                        renwuKa.value = it
-                    })
-                }
+            Row {
+                Text("任务卡:")
+                OutlinedTextField(renwuKa.value, {
+                    renwuKa.value = it
+                })
+                MCheckBox("做任务", useRenwuKa)
             }
             LazyRow {
                 itemsIndexed(imgs) { _, item ->
@@ -84,12 +89,12 @@ class HanBingModel() : ZhanDouModel("寒冰") {
             Text(("关卡操作：${MainData.curGuanKaDes.value}"))
             OutlinedTextField(MainData.guan.value.toString(), {
 
-                var guan :Int = try {
+                var guan: Int = try {
                     it.toInt()
-                } catch (e:Exception){
+                } catch (e: Exception) {
                     0
                 }
-                UIKeyListenerManager.onGuanFix (guan)
+                UIKeyListenerManager.onGuanFix(guan)
 
             })
             Row {
