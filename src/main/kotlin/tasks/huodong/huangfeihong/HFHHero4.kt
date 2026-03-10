@@ -19,7 +19,7 @@ class HFHHero4 : BaseHFH() {//野法皮）
 
     override fun initHeroes() {
         heros = arrayListOf(dianfa, dapao, wangjiang, yuren, gugu, xiongmao, bingqi, guangqiu, niutou, moqiu)
-        upHeros = arrayListOf(dianfa, niutou, yuren, gugu, xiongmao, bingqi)
+        upHeros = arrayListOf(dianfa, niutou, yuren, gugu, wangjiang, bingqi,dapao)
         qiu = moqiu
         qiuTime = 5000L
 

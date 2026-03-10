@@ -4,25 +4,25 @@ import data.HeroCreator
 
 class HFHHero5 : BaseHFH() {//野法皮）
 
-    var xiongmao = HeroCreator.xiongmao.create()
+    var huofa = HeroCreator.huofa.create()
     var daoke = HeroCreator.daoke.create()
-    var huoling = HeroCreator.huoling.create()
+    var yanmo = HeroCreator.yanmo.create()
     
-    var sishen = HeroCreator.sishen.create()
+    var gugu = HeroCreator.gugu.create()
     var bingqi = HeroCreator.bingqi.create()
-    var niutou = HeroCreator.niutou.create()
+    var feiji = HeroCreator.feiji.create()
 
 
-    var hunqiu = HeroCreator.hunqiu.create()
-    var shexian = HeroCreator.shexian.create()
+    var dasheng = HeroCreator.dasheng.create()
+    var xiongmao = HeroCreator.xiongmao.create()
     var guangqiu = HeroCreator.guangqiu.create()
     var moqiu = HeroCreator.moqiu.create()
 
     override fun initHeroes() {
-        heros = arrayListOf(daoke, shexian, hunqiu, huoling, xiongmao, sishen, bingqi, guangqiu, niutou, moqiu)
-        upHeros = arrayListOf(daoke, niutou, huoling, xiongmao, sishen, bingqi,shexian)
-        qiu = hunqiu
-        qiuTime = 2000L
+        heros = arrayListOf(daoke, xiongmao, dasheng, yanmo, huofa, gugu, bingqi, guangqiu, feiji, moqiu)
+        upHeros = arrayListOf(daoke, feiji, yanmo, huofa, gugu, bingqi,)
+        qiu = moqiu
+        qiuTime = 5500
 
         super.initHeroes()
 

@@ -53,6 +53,9 @@ class Ay139(val heroDoing: BaseAnYueHeroDoing, val test: Boolean = true) : AnSub
                             delay(200)
                         }
 
+                        if(state==2)return@chooseHero -1
+
+
                         return@chooseHero indexOf(bingqiu)
                     }
                     onStart {

@@ -3,10 +3,7 @@ import androidx.compose.ui.window.WindowPosition.PlatformDefault.y
 import data.MRect
 import data.toHSB
 import data.toHSBFirst
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import model.CarDoing
 import net.sourceforge.tess4j.util.ImageHelper.getScaledInstance
 import opencv.*
@@ -16,6 +13,7 @@ import org.opencv.core.Rect
 import org.opencv.core.Scalar
 import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
+import tasks.XueLiang
 import tasks.daxuanwo.utils.WX89
 import utils.ImgUtil
 import utils.ImgUtil.forEach
@@ -33,26 +31,24 @@ fun main() {
     }
     val start = System.currentTimeMillis()
 
-    var carDoing = CarDoing(0, CarDoing.CheType_MaChe)
-    carDoing.initPositions()
-    var carDoing2 = CarDoing(1, CarDoing.CheType_MaChe)
-    carDoing2.initPositions()
-
-    File("C:\\Users\\Administrator\\Desktop\\tmphb199").listFiles().forEach {
-
-        println("file:${it.name}")
-
-        val img = getImageFromFile(it)
-
-        carDoing.getHB199Selected(img)
-        println("")
-        carDoing2.getHB199Selected(img)
-        println("")
-        println("")
-
-    }
-
-
+//    var carDoing = CarDoing(0, CarDoing.CheType_MaChe)
+//    carDoing.initPositions()
+//    var carDoing2 = CarDoing(1, CarDoing.CheType_MaChe)
+//    carDoing2.initPositions()
+//
+//    File("C:\\Users\\Administrator\\Desktop\\tmphb199").listFiles().forEach {
+//
+//        println("file:${it.name}")
+//
+//        val img = getImageFromFile(it)
+//
+//        carDoing.getHB199Selected(img)
+//        println("")
+//        carDoing2.getHB199Selected(img)
+//        println("")
+//        println("")
+//
+//    }
 
 
 //    val img = getImageFromRes("xiaochengxu/heros/xiaolu/xiaolu/xiaolu0.png")
@@ -75,9 +71,9 @@ fun main() {
 //    getKeyImg()
 //    getSmallImg()
 
-//    while(System.currentTimeMillis() - start<10000){
-//        Thread.sleep(1000)
-//    }
+    while(System.currentTimeMillis() - start<10000){
+        Thread.sleep(1000)
+    }
 
 
     println("耗时:${System.currentTimeMillis() - start}毫秒")

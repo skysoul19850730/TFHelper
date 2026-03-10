@@ -8,6 +8,7 @@ import getSubImage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import log
 import opencv.MatSearch
 import opencv.toMat
@@ -96,12 +97,18 @@ class An49(val heroDoing: BaseAnYueHeroDoing ,val test:Boolean = true) : AnSub {
                         state = 1
                         break
                     }else{
-                        //这里其实不用再识别了，识别掉两次血就可以了
+                        //这里其实不用再识别了，识别掉两次血就可以了//这里有时不同色时不掉血或者掉血后补血太快，
+                        //查看素材后，第一个球出现后，7秒多点会撞上车，3秒后（第一个球10秒后）出第二个球，所以大约17秒后开始攻击
                         log("不同色")
-                        XueLiang.observerXueDown { curGuan > 49 }
-                        log("掉血了")
-                        delay(3000)
-                        XueLiang.observerXueDown { curGuan > 49 }
+                       val result = withTimeoutOrNull(18000) {
+                            XueLiang.observerXueDown { curGuan > 49 }
+                            log("掉血了")
+                            delay(3000)
+                            XueLiang.observerXueDown { curGuan > 49 }
+                        }
+                        if(result==null){
+                            log("超时了，有一组没掉血，超时后开打")
+                        }
                         state = 1
                         break
                     }
