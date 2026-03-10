@@ -249,6 +249,10 @@ class LongQuanGameLaunch : IGameLaunch {
                 }
                 log("7")
                 Config.adv_close.click()
+                delay(100)
+                Config.adv_close2.click()
+                delay(100)
+                Config.adv_close3.click()
             }
             delay(3000)
             MPoint(100, 130).click()
