@@ -93,6 +93,7 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
 //        add139()
         add139(false)
+
         curGuanDeal = guanDealList.get(0)
     }
 

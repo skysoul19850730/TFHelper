@@ -11,6 +11,8 @@ import java.awt.event.KeyEvent
 
 class AYWuZhanHeroDoingZQ : BaseAnYueHeroDoing() {
 
+    //副卡 牛头，死神，天使，电法，女王，鱼人，射线，冰，光，幻
+
     val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()

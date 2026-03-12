@@ -22,6 +22,7 @@ import kotlin.math.abs
 class An109(val heroDoing: BaseAnYueHeroDoing) : AnSub {
 
     private var count = 0
+    var lastBingTime = 0L
     override fun addToHeroDoing() {
         heroDoing.apply {
            addGuanDeal(109){
@@ -36,9 +37,11 @@ class An109(val heroDoing: BaseAnYueHeroDoing) : AnSub {
                            it?.heroName == "bingqiu"
                        }
                        count++
+                       lastBingTime = System.currentTimeMillis()
                        return@chooseHero index
                    }else if(count == 1|| count == 2){
-                       delay(if(count==1) 2500 else 1000)
+                       val coastTime = System.currentTimeMillis() - lastBingTime
+                       delay(if(count==1) 2500-coastTime else 1000-coastTime)
                        count++
                        return@chooseHero indexOfFirst {
                            it?.heroName == "bingqiu"

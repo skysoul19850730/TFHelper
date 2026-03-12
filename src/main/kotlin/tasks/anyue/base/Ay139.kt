@@ -1,6 +1,7 @@
 package tasks.anyue.base
 
 import data.Config
+import getImage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -82,6 +83,7 @@ class Ay139(val heroDoing: BaseAnYueHeroDoing, val test: Boolean = true) : AnSub
             }
 
             log("顶部结果：${top4.joinToString(";") { it.toPString() }} 不同的是:${differentMat?.toPString()}")
+            log(getImage())
 
             while (heroDoing.curGuan == 139 && state < 2) {
                 val bottom = AY139Util.getBottomRunningMat()
