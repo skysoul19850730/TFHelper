@@ -481,7 +481,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 if(img.hasImage(platImg,true)){
                     MainData.curGuanKaDes.value="检测到标记，4秒后下卡"
                     log(MainData.curGuanKaDes.value)
-                    delay(4000)
+                    delay(3000)
                     g69State = 1
                     MainData.curGuanKaDes.value="发出下卡指令，10秒后再检测"
                     log(MainData.curGuanKaDes.value,true)

@@ -7,56 +7,35 @@ import tasks.XueLiang
 import java.awt.event.KeyEvent
 
 class XWZJHeroDoingDaiRen3 : BaseSimpleXWHeroDoing() {
+    
+    //副卡：天使，咕咕，小野，闪，巫医,死神（中间放 闪 天使）  射线  幻  魔  光， 马车融吸血或生命
+    
     val dianfa = HeroCreator.dianfa.create()
     val jiaonv = HeroCreator.jiaonv.create()
     val yuren = HeroCreator.yuren.create()
     val feiting = HeroCreator.feiting.create()
     val tianshi = HeroCreator.tianshi.create()
     val niutou = HeroCreator.niutou.create()
-    val sishen = HeroCreator.sishen.create()
     
-    val huanqiu = HeroCreator.huanqiu.create()
-    val hunqiu = HeroCreator.hunqiu.create()
+    
+    val bingqi = HeroCreator.bingqi.create()
+    val haiyao = HeroCreator.haiyao.create()
+    
+    
+    val wangjiang = HeroCreator.wangjiang.create()
     val guangqiu = HeroCreator.guangqiu.create()
 
-    var lastHun = 0L
-
-    private suspend fun backHun(index: Int): Int {
-        if (index > -1) {
-            if (System.currentTimeMillis() - lastHun > 2000) {
-                return index
-            } else {
-                delay(2000 - (System.currentTimeMillis() - lastHun))
-                return index
-            }
-        }
-        return index
-    }
-    private suspend fun g69(list: List<HeroBean?>, step: Int):Int{
-        val index = list.indexOf(hunqiu)
-        if(XueLiang.getXueLiang()<0.95){
-            return index
-        }
-        return -1
-    }
     override fun initHeroes() {
         super.initHeroes()
-        g49StartBoss = {
-            var index = it.indexOf(hunqiu)
-            backHun(index)
-        }
+        auto59 = true
 
-        g69StartBoss = {list,step->
-            g69(list,step)
-        }
-        
-        heros = arrayListOf(dianfa,jiaonv,yuren,feiting,tianshi,niutou,huanqiu,hunqiu,guangqiu,sishen)
+        heros = arrayListOf(dianfa,jiaonv,yuren,feiting,tianshi,niutou,wangjiang,haiyao,guangqiu,bingqi)
         addGuanDeal(0){
             over {
-                fulls(jiaonv,tianshi,feiting,niutou,dianfa,sishen,yuren)
+                fulls(jiaonv,tianshi,feiting,niutou,dianfa,haiyao,yuren)
             }
             chooseHero {
-                val list = listOf(jiaonv,dianfa,sishen,niutou)
+                val list = listOf(jiaonv,dianfa,haiyao,niutou)
                 val listMid = listOf(tianshi,yuren)
                 val listInCar  = list.filter { it.isInCar() }
                 val listNoInCar = list.filter { !it.isInCar() }
@@ -72,7 +51,7 @@ class XWZJHeroDoingDaiRen3 : BaseSimpleXWHeroDoing() {
                     }
                     upAny(listToIn)
                 }else if(listMid.all { it.isInCar() }){
-                    upAny(listOf(feiting,tianshi,yuren,jiaonv,dianfa,sishen,niutou))
+                    upAny(listOf(feiting,tianshi,yuren,jiaonv,dianfa,haiyao,niutou))
                 }else {
                     val listToIn = arrayListOf<HeroBean>()
                     if(!feiting.isInCar()) {
@@ -89,15 +68,16 @@ class XWZJHeroDoingDaiRen3 : BaseSimpleXWHeroDoing() {
             }
         }
 
-        changeZhuangbei(31, {yandou})
 
-        add49WithQiu(feiting,hunqiu,5000)
+        add49(feiting)
 
         add50(listOf(), listOf(tianshi,yuren), onlySetMid = true)
 
-        changeZhuangbei(55, {longxin})
-        
+        addGuanDealWithHerosFull(52, listOf(bingqi), listOf(haiyao))
+
         add69(auto = true)
+
+        addGuanDealWithHerosFull(70, listOf(wangjiang), listOf(bingqi))
         
         curGuanDeal = guanDealList.get(0)
     }
