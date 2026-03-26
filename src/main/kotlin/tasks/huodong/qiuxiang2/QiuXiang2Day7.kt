@@ -20,7 +20,7 @@ class QiuXiang2Day7 : BaseQiuxiang2() {
     override fun initHeroes() {
         heros = arrayListOf(yuren, zhanjiang2, saman2, niutou2, wangjiang2, maomi, bingqi, guangqiu, huanqiu, muqiu)
 
-        bingQiu = muqiu
+        pBingQiu = muqiu
         dabing = true
 
         guanDealList.add(GuanDeal(

@@ -1,113 +1,95 @@
 package tasks.huodong.qiuxiang2
 
 import data.HeroBean
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import tasks.SimpleHeZuoHeroDoing
-import tasks.XueLiang
 import java.awt.event.KeyEvent
-import kotlin.math.abs
 
 abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
 
     var damu = false
     var dabing = false
 
-    var bingQiu :HeroBean? = null
-    var muQiu:HeroBean?=null
+    var pBingQiu: HeroBean? = null
+    var pHuanQiu: HeroBean? = null
 
-
+    lateinit var upHeros: List<HeroBean>
 
     override suspend fun onKeyDown(code: Int): Boolean {
         if (code == KeyEvent.VK_NUMPAD9) {//9强制改变waitting，防止waiting有逻辑错误不上卡
             waiting = !waiting
             return false
         }
-        if(curGuan==49 || curGuan == 48){
-           var position = when(code){
-                KeyEvent.VK_NUMPAD4->3
-                KeyEvent.VK_NUMPAD5->2
-                KeyEvent.VK_NUMPAD7->5
-                KeyEvent.VK_NUMPAD8->4
-               else ->-1
+        if (curGuan == 49 || curGuan == 48) {
+            var position = when (code) {
+                KeyEvent.VK_NUMPAD2 -> 0
+                KeyEvent.VK_NUMPAD1 -> 1
+                KeyEvent.VK_NUMPAD5 -> 2
+                KeyEvent.VK_NUMPAD4 -> 3
+                KeyEvent.VK_NUMPAD8 -> 4
+                KeyEvent.VK_NUMPAD7 -> 5
+                KeyEvent.VK_NUMPAD0 -> 6
+                else -> -1
             }
             carDoing.downPosition(position)
 
-            if(code == KeyEvent.VK_NUMPAD0){
-                waiting = false
-            }
+            full49 = false
             return true
+        }
+        if (curGuan == 99) {
+            stop99 = true
         }
         return super.onKeyDown(code)
     }
 
-    fun addHuan(guan:Int, zhuangbei: ()->Boolean){
-        guanDealList.add(
-            GuanDeal(
-                guan,
-                isOver = zhuangbei,
-                chooseHero = {
-                    upAny(zhuangbei = zhuangbei)
-                }
-            )
+    fun addStart() {
+//        if (huanQiu == null) {
+//            addGuanDealWithHerosFull(0, upHeros)
+//        } else {
+//            addGuanDealWithHerosFull(0, upHeros, zhuangbei = { qiangxi })
+//        }
+        addGuanDealWithHerosFull(
+            0, upHeros, zhuangbei = if (pHuanQiu == null) null else {
+                { qiangxi }
+            }
         )
     }
 
-    fun add49(){
-
+    var stop99 = false
+    fun add99() {
+        if (pBingQiu == null) return
+        gudingShuaQiuTask("bingqiu", 99, 2000,
+            customOverJudge = {
+                stop99
+            })
     }
 
-    fun add149(){
-        if(dabing||damu){
-            guanDealList.add(GuanDeal(
-                149,
-                isOver = {
-                    curGuan > 149
-                },
-                chooseHero = {
-                    if(!xueChecked){
-                        check3Attach()
-                    }
-                    delay(1000)
-                    if(dabing){
-                        upAny(bingQiu!!)
-                    }else{
-                        upAny(muQiu!!)
-                    }
-                }
-            ))
+    var full49 = true
+    fun add49() {
+        addGuanDeal(49) {
+            over {
+                curGuan > 49
+            }
 
+            chooseHero {
+                if (fulls(*upHeros.toTypedArray())) {
+                    full49 = true
+                }
+                while (full49 && curGuan==49) {
+                    delay(200)
+                }
+                upAny(upHeros)
+            }
         }
+
+        addGuanDealWithHerosFull(50, upHeros)
     }
 
-
-    var curXue = 0f
-    var xueChecked = false
-
-    suspend fun check3Attach(){
-        if(curXue == 0f){
-            curXue = XueLiang.getXueLiang()
-        }
-
-        var tem = XueLiang.getXueLiang()
-        var count = 0
-        while(curGuan<150){
-            if(abs(curXue-tem)>0.03) {
-                count++
-                curXue = tem
-            }
-            delay(200)
-            tem = XueLiang.getXueLiang()
-            if(count>=3){
-                xueChecked = true
-                GlobalScope.launch {
-                    delay(10000)
-                    xueChecked = false
-                }
-                return
-            }
-        }
+    fun autoHuanAfter149() {
+        changeZhuangbei(169, { yandou })
+        changeZhuangbei(179, { qiangxi })
+        changeZhuangbei(189, { yandou })
+        changeZhuangbei(199, { qiangxi })
     }
 
 }

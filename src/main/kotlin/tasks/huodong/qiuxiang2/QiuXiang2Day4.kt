@@ -20,7 +20,7 @@ class QiuXiang2Day4 : BaseQiuxiang2() {
     override fun initHeroes() {
         heros = arrayListOf(yuren, zhanjiang2, saman2, niutou2, wangjiang2, maomi, bingqi, guangqiu, huanqiu, muqiu)
 
-        muQiu = muqiu
+        pHuanQiu = muqiu
         damu = true
 
         guanDealList.add(GuanDeal(
@@ -58,9 +58,6 @@ class QiuXiang2Day4 : BaseQiuxiang2() {
             }
         ))
 
-        addHuan(140,{longxin})
-        add149()
-        addHuan(150,{qiangxi})
 
         curGuanDeal = guanDealList.get(0)
     }

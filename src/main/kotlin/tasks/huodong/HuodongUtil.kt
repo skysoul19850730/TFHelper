@@ -54,7 +54,7 @@ object HuodongUtil {
 
 
 
-    var huodongStartTime = LocalDate.of(2026, 3, 3)
+    var huodongStartTime = LocalDate.of(2026, 3, 26)
     var perCircleDate = 7// 7天一轮，担心不是七天
     private fun getHuodongDoing():HeroDoing?{
         if(mModel == 1002){
@@ -66,7 +66,7 @@ object HuodongUtil {
         var today = LocalDate.now()
         var dayDt = abs( ChronoUnit.DAYS.between(today, huodongStartTime).toInt())
         return when(dayDt%perCircleDate){
-            0-> HFHHero1()
+            0-> QiuXiang2Day1()
             1-> HFHHero2()
             2-> HFHHero3()
             3-> HFHHero4()
