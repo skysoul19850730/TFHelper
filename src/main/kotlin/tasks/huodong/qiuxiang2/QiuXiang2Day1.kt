@@ -1,69 +1,58 @@
 package tasks.huodong.qiuxiang2
 
 import data.HeroCreator
+import java.awt.event.KeyEvent
 
 class QiuXiang2Day1 : BaseQiuxiang2() {
-    val zhanjiang = HeroCreator.zhanjiang.create()
-    val niutou = HeroCreator.niutou.create()
-    val saman2 = HeroCreator.saman.create()
-    val efei = HeroCreator.efei.create()
-    val nvwang = HeroCreator.nvwang.create()
-    val maomi = HeroCreator.maomi.create()
+    val shan = HeroCreator.shan.create()
+    val mengyan = HeroCreator.mengyan.create()
+    val gugu = HeroCreator.saman.create()
+    val sishen = HeroCreator.sishen.create()
+    val kui = HeroCreator.kui.create()
+    val dasheng = HeroCreator.dasheng.create()
 
-    val shengqi = HeroCreator.shengqi.create()
+    val haiyao = HeroCreator.haiyao.create()
 
-    val bingqi = HeroCreator.bingqi.create()
-    val muqiu = HeroCreator.muqiu.create()
-    val huanqiu = HeroCreator.huanqiu.create()
+    val nvyao = HeroCreator.nvyao.create()
+    val bingqiu = HeroCreator.bingqiu.create()
+    val shexian = HeroCreator.shexian.create()
 
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, niutou, maomi, saman2, efei, nvwang, bingqi, muqiu, shengqi, huanqiu)
-        damu = true
+        heros = arrayListOf(shan, mengyan, dasheng, gugu, sishen, kui, nvyao, bingqiu, haiyao, shexian)
+        upHeros = arrayListOf(shan,mengyan, dasheng, gugu, sishen,haiyao,sishen)
+        pBingQiu = bingqiu
 
         guanDealList.add(GuanDeal(
             0,
             isOver = {
-                fulls(zhanjiang, niutou, maomi, saman2)
+                fulls(shan, mengyan, kui, gugu,sishen,haiyao,shexian)
             },
             chooseHero = {
-                if (zhanjiang.isInCar()) {
-                    upAny(zhanjiang, niutou, maomi, saman2)
-                } else upAny(zhanjiang)
+                upAny(shan, mengyan, kui, gugu,sishen,haiyao,shexian)
             }
         ))
 
-        guanDealList.add(GuanDeal(
-            40,
-            isOver = {
-                fulls(efei) && qiangxi
-            },
-            chooseHero = {
-                upAny(efei, zhuangbei = { qiangxi })
-            }
-        ))
+        add49()
 
+        gudingShuaQiuTask("bingqiu",80,2400, customOverJudge = {
+            !bing88
+        })
 
-        guanDealList.add(GuanDeal(
-            50,
-            isOver = {
-                fulls(zhanjiang, niutou, maomi, saman2, efei) && nvwang.isInCar()
-            },
-            chooseHero = {
-                if (nvwang.isInCar()) {
-                    upAny(zhanjiang, niutou, maomi, saman2, efei)
-                } else {
-                    upAny(zhanjiang, niutou, maomi, saman2, efei, nvwang)
-                }
-            }
-        ))
+        add99()
 
-        addHuan(140, { longxin })
-        add149()
-        addHuan(150, { qiangxi })
+        autoHuanAfter149()
 
         curGuanDeal = guanDealList.get(0)
     }
 
+    var bing88 = true
 
+
+    override suspend fun onKeyDown(code: Int): Boolean {
+        if(code == KeyEvent.VK_NUMPAD0){
+            bing88 = false
+        }
+        return super.onKeyDown(code)
+    }
 }

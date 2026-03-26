@@ -253,6 +253,7 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
     }
 
 
+    var lastBing199 = 0L
     suspend fun deal199Super2(heros: List<HeroBean?>): Int {
         if (step199Super == 1) {//准备冰球，变白扔冰
             val index = heros.indexOf(bingqiu)
@@ -271,9 +272,10 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
                 }
 
             } else if (index > -1) {
-                delay(1000)
+                delay(1000-(System.currentTimeMillis() - lastBing199))
             }
             return if (step199Super == 1) {
+                lastBing199 = System.currentTimeMillis()
                 index
             } else -1
 
