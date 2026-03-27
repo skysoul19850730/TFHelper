@@ -8,6 +8,7 @@ import data.toHSBFirst
 import foreach
 import getImage
 import getImageFromRes
+import org.apache.commons.compress.harmony.pack200.PackingUtils.log
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.awt.image.BufferedImage.TYPE_INT_RGB
@@ -217,7 +218,7 @@ object ImgUtil {
         }
 
 //        if(bestRate<0.6) {
-            println("bestRate si ${bestRate}")
+            log("bestRate si ${bestRate}")
 //        }
 
         return bestRate to bestPos

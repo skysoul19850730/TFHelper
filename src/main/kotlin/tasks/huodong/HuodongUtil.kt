@@ -67,7 +67,7 @@ object HuodongUtil {
         var dayDt = abs( ChronoUnit.DAYS.between(today, huodongStartTime).toInt())
         return when(dayDt%perCircleDate){
             0-> QiuXiang2Day1()
-            1-> HFHHero2()
+            1-> QiuXiang2Day2()
             2-> HFHHero3()
             3-> HFHHero4()
             4-> HFHHero5()
