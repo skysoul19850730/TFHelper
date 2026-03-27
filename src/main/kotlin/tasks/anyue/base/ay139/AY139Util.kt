@@ -174,32 +174,34 @@ object AY139Util {
         var circle = -1
         var fill = -1
 
-        var max = 0.0
+        var max = 0.3
 
         var r = slidingPixelMatch(bff, target)
         if(r.first>max){
             max = r.first
             futou = 1
             fill = 1
-        }
+        }else {
 
-        r = slidingPixelMatch(bfe, target)
-        if(r.first>max){
-            max = r.first
-            futou = 1
-            fill = 0
+            r = slidingPixelMatch(bfe, target)
+            if (r.first > max) {
+                max = r.first
+                futou = 1
+                fill = 0
+            }
         }
         r = slidingPixelMatch(bzf, target)
         if(r.first>max){
             max = r.first
             futou = 0
             fill = 1
-        }
-        r = slidingPixelMatch(bze, target)
-        if(r.first>max){
-            max = r.first
-            futou = 0
-            fill = 0
+        }else {
+            r = slidingPixelMatch(bze, target)
+            if (r.first > max) {
+                max = r.first
+                futou = 0
+                fill = 0
+            }
         }
 
         if (slidingPixelMatch(bs, target).first > 0.6) {
