@@ -44,7 +44,6 @@ class QiuXiang2Day7 : BaseQiuxiang2() {
             }
         ))
 
-        add149()
 
         curGuanDeal = guanDealList.get(0)
     }

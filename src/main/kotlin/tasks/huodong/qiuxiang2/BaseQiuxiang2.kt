@@ -15,6 +15,16 @@ abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
 
     lateinit var upHeros: List<HeroBean>
 
+
+    override fun onGuanChange(guan: Int) {
+        super.onGuanChange(guan)
+        if(curGuan == 49){
+            App.startAutoSave()
+        }else{
+            App.stopAutoSave()
+        }
+    }
+
     override suspend fun onKeyDown(code: Int): Boolean {
         if (code == KeyEvent.VK_NUMPAD9) {//9强制改变waitting，防止waiting有逻辑错误不上卡
             waiting = !waiting
