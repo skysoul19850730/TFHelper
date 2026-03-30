@@ -8,7 +8,7 @@ import data.toHSBFirst
 import foreach
 import getImage
 import getImageFromRes
-import org.apache.commons.compress.harmony.pack200.PackingUtils.log
+import log
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.awt.image.BufferedImage.TYPE_INT_RGB
@@ -22,16 +22,16 @@ object ImgUtil {
 
     //        val simRate = 0.95 //太小了，比较管卡 都特么一样，操
     val simRate
-        get() = if (App.caijing.value) 0.98  else _norRate.value
+        get() = if (App.caijing.value) 0.98 else _norRate.value
 
-    fun isImageSim(img1: BufferedImage, img2: BufferedImage?, sim: Double = simRate,tag:String?=null): Boolean {
+    fun isImageSim(img1: BufferedImage, img2: BufferedImage?, sim: Double = simRate, tag: String? = null): Boolean {
         img2 ?: return false
 //        var startTime = System.currentTimeMillis()
         if (img1.width != img2.width || img1.height != img2.height) return false
 
         var rect = MRect.createWH(0, 0, img1.width, img1.height)
 
-        var result = quickCompare(rect, sim,tag) { x, y ->
+        var result = quickCompare(rect, sim, tag) { x, y ->
             img1.getRGB(x, y) to img2.getRGB(x, y)
         }
 //        logOnly("isImageSim cost ${System.currentTimeMillis()-startTime}")
@@ -56,7 +56,12 @@ object ImgUtil {
         }
     }
 
-    private fun quickCompare(rect: MRect, sim: Double = simRate,tag:String?=null, c1c2: (Int, Int) -> Pair<Int, Int>): Boolean {
+    private fun quickCompare(
+        rect: MRect,
+        sim: Double = simRate,
+        tag: String? = null,
+        c1c2: (Int, Int) -> Pair<Int, Int>
+    ): Boolean {
         var yes = 0
         var no = 0
         val all = rect.width * rect.height
@@ -84,7 +89,7 @@ object ImgUtil {
             }
         }
         var rate = (yes * 1f / (rect.width * rect.height))
-        if(rate>0.75&&tag!=null) {
+        if (rate > 0.75 && tag != null) {
 //            println("$tag rate is $rate")
         }
         return rate > sim
@@ -111,10 +116,11 @@ object ImgUtil {
             }
         }
     }
+
     inline fun MRect.forEach4Result(callback: (Int, Int) -> Boolean) {
         for (x in left..right) {
             for (y in top..bottom) {
-                if(callback.invoke(x, y)){
+                if (callback.invoke(x, y)) {
                     return
                 }
             }
@@ -136,19 +142,19 @@ object ImgUtil {
     }
 
 
-    fun BufferedImage.copyWithColor(color:Color,minColorCount:Int):BufferedImage?{
+    fun BufferedImage.copyWithColor(color: Color, minColorCount: Int): BufferedImage? {
 
         val newImg = BufferedImage(width, height, TYPE_INT_RGB)
         var count = 0
         foreach { x, y ->
-            val tC = getRGB(x,y)
-            if(colorCompare(Color(tC),color,30)){
+            val tC = getRGB(x, y)
+            if (colorCompare(Color(tC), color, 30)) {
                 count++
-                newImg.setRGB(x,y,tC)
+                newImg.setRGB(x, y, tC)
             }
             false
         }
-        if(count<minColorCount){
+        if (count < minColorCount) {
             return null
         }
         return newImg
@@ -169,7 +175,7 @@ object ImgUtil {
         template: BufferedImage,
         target: BufferedImage,
         tolerance: Int = 15,
-        hsvFirst:Int = 0,//这个设置时就也会用它来判断，调用处自行决定是否需要严格用模板色值
+        hsvFirst: Int = 0,//这个设置时就也会用它来判断，调用处自行决定是否需要严格用模板色值
     ): Pair<Double, MPoint?> {
         val tw = template.width
         val th = template.height
@@ -205,7 +211,12 @@ object ImgUtil {
                     val px = tx + tx0
                     val py = ty + ty0
                     val targetColor = Color(target.getRGB(px, py))
-                    if (colorCompare(tmplColor, targetColor, tolerance) || abs(targetColor.rgb.toHSBFirst()- tmplColor.rgb.toHSBFirst())<hsvFirst) {
+                    if (colorCompare(
+                            tmplColor,
+                            targetColor,
+                            tolerance
+                        ) || abs(targetColor.rgb.toHSBFirst() - tmplColor.rgb.toHSBFirst()) < hsvFirst
+                    ) {
                         matchCount++
                     }
                 }
@@ -218,7 +229,8 @@ object ImgUtil {
         }
 
 //        if(bestRate<0.6) {
-            log("bestRate si ${bestRate}")
+        log("bestRate si ${bestRate},target ${target.hashCode()}")
+        log(target)
 //        }
 
         return bestRate to bestPos

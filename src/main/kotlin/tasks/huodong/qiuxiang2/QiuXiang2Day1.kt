@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent
 class QiuXiang2Day1 : BaseQiuxiang2() {
     val shan = HeroCreator.shan.create()
     val mengyan = HeroCreator.mengyan.create()
-    val gugu = HeroCreator.saman.create()
+    val gugu = HeroCreator.gugu.create()
     val sishen = HeroCreator.sishen.create()
     val kui = HeroCreator.kui.create()
     val dasheng = HeroCreator.dasheng.create()
@@ -20,7 +20,7 @@ class QiuXiang2Day1 : BaseQiuxiang2() {
 
     override fun initHeroes() {
         heros = arrayListOf(shan, mengyan, dasheng, gugu, sishen, kui, nvyao, bingqiu, haiyao, shexian)
-        upHeros = arrayListOf(shan,mengyan, dasheng, gugu, sishen,haiyao,sishen)
+        upHeros = arrayListOf(shan, mengyan, kui, gugu,sishen,haiyao,shexian)
         pBingQiu = bingqiu
 
         guanDealList.add(GuanDeal(

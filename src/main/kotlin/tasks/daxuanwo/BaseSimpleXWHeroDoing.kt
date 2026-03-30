@@ -293,7 +293,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 }
             }
             onStart {
-                start49Listener()
+//                start49Listener()
             }
             des = "需要切的时候按0，会自动下卡再上卡，收集完成后按3，切换的卡会上满"
         }
@@ -472,7 +472,7 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
     private fun start69Listener(){
 
         val checkRect = MRect.createWH(78, 326, 205, 55)
-        val platImg = getImageFromRes("${Config.platName}/tezheng/xuanwo/xw69.png")
+        val platImg = getImageFromRes("${Config.platName}/tezheng/xuanwo/wx69.png")
         GlobalScope.launch {
             while(curGuan == 69 && running){
                 val img = getImage(checkRect)

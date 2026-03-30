@@ -101,7 +101,14 @@ class Ay139(val heroDoing: BaseAnYueHeroDoing, val test: Boolean = true) : AnSub
                     } else {
                         state = 1
                     }
+
+                    //这里不能简单3秒后，因为上一个冰球可能刚用完，delay3秒也才醒0.x秒就又要冰额，所以要关联上次冰的时间
+                    //如果3秒能打死，要精准delay  冰的效果完3秒
                     delay(3000)//打死一个球的时间
+
+                    if(state!=2){//恢复冰
+                        state = 0
+                    }
                 }
             }
 
