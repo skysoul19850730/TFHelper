@@ -244,6 +244,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
         overGuan: Int? = null,
         dealTime: Long = 0L,
         sholudPasue: (suspend () -> Boolean)? = null,
+        otherDoBeforeBing:(suspend () -> Unit)?=null,
         customOverJudge: (() -> Boolean)? = null,
         onGuanDealStart: (suspend () -> Unit)? = null
     ) {
@@ -285,6 +286,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
                         delay(200)
                         sp = sholudPasue?.invoke()?:false
                     }
+                    otherDoBeforeBing?.invoke()
                     lastQiuTime = System.currentTimeMillis()
                 }
                 index
