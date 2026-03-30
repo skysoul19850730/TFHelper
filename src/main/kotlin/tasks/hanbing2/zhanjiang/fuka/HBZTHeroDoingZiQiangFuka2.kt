@@ -136,7 +136,7 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
         }, onGuanDealStart = { startLeishenOberserver() }))
 
         gudingShuaQiuTask("bingqiu", 149, 2500, overGuan = 150, dealTime = 3000,
-            sholudPasue = {
+            otherDoBeforeBing = {
                 if (g149 == 1) {//
                     delay(3000)//保证的是 冰完打3秒
                     g149 = 0

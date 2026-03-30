@@ -34,7 +34,8 @@ class QiuXiang2Day2 : BaseQiuxiang2() {
             }
         ))
 
-        addGuanDealWithHerosFull(80, listOf(zhanjiang,jiaonv,saman,shexian,nvwang,shahuang,tianshi)
+
+        addGuanDealWithHerosFull(50, listOf(zhanjiang,jiaonv,saman,shexian,nvwang,shahuang,tianshi)
         , listOf(shengqi), zhuangbei = {qiangxi}
         )
 

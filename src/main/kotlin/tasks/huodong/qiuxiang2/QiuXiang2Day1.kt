@@ -33,7 +33,9 @@ class QiuXiang2Day1 : BaseQiuxiang2() {
             }
         ))
 
-        add49()
+//        add49()
+
+        addGuanDealWithHerosFull(50, listOf(shan, mengyan, kui, gugu,sishen,haiyao,shexian))
 
         gudingShuaQiuTask("bingqiu",80,2400, customOverJudge = {
             !bing88
