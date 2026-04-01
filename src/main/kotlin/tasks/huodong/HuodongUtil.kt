@@ -72,7 +72,7 @@ object HuodongUtil {
             3-> HFHHero4()
             4-> QiuXiang2Day5()
             5-> QiuXiang2Day6()
-            6-> HFHHero7()
+            6-> QiuXiang2Day7()
             else-> HFHHero7()
         }
     }
