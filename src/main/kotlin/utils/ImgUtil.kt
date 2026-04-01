@@ -229,8 +229,8 @@ object ImgUtil {
         }
 
 //        if(bestRate<0.6) {
-        log("bestRate si ${bestRate},target ${target.hashCode()}")
-        log(target)
+//        log("bestRate si ${bestRate},target ${target.hashCode()}")
+//        log(target)
 //        }
 
         return bestRate to bestPos

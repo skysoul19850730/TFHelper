@@ -8,7 +8,7 @@ class QiuXiang2Day6 : BaseQiuxiang2() {
     val hugong = HeroCreator.hugong.create()
     val houyi = HeroCreator.houyi.create()
     val shenv = HeroCreator.shenv.create()
-    val xiaopao = HeroCreator.haiyao.create()
+    val xiaopao = HeroCreator.zhanjiang.create()
     val haiyao = HeroCreator.haiyao.create()
     val gugu = HeroCreator.gugu.create()
     val nvyao = HeroCreator.nvyao.create()
@@ -24,7 +24,7 @@ class QiuXiang2Day6 : BaseQiuxiang2() {
 
         addGuanDealWithHerosFull(50, listOf(dianfa, haiyao, houyi, gugu, nvyao, hugong, dapao))
 
-        gudingShuaQiuTask("moqiu", 58, 5500, sholudPasue = {
+        gudingShuaQiuTask("moqiu", 58, 5500, overGuan = 200, sholudPasue = {
             moPause
         })
 

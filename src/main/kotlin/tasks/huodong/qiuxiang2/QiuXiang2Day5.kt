@@ -24,7 +24,7 @@ class QiuXiang2Day5 : BaseQiuxiang2() {
 
         addGuanDealWithHerosFull(50, listOf(houzi, xiaoye, sishen, gugu, ganglie, longwang, dapao))
 
-        gudingShuaQiuTask("moqiu", 58, 5500, sholudPasue = {
+        gudingShuaQiuTask("moqiu", 58, 5500, overGuan = 200, sholudPasue = {
             moPause
         })
 
