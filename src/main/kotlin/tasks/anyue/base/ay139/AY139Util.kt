@@ -15,6 +15,8 @@ import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
 import utils.ImgUtil
 import utils.ImgUtil.slidingPixelMatch
+import utils.hasColorCount
+import java.awt.Color
 import java.awt.image.BufferedImage
 
 object AY139Util {
@@ -49,7 +51,7 @@ object AY139Util {
     val bottomSize = Size(104.0, 104.0)
     val TopAllRect = MRect.createWH(350, 150, 446, 173)
 
-//    val BottomCheckRect = MRect.createWH(340, 310, 450, 104)//测试时用，因为截图可能已经去到左边了，所以范围大些，范围大了效率就低
+    //    val BottomCheckRect = MRect.createWH(340, 310, 450, 104)//测试时用，因为截图可能已经去到左边了，所以范围大些，范围大了效率就低
     val BottomCheckRect = MRect.createWH(630, 310, 150, 104)//正式用，假设已经比较准了，那差不多刚出来就可以时识别了，增加效率
 
     class MatType(val futou: Int, val circle: Int, val fill: Int) {
@@ -62,8 +64,9 @@ object AY139Util {
         template: BufferedImage,
         target: BufferedImage,
         tolerance: Int = 15,
+        log: Boolean = false
     ): Pair<Double, MPoint?> {
-        return ImgUtil.slidingPixelMatch(template, target, tolerance,30)
+        return ImgUtil.slidingPixelMatch(template, target, tolerance, 30, log)
     }
 
     fun getTopMatTypes(img2: BufferedImage? = null): List<MatType>? {
@@ -88,27 +91,27 @@ object AY139Util {
 
         var max = 0.0
 
-        var r = slidingPixelMatch(sff, target)
-        if(r.first>max){
+        var r = slidingPixelMatch(sff, target, log = true)
+        if (r.first > max) {
             max = r.first
             futou = 1
             fill = 1
         }
 
-        r = slidingPixelMatch(sfe, target)
-        if(r.first>max){
+        r = slidingPixelMatch(sfe, target, log = true)
+        if (r.first > max&& target.hasColorCount(Color.WHITE) < 800) {
             max = r.first
             futou = 1
             fill = 0
         }
-        r = slidingPixelMatch(szf, target)
-        if(r.first>max){
+        r = slidingPixelMatch(szf, target, log = true)
+        if (r.first > max) {
             max = r.first
             futou = 0
             fill = 1
         }
-        r = slidingPixelMatch(sze, target)
-        if(r.first>max){
+        r = slidingPixelMatch(sze, target, log = true)
+        if (r.first > max&& target.hasColorCount(Color.WHITE) < 800) {
             max = r.first
             futou = 0
             fill = 0
@@ -135,7 +138,7 @@ object AY139Util {
             circle = 1
         }
 
-        if (futou > -1 && max>0.6) {
+        if (futou > -1 && max > 0.6) {
             return MatType(futou, circle, fill).apply {
                 println("${this.toPString()}")
             }
@@ -176,41 +179,47 @@ object AY139Util {
 
         var max = 0.3
 
-        var r = slidingPixelMatch(bff, target)
-        if(r.first>max){
+        var r = slidingPixelMatch(bff, target, log = true)
+        if (r.first > max) {
             max = r.first
             futou = 1
             fill = 1
-        }else {
-
-            r = slidingPixelMatch(bfe, target)
-            if (r.first > max) {
-                max = r.first
-                futou = 1
-                fill = 0
-            }
         }
-        r = slidingPixelMatch(bzf, target)
-        if(r.first>max){
+
+        r = slidingPixelMatch(bfe, target, log = true)
+
+        //bottom 实心斧头 实测  白色像素有3500个。。  top 实心斧头 实测  白色像素有1500个。。top的空心法杖加边框都有260个
+        //所以底部用2000，top用800吧
+//如果target是实心白，但这里用镂空模板（只计算非镂空部分）的占比，可能比上面实心计算比例还大，
+// 所以这里加一步粗略计算是否镂空，暂时按300,实心的应该远大于300了
+        if (r.first > max && target.hasColorCount(Color.WHITE) < 2000) {
+            max = r.first
+            futou = 1
+            fill = 0
+        }
+
+        r = slidingPixelMatch(bzf, target, log = true)
+        if (r.first > max) {
             max = r.first
             futou = 0
             fill = 1
-        }else {
-            r = slidingPixelMatch(bze, target)
-            if (r.first > max) {
-                max = r.first
-                futou = 0
-                fill = 0
-            }
         }
 
-        if (slidingPixelMatch(bs, target).first > 0.6) {
+        r = slidingPixelMatch(bze, target, log = true)
+        if (r.first > max && target.hasColorCount(Color.WHITE) < 2000) {
+            max = r.first
+            futou = 0
+            fill = 0
+        }
+
+
+        if (slidingPixelMatch(bs, target, log = true).first > 0.6) {
             circle = 0
         } else {
             circle = 1
         }
 
-        if (futou > -1 && max>0.6) {
+        if (futou > -1 && max > 0.6) {
             return MatType(futou, circle, fill)
         }
         return null

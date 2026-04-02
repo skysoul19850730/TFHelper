@@ -7,11 +7,13 @@ import data.MRect
 import data.toHSBFirst
 import foreach
 import getImage
+import getImageFromFile
 import getImageFromRes
 import log
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.awt.image.BufferedImage.TYPE_INT_RGB
+import java.io.File
 import kotlin.math.abs
 
 object ImgUtil {
@@ -176,6 +178,7 @@ object ImgUtil {
         target: BufferedImage,
         tolerance: Int = 15,
         hsvFirst: Int = 0,//这个设置时就也会用它来判断，调用处自行决定是否需要严格用模板色值
+        log: Boolean = false
     ): Pair<Double, MPoint?> {
         val tw = template.width
         val th = template.height
@@ -228,12 +231,30 @@ object ImgUtil {
             }
         }
 
-//        if(bestRate<0.6) {
-//        log("bestRate si ${bestRate},target ${target.hashCode()}")
-//        log(target)
-//        }
+        if (log && bestRate>0.5) {
+            log("bestRate si ${bestRate},target ${target.hashCode()}")
+            log(target)
+        }
 
         return bestRate to bestPos
     }
 
+}
+
+fun BufferedImage.hasColorCount(toColor: Color, sim: Int = 20): Int {
+    var count = 0
+    this.foreach { i, i2 ->
+        val color = Color(this.getRGB(i, i2))
+        if (colorCompare(color, toColor, sim)) {
+            count++
+        }
+        false
+    }
+    return count
+}
+
+fun main(){
+    val img = getImageFromFile(File("E:\\ideaspace\\TFHelperHome\\tfres\\logs\\anyue\\26_04_01\\06_49_49\\373279871.png"))
+    val count = img.hasColorCount(Color.WHITE)
+    println(count)
 }

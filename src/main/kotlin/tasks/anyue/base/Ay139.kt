@@ -92,13 +92,14 @@ class Ay139(val heroDoing: BaseAnYueHeroDoing, val test: Boolean = true) : AnSub
                 } else {
                     log("底部结果：${bottom.toPString()}")
                     if (bottom.toPString() == differentMat?.toPString()) {//但这个不用操作，本身就一直冰
-                        log("底部与不同一致,停止冰")
+                        log("底部与不同一致,继续冰")
                         //是不同的那个
                         state = 0
                         delay(10000)
-                        log("10秒后，解除冰")
+                        log("10秒后，解除冰，不再打冰")
                         state = 2
                     } else {
+                        log("暂停打冰，3秒后恢复打冰")
                         state = 1
                     }
 

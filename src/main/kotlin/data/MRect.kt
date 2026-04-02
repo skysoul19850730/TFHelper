@@ -3,6 +3,7 @@
 package data
 
 import colorCompare
+import foreach
 import getImage
 import getSubImage
 import utils.ImgUtil.forEach
