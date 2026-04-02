@@ -34,6 +34,7 @@ dependencies {
     implementation("commons-codec:commons-codec:1.18.0")
     implementation("org.openpnp:opencv:4.6.0-0")
     implementation("com.alibaba:fastjson:1.2.76")
+    implementation("com.google.code.gson:gson:2.10.1")
         implementation("org.projectlombok:lombok:1.18.24") // 使用最新版本
 //        annotationProcessor 'org.projectlombok:lombok:1.18.24' // 使用最新版本
     implementation("org.usb4java:usb4java:1.3.0")

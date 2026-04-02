@@ -2,6 +2,7 @@ package database
 
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.fastjson.TypeReference
+import com.google.gson.Gson
 import data.Config
 import getImageFromFile
 import resFile
@@ -10,29 +11,52 @@ import ui.utils.WashDataBean
 import java.io.File
 
 object DataManager {
+    lateinit var dataConfig: DataConfig
+        private set
     val dataDirPath = Config.data_main_path
     var wxGroups = arrayListOf<String>()
         get() {
-            if(field.isEmpty()){
+            if (field.isEmpty()) {
                 init()
             }
             return field
         }
 
 
-    fun initWashData():Map<String,WashDataBean> {
+    private fun initDataConfig(): DataConfig {
+        var washFile = File(dataDirPath, "configs.txt")
+        if (!washFile.exists()) {
+            washFile.createNewFile()
+        }
+        val text = washFile.readText()
+        val map =  Gson().fromJson<DataConfig>(text, DataConfig::class.java)
+//        val map = JSONObject.parseObject(text,object : TypeReference<DataConfig>() {})
+        return map
+    }
+
+    fun saveDataConfig(change:(DataConfig)->DataConfig) {
+        var washFile = File(dataDirPath, "configs.txt")
+        if (!washFile.exists()) {
+            washFile.createNewFile()
+        }
+        dataConfig = change(dataConfig)
+        washFile.writeText(JSONObject.toJSONString(dataConfig))
+    }
+
+
+    fun initWashData(): Map<String, WashDataBean> {
         var washFile = File(dataDirPath, "wash.txt")
         if (!washFile.exists()) {
             washFile.createNewFile()
         }
         val text = washFile.readText()
 
-        val map= JSONObject.parseObject(text,object :TypeReference<Map<String,WashDataBean>>(){})
-            ?:HashMap()
+        val map = JSONObject.parseObject(text, object : TypeReference<Map<String, WashDataBean>>() {})
+            ?: HashMap()
         return map
     }
 
-    fun saveWashData(){
+    fun saveWashData() {
         var washFile = File(dataDirPath, "wash.txt")
         if (!washFile.exists()) {
             washFile.createNewFile()
@@ -61,17 +85,19 @@ object DataManager {
                 saveGroups()
             }
         }
+
+        dataConfig = initDataConfig()
     }
 
-    fun addGroup(text:String){
-        if(!wxGroups.contains(text)){
+    fun addGroup(text: String) {
+        if (!wxGroups.contains(text)) {
             wxGroups.add(text)
             saveGroups()
         }
     }
 
-    fun removeGroup(text:String){
-        if(wxGroups.contains(text)){
+    fun removeGroup(text: String) {
+        if (wxGroups.contains(text)) {
             wxGroups.remove(text)
             saveGroups()
         }
