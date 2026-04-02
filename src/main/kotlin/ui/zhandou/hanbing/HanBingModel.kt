@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toPainter
 import androidx.compose.ui.unit.dp
 import button
+import database.DataConfig
+import database.DataManager
 import ui.weights.MCheckBox
 import ui.zhandou.UIKeyListenerManager
 import ui.zhandou.data.ZhanDouModel
@@ -32,7 +34,7 @@ class HanBingModel() : ZhanDouModel("寒冰") {
 
     companion object {
         val imgs = mutableStateListOf<BufferedImage>()
-        val renwuKa = mutableStateOf<String>("xiaoye")
+        val renwuKa = mutableStateOf<String>(DataManager.dataConfig.taskCard)
         val useRenwuKa = mutableStateOf(false)
     }
 
@@ -79,6 +81,11 @@ class HanBingModel() : ZhanDouModel("寒冰") {
                     renwuKa.value = it
                 })
                 MCheckBox("做任务", useRenwuKa)
+                button("保存"){
+                    DataManager.saveDataConfig{
+                        it.copy(taskCard = renwuKa.value)
+                    }
+                }
             }
             LazyRow {
                 itemsIndexed(imgs) { _, item ->
