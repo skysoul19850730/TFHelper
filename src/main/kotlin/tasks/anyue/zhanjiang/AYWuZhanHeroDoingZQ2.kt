@@ -79,7 +79,7 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
                 check129Xue()
             }
         })
-            .apply { des = "按0下射线，再按0上射线" })
+            .apply { des = "按0下射线，再按0上射线，改为脚本方上下俩卡，另一方下一个就不用再操作上下卡了（可以刷魔）" })
 
 
         guanDealList.add(
@@ -125,15 +125,16 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
         if (curGuan > 129) return -1
 
-        while (g129State == 0) {
-            delay(100)
-            if (curGuan > 129) return -1
-        }
+//        while (g129State == 0) {
+//            delay(100)
+//            if (curGuan > 129) return -1
+//        }
         when (g129State) {
             1 -> {
                 delay(500)
                 carDoing.downHero(feiting)
-                var index = heros.indexOf(feiting)
+                carDoing.downHero(jiaonv)
+                var index = heros.upAny(jiaonv,feiting)
                 if (index > -1) {
                     while (g129State == 1) {
                         delay(100)
@@ -142,6 +143,23 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
                     return index
                 }
                 return -1
+            }
+            0 ->{
+                if(jiaonv.isInCar() && feiting.isInCar()){
+                    while (g129State == 0) {
+                        delay(100)
+                        if (curGuan > 129) return -1
+                    }
+                    //这里等state 变回1后，直接递归本方法，去执行 =1 的分支，即下卡
+                    return g129Index(heros)
+                }else{
+                    //这里也上另一个，这样如果运气差，等另一个满了，也就上去了
+                    if(jiaonv.isInCar()){
+                        return heros.upAny(feiting,jiaonv)
+                    }else{
+                        return heros.upAny(jiaonv,feiting)
+                    }
+                }
             }
 
         }
