@@ -254,7 +254,7 @@ fun BufferedImage.hasColorCount(toColor: Color, sim: Int = 20): Int {
 }
 
 fun main(){
-    val img = getImageFromFile(File("E:\\ideaspace\\TFHelperHome\\tfres\\logs\\anyue\\26_04_01\\06_49_49\\373279871.png"))
-    val count = img.hasColorCount(Color.WHITE)
-    println(count)
+//    val img = getImageFromFile(File("E:\\ideaspace\\TFHelperHome\\tfres\\logs\\anyue\\26_04_01\\06_49_49\\373279871.png"))
+//    val count = img.hasColorCount(Color.WHITE)
+//    println(count)
 }

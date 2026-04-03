@@ -46,7 +46,7 @@ abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
             full49 = false
             return true
         }
-        if (curGuan == 99) {
+        if (curGuan == 99 && code == KeyEvent.VK_NUMPAD0) {
             stop99 = true
         }
         return super.onKeyDown(code)
