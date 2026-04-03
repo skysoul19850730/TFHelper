@@ -13,7 +13,7 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
     val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()
-    val yuren = HeroCreator.yuren.create()
+    val guangqiu = HeroCreator.guangqiu.create()
     val jiaonv = HeroCreator.jiaonv.create()
     val feiting = HeroCreator.feiting.create()
 
@@ -25,7 +25,7 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, tieqi, tuling, tianshi, gugu, feiting, jiaonv, dijing, bingqiu, yuren)
+        heros = arrayListOf(zhanjiang, tieqi, tuling, tianshi, gugu, feiting, jiaonv, dijing, bingqiu, guangqiu)
 
         addGuanDeal(0) {
             over {
@@ -40,9 +40,9 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
             }
         }
 
-        addGuanDealWithHerosFull(27, listOf(zhanjiang, gugu, jiaonv, dijing, feiting, tieqi, yuren))
+        addGuanDealWithHerosFull(27, listOf(zhanjiang, gugu, jiaonv, dijing, feiting, tieqi))
 
-        addGuanDealWithHerosFull(38, listOf(tianshi), listOf(dijing))
+        addGuanDealWithHerosFull(38, listOf(tianshi))
 
         add39()
 
@@ -57,7 +57,7 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
         add99()
 
 
-        addGuanDealWithHerosFull(100, listOf(tianshi), listOf(yuren))
+        addGuanDealWithHerosFull(100, listOf(tianshi), listOf(dijing))
 
         add109()
 
@@ -85,9 +85,9 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
         guanDealList.add(
             GuanDeal(
                 130,
-                isOver = { feiting.isFull() },
+                isOver = { fulls(feiting,jiaonv) },
                 chooseHero = {
-                    upAny(feiting)
+                    upAny(feiting,jiaonv)
                 })
         )
 
