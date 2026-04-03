@@ -25,7 +25,7 @@ import java.awt.image.BufferedImage
 
 class ShenHaiModel() : ZhanDouModel("深海") {
     //    override var subModels = arrayListOf("1","2")
-    override var subModels: SnapshotStateList<String> = mutableStateListOf("瓦王波","天使静")
+    override var subModels: SnapshotStateList<String> = mutableStateListOf("瓦王波","天使静","自强猫")
     override var subSelected: MutableState<String> = mutableStateOf("瓦王波")
 
     companion object {
@@ -41,6 +41,9 @@ class ShenHaiModel() : ZhanDouModel("深海") {
             }
             "天使静" -> {
                 App.setLaunchModel(App.model_shenhai_tianshiJing)
+            }
+            "自强猫" -> {
+                App.setLaunchModel(App.model_shenhai_ziqiang_maomi)
             }
 
         }

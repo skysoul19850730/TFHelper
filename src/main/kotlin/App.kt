@@ -83,6 +83,8 @@ object App {
 
     val model_shenhai_wawangbo = model_shenhai or 0x00000001
     val model_shenhai_tianshiJing = model_shenhai or 0x00000002
+    val model_shenhai_ziqiang = model_shenhai or 0x0000004
+    val model_shenhai_ziqiang_maomi = model_shenhai or 0x0000008
 
     val _launchModel = mutableStateOf(model_duizhan)
     var mLaunchModel: Int
@@ -251,7 +253,7 @@ object App {
             model_xuanwo_wawangbo,model_xuanwo_huolingbo, model_xuanwo_wawangziqiang,model_xuanwo_wawangdairen, model_xuanwo_wawangdairen69->{
                 HBZhanNvGameLaunch()
             }
-            model_shenhai_wawangbo, model_shenhai_tianshiJing->{
+            model_shenhai_wawangbo, model_shenhai_tianshiJing,model_shenhai_ziqiang_maomi,model_shenhai_ziqiang->{
                 HBZhanNvGameLaunch()
             }
 
