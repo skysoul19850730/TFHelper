@@ -91,9 +91,17 @@ class An49(val heroDoing: BaseAnYueHeroDoing ,val test:Boolean = true) : AnSub {
 
                     log(img)
                     if(same){
+                        //这里也要补超时，只要识别到球，不论是否同色，都只判一次，如果第一次同色，监听一次掉血或延迟最多10秒开打，如果第一个是不同色，监听两次掉血，但最多18秒后开打
+                        //observerXueDown 里有delay会被timeout
                         log("同色")
-                        XueLiang.observerXueDown { curGuan > 49 }
-                        log("掉血了")
+                        val result = withTimeoutOrNull(10000) {
+                            XueLiang.observerXueDown { curGuan > 49 }
+                        }
+                        if(result==null){
+                            log("超时了，超时后开打")
+                        }else {
+                            log("掉血了")
+                        }
                         state = 1
                         break
                     }else{

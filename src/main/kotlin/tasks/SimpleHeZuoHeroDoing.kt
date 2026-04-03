@@ -251,22 +251,26 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
 
         var delayed = false
 
+        var overRun = {
+            if (qiuStopFlag) {
+                true
+            } else {
+                if (customOverJudge != null) {
+                    customOverJudge.invoke()
+                } else if (overGuan != null) {
+                    curGuan > overGuan
+                } else if (allTime != null) {
+                    System.currentTimeMillis() - qiuAutoBeginTime > allTime
+                } else {
+                    qiuStopFlag || curGuan > startGuan
+                }
+            }
+        }
+
         guanDealList.add(GuanDeal(
             startGuan = startGuan,
             isOver = {
-                if (qiuStopFlag) {
-                    true
-                } else {
-                    if (customOverJudge != null) {
-                        customOverJudge.invoke()
-                    } else if (overGuan != null) {
-                        curGuan > overGuan
-                    } else if (allTime != null) {
-                        System.currentTimeMillis() - qiuAutoBeginTime > allTime
-                    } else {
-                        qiuStopFlag || curGuan > startGuan
-                    }
-                }
+                overRun.invoke()
             },
             chooseHero = {
                 //这里需要增加一个外面终止后，这里delay后还要刷最后一个的问题，尤其冰球
@@ -288,6 +292,9 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
                     }
                     otherDoBeforeBing?.invoke()
                     lastQiuTime = System.currentTimeMillis()
+                }
+                if(overRun.invoke()){//over后，不释放最后一次球
+                    return@GuanDeal -1
                 }
                 index
             },
