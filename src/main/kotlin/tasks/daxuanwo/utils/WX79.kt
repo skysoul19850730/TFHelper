@@ -41,6 +41,9 @@ object WX79 {
                         it.clickPoint.click()
                         delay(2000)
                         break
+                    }else if(rate>0.1){
+                        println("按0.1可能识别到气泡在位置:${index}")
+                        log(img)
                     }
                 }
                 delay(200)

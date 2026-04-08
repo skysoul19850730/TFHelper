@@ -515,9 +515,20 @@ abstract class BaseSimpleXWHeroDoing() : SimpleHeZuoHeroDoing(), UIKeyListenerMa
                 WX59.autoDo(auto59)
             }
             if (guan == 79 && auto79) {
-                WX79.autoDo(carDoing.carps.map {
+
+                val mRects = arrayListOf<MRect>()
+                mRects.addAll(carDoing.carps.map {
                     it.mRect.scale(0.3f)
-                }) {
+                })
+
+                //尝试帮队友点击气泡
+                val otherCar = otherCarDoing.carps.map {
+                    it.mRect.scale(0.3f)
+                }
+
+                mRects.addAll(otherCar)
+
+                WX79.autoDo(mRects) {
                     curGuan > 79
                 }
             }
