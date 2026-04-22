@@ -10,7 +10,7 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
     val tieqi = HeroCreator.tieqi.create()
     val tianshi = HeroCreator.tianshi.create()
     val sishen = HeroCreator.sishen.create()
-    val bingqi = HeroCreator.bingqi.create()
+    val yuren = HeroCreator.yuren.create()
     
     val wangjiang = HeroCreator.wangjiang.create()
     val feiting = HeroCreator.feiting.create()
@@ -24,7 +24,7 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
         super.initHeroes()
         auto59 = true
         heros = arrayListOf(
-            sishen, tieqi, zhanjiang, haiyao, niutou, wangjiang, feiting, tianshi, guangqiu, bingqi
+            sishen, tieqi, zhanjiang, haiyao, niutou, wangjiang, feiting, tianshi, guangqiu, yuren
         )
         addGuanDeal(0) {
             over {
@@ -40,33 +40,32 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
             }
         }
 
-        addGuanDeal(18) {
+        addGuanDeal(17) {
             over {
-                fulls(zhanjiang, niutou, feiting, tieqi, sishen,haiyao)
+                fulls(zhanjiang, niutou, feiting, tieqi, sishen,yuren,haiyao)
             }
             chooseHero {
-                upAny(zhanjiang, niutou, feiting, tieqi, sishen,haiyao)
+                upAny(zhanjiang, niutou, feiting, tieqi, sishen,yuren,haiyao)
             }
         }
 
 
-        addGuanDeal(38) {
-            over {
-                fulls(zhanjiang, niutou, feiting, tieqi, haiyao, tianshi, sishen)
-            }
-            chooseHero {
-                upAny(zhanjiang, niutou, feiting, tieqi, tianshi, sishen, haiyao)
-            }
-            onStart {
-                delay(3000)
-            }
-        }
-        addGuanDeal(40){
+        addGuanDealWithHerosFull(38, listOf(tianshi), listOf(haiyao), delay = 3000)
 
-            onlyDo {
-                carDoing.downHero(tianshi)
-            }
-        }
+//        addGuanDeal(38) {
+//            over {
+//                fulls(zhanjiang, niutou, feiting, tieqi, yuren, tianshi, sishen)
+//            }
+//            chooseHero {
+//                upAny(zhanjiang, niutou, feiting, tieqi, tianshi, sishen, yuren)
+//            }
+//            onStart {
+//                carDoing.downHero(haiyao)
+//                delay(3000)
+//            }
+//        }
+        addGuanDealWithHerosFull(40, listOf(haiyao), listOf(tianshi,yuren))
+
 
         addGuanDealWithHerosFull(47, listOf(tianshi))
 
@@ -81,12 +80,13 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
             }
         }
         //内部实际是52关开始
-        add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, bingqi, wangjiang),listOf(tieqi,wangjiang))
+        add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, yuren, wangjiang),listOf(yuren,wangjiang))
 
-        add69(listOf(tieqi,tianshi))
+        add69(listOf(yuren,tianshi))
+        g69State = 1//跟波打，上来就是1  下卡，等掉血上去抗个无敌就可以了，就不需要快捷键上下卡了
 
-        addGuanDealWithHerosFull(70, listOf(tieqi,wangjiang), listOf(bingqi,tianshi))
-        addGuanDealWithHerosFull(78, listOf(tianshi))
+        addGuanDealWithHerosFull(70, listOf(wangjiang), listOf(tianshi))
+        addGuanDealWithHerosFull(78, listOf(tianshi), listOf(yuren))
 
 //        addGuanDealWithHerosFull(82, listOf(guangqiu), listOf(wangjiang))
 
