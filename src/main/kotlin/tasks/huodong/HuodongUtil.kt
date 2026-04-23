@@ -68,7 +68,7 @@ object HuodongUtil {
         return when(dayDt%perCircleDate){
             0-> QiuXiang2Day1()
             1-> QiuXiang2Day2()
-            2-> HFHHero3()
+            2-> QiuXiang2Day3()
             3-> HFHHero4()
             4-> QiuXiang2Day5()
             5-> QiuXiang2Day6()

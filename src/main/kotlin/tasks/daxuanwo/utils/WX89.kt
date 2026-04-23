@@ -63,8 +63,8 @@ object WX89 {
         doing = true
         GlobalScope.launch {
             //适当加个delay
-//            delay(2000)
-            delay(28000)//16秒后出土，再开始即可
+            delay(6000)//加速了，boss出来几秒就扔龙了
+//            delay(28000)//16秒后出土，再开始即可
             var folder = "${Config.platName}/tezheng/xuanwo/xw89"
 
 //            while (!over.invoke() && doing) {//这里是防止队友又给转走，

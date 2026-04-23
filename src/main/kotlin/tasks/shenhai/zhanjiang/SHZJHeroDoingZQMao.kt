@@ -41,13 +41,13 @@ class SHZJHeroDoingZQMao : BaseSimpleSHHeroDoing() {
             val lastNum = i % 10
 
             if(lastNum == 8){
-                addGuanDealWithHerosFull(start, listOf(tianshi), delay = 2000)
+                addGuanDealWithHerosFull(i, listOf(tianshi), delay = 2000)
             }
             if(lastNum==9){
-                gudingShuaQiuTask("hunqiu",start,2000, overGuan = start+1)
+                gudingShuaQiuTask("hunqiu",i,2000, overGuan = i+1)
             }
             if(lastNum == 0){
-                downHero(lastNum,tianshi)
+                downHero(i,tianshi)
             }
 
         }
