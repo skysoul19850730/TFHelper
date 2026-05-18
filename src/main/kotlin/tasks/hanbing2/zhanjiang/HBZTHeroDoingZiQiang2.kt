@@ -46,55 +46,21 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
 
         addGuanDeal(0) {
             over {
-                zhanjiang.isInCar()
+                fulls(zhanjiang, yuren, jiaonv, feiting, tianshi, gugu, tieqi) && longxin
             }
             chooseHero {
-                upAny(zhanjiang)
+                if (zhanjiang.isInCar()) {
+                    upAny(tianshi, zhanjiang, tieqi, yuren, gugu, jiaonv, feiting, zhuangbei = { longxin })
+                } else upAny(zhanjiang, feiting)
             }
         }
-
-        addGuanDealWithHerosFull(19, listOf(zhanjiang, gugu, jiaonv, tieqi, wangjiang, feiting), null, { longxin })
-
-        addGuanDeal(39) {
-            over {
-                fulls(yuren) && longxin
-            }
-            chooseHero {
-                upAny(yuren, zhuangbei = { longxin })
-            }
-        }
-        addGuanDeal(98) {
-            over {
-                fulls(tianshi)
-            }
-            chooseHero {
-                upAny(tianshi)
-            }
-            onStart {
-                carDoing.downHero(wangjiang)
-            }
-        }
-        addGuanDeal(100) {
-            over {
-                fulls(wangjiang) && yandou
-            }
-            chooseHero {
-                upAny(wangjiang, zhuangbei = { yandou })
-            }
-            onStart {
-                carDoing.downHero(tianshi)
-            }
-        }
-        addGuanDeal(108) {
+        changeZhuangbei(101){yandou}
+        addGuanDeal(109) {
             over {
                 curGuan > 109
             }
             chooseHero {
                 upBase()
-
-            }
-            onStart {
-                carDoing.downHero(wangjiang)
             }
         }
 

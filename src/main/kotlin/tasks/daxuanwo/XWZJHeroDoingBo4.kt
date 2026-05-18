@@ -11,12 +11,12 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
     val tianshi = HeroCreator.tianshi.create()
     val sishen = HeroCreator.sishen.create()
     val yuren = HeroCreator.yuren.create()
-    
+
     val wangjiang = HeroCreator.wangjiang.create()
     val feiting = HeroCreator.feiting.create()
     val haiyao = HeroCreator.haiyao.create()
 
-   
+
     val guangqiu = HeroCreator.guangqiu.create()
 
 
@@ -28,65 +28,29 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
         )
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang, niutou,sishen, feiting)
+                fulls(zhanjiang, niutou, sishen, feiting, tieqi, tianshi, yuren)
             }
             chooseHero {
                 if (zhanjiang.isInCar()) {
-                    if(feiting.isInCar()){
-                        upAny(zhanjiang,feiting  ,niutou,sishen)
-                    }else
-                    upAny(feiting,zhanjiang,  niutou,sishen)
-                } else upAny(zhanjiang,feiting)
+                    if (feiting.isInCar()) {
+                        upAny(zhanjiang, feiting, niutou, sishen,tieqi,tianshi,yuren)
+                    } else
+                        upAny(feiting, zhanjiang, niutou, sishen,tieqi,tianshi,yuren)
+                } else upAny(zhanjiang, feiting)
             }
         }
 
-        addGuanDeal(17) {
-            over {
-                fulls(zhanjiang, niutou, feiting, tieqi, sishen,yuren,haiyao)
-            }
-            chooseHero {
-                upAny(zhanjiang, niutou, feiting, tieqi, sishen,yuren,haiyao)
-            }
-        }
-
-
-        addGuanDealWithHerosFull(38, listOf(tianshi), listOf(haiyao), delay = 3000)
-
-//        addGuanDeal(38) {
-//            over {
-//                fulls(zhanjiang, niutou, feiting, tieqi, yuren, tianshi, sishen)
-//            }
-//            chooseHero {
-//                upAny(zhanjiang, niutou, feiting, tieqi, tianshi, sishen, yuren)
-//            }
-//            onStart {
-//                carDoing.downHero(haiyao)
-//                delay(3000)
-//            }
-//        }
-        addGuanDealWithHerosFull(40, listOf(haiyao), listOf(tianshi,yuren))
-
-
-        addGuanDealWithHerosFull(47, listOf(tianshi))
-
+        addGuanDealWithHerosFull(40, listOf(haiyao), listOf(yuren))
 
         add49(feiting)
 
-
-        addGuanDeal(50){
-
-            onlyDo {
-                carDoing.downHero(tianshi)
-            }
-        }
         //内部实际是52关开始
-        add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, yuren, wangjiang),listOf(yuren,wangjiang))
+        add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, yuren, tianshi), listOf(yuren, tianshi))
 
-        add69(listOf(yuren,tianshi))
+        add69()
         g69State = 1//跟波打，上来就是1  下卡，等掉血上去抗个无敌就可以了，就不需要快捷键上下卡了
 
-        addGuanDealWithHerosFull(70, listOf(wangjiang), listOf(tianshi))
-        addGuanDealWithHerosFull(78, listOf(tianshi), listOf(yuren))
+        addGuanDealWithHerosFull(70, listOf(wangjiang), listOf(yuren))
 
         addGuanDealWithHerosFull(82, listOf(yuren), listOf(wangjiang))
 

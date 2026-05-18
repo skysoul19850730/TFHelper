@@ -51,45 +51,17 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
 
         addGuanDeal(10) {
             over {
-                fulls(shexian,sishen, xiaoye, niutou, dianfa)
+                fulls(shexian,sishen, xiaoye, niutou, dianfa,tianshi,yuren)
             }
             chooseHero {
-                upAny(shexian,sishen, xiaoye, niutou, dianfa)
+                upAny(shexian,sishen, xiaoye, niutou, dianfa,tianshi,yuren)
             }
             onStart {
                 carDoing.downHero(bingnv)
             }
         }
-        addGuanDeal(29) {
-            over {
-                fulls(yuren, sishen, shexian, xiaoye, niutou, dianfa)
-            }
-            chooseHero {
-                upAny(yuren, sishen, shexian, xiaoye, niutou, dianfa)
-            }
-        }
-        addGuanDeal(98) {
-            over {
-                fulls(tianshi)
-            }
-            chooseHero {
-                upAny(tianshi)
-            }
 
-        }
-        addGuanDeal(100) {
-            over {
-                fulls(bingnv)
-            }
-            chooseHero {
-                upAny(bingnv)
-            }
-            onStart {
-                carDoing.downHero(tianshi)
-            }
-        }
-
-        addGuanDeal(108) {
+        addGuanDeal(109) {
             over {
                 curGuan > 109
             }
@@ -101,9 +73,6 @@ class HBZTHeroDoingZiQiangFuka2 : BaseSimpleHBHeroDoing() {
                     } else
                         upAny(guangqiu)
                 }
-            }
-            onStart {
-                carDoing.downHero(bingnv)
             }
         }
         guanDealList.add(GuanDeal(110, isOver = {
