@@ -90,6 +90,14 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
 
         addGuanDealWithHerosFull(82, listOf(yuren), listOf(wangjiang))
 
+        addGuanDeal(80){
+            onlyDo {
+                carDoing.carps.forEach {
+                    it.downHero()
+                }
+            }
+        }
+
         curGuanDeal = guanDealList.get(0)
     }
 

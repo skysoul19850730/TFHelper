@@ -41,23 +41,23 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
         heros = arrayListOf(tieqi,zhanjiang,yuren,feiting,gugu,niutou,moqiu,muqiu,guangqiu,haiyao)
         addGuanDeal(0){
             over {
-                fulls(zhanjiang,gugu,feiting,niutou)
+                fulls(zhanjiang,gugu,feiting,niutou,yuren,haiyao,tieqi)
             }
             chooseHero {
                 if(zhanjiang.isInCar()) {
-                    upAny(zhanjiang,gugu,feiting,niutou)
+                    upAny(zhanjiang,gugu,feiting,niutou,yuren,haiyao,tieqi)
                 }else upAny(zhanjiang)
             }
         }
 
-        addGuanDeal(18){
-            over {
-                fulls(zhanjiang,feiting,tieqi,niutou,gugu,yuren,haiyao)
-            }
-            chooseHero{
-                upAny(zhanjiang,feiting,tieqi,niutou,gugu,yuren,haiyao)
-            }
-        }
+//        addGuanDeal(18){
+//            over {
+//                fulls(zhanjiang,feiting,tieqi,niutou,gugu,yuren,haiyao)
+//            }
+//            chooseHero{
+//                upAny(zhanjiang,feiting,tieqi,niutou,gugu,yuren,haiyao)
+//            }
+//        }
 
 
         add49WithQiu(gugu,moqiu,5000)

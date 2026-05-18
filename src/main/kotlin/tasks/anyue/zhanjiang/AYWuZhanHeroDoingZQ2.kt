@@ -46,7 +46,7 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
         add39()
 
-        addGuanDealWithHerosFull(40, listOf(tuling), listOf(tianshi))
+        addGuanDealWithHerosFull(40, listOf(tuling), listOf(dijing))
 
         add49(false)
 
@@ -57,7 +57,7 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
         add99()
 
 
-        addGuanDealWithHerosFull(100, listOf(tianshi), listOf(dijing))
+//        addGuanDealWithHerosFull(100, listOf(tianshi), listOf(dijing))
 
         add109()
 
