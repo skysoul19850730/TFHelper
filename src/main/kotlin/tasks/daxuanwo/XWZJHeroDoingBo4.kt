@@ -52,7 +52,7 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
 
         addGuanDealWithHerosFull(70, listOf(wangjiang), listOf(yuren))
 
-//        addGuanDealWithHerosFull(82, listOf(guangqiu), listOf(wangjiang))
+        addGuanDealWithHerosFull(82, listOf(yuren), listOf(wangjiang))
 
         curGuanDeal = guanDealList.get(0)
     }

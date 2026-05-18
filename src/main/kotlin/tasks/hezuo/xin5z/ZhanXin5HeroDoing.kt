@@ -20,7 +20,7 @@ class ZhanXin5HeroDoing : SimpleHeZuoHeroDoing() {//默认赋值0，左边，借
     val zhanjiang = HeroCreator.zhanjiang.create()
     val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()
-    val yuren = HeroCreator.shitou.create()
+    val yuren = HeroCreator.wangjiang.create()
     val niutou2 = HeroCreator.niutou.create()
     val gongjiang = HeroCreator.gongjiang.create()
     val maomi = HeroCreator.maomi.create()

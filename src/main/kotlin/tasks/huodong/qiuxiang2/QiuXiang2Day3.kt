@@ -4,83 +4,30 @@ import data.HeroCreator
 
 class QiuXiang2Day3 : BaseQiuxiang2() {
     val dianfa = HeroCreator.dianfa.create()
-    val hugong = HeroCreator.hugong.create()
+    val huoling = HeroCreator.huoling.create()
     val gugu = HeroCreator.gugu.create()
-    val houyi = HeroCreator.houyi.create()
-    val shenv = HeroCreator.shenv.create()
-    val maomi = HeroCreator.maomi.create()
-    val bingqi = HeroCreator.bingqi.create()
-    val moqiu = HeroCreator.moqiu.create()
-    val bingqiu = HeroCreator.bingqiu.create()
-    val shexian = HeroCreator.shexian.create()
+    val xiongmao = HeroCreator.xiongmao.create()
+    val gugong = HeroCreator.gugong.create()
+    val ganglie = HeroCreator.ganglie.create()
+    val sishen = HeroCreator.sishen.create()
+    val huanqiu = HeroCreator.huanqiu.create()
+    val muqiu = HeroCreator.muqiu.create()
+    val wawa = HeroCreator.wawa.create()
 
 
 
 
     override fun initHeroes() {
-        heros = arrayListOf(dianfa, gugu, maomi, shexian, bingqiu, bingqi, houyi, shenv, hugong, moqiu)
+        heros = arrayListOf(dianfa, gugu, ganglie, wawa, muqiu, sishen, xiongmao, gugong, huoling, huanqiu)
 
-        guanDealList.add(GuanDeal(
-            startGuan = 0,
-            isOver = {
-                fulls(hugong,dianfa,gugu,houyi,shenv,shexian)
-            },
-            chooseHero = {
-                upAny(hugong,dianfa,gugu,houyi,shenv,shexian)
-            }
-        ))
-        guanDealList.add(GuanDeal(
-            startGuan = 50,
-            isOver = {
-                fulls(maomi)
-            },
-            chooseHero = {
-                upAny(maomi)
-            }
-        ))
 
-        guanDealList.add(GuanDeal(
-            startGuan = 91,
-            onlyDoSomething = {
-                carDoing.downHero(shexian)
-            }
-        ))
+        addGuanDealWithHerosFull(0, listOf(huoling,dianfa,gugu,xiongmao,gugong,ganglie,wawa)
+        , zhuangbei = {qiangxi})
 
-        gudingShuaQiuTask("moqiu",99,5000,null,100)
+        addGuanDealWithHerosFull(50, listOf(huoling,dianfa,gugu,xiongmao,gugong,ganglie,wawa)
+            , zhuangbei = {qiangxi})
 
-        guanDealList.add(GuanDeal(
-            startGuan = 101,
-            isOver = {
-                fulls(shexian)
-            },
-            chooseHero = {
-                upAny(shexian)
-            }
-        ))
-
-        guanDealList.add(GuanDeal(
-            startGuan = 141,
-            isOver = {
-                fulls(bingqi)
-            },
-            chooseHero = {
-                carDoing.downHero(shenv)
-                upAny(bingqi)
-            }
-        ))
-
-        gudingShuaQiuTask("moqiu",149,5000,null,150)
-
-        guanDealList.add(GuanDeal(
-            startGuan = 151,
-            isOver = {
-                fulls(shenv)
-            },
-            chooseHero = {
-                carDoing.downHero(bingqi)
-                upAny(shenv)
-            }
-        ))
+        addGuanDealWithHerosFull(140, listOf(sishen), listOf(ganglie))
 
         curGuanDeal = guanDealList.get(0)
     }
