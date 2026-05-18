@@ -30,30 +30,18 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
         heros = arrayListOf(niutou, tieqi, tianshi, zhanjiang, dianfa, wangjiang, huanqiu, jiaonv, feiting, guangqiu)
 
         guanDealList.add(GuanDeal(0, isOver = {
-            fulls(zhanjiang, niutou, jiaonv, feiting)
+            fulls(zhanjiang, niutou, jiaonv, feiting, tianshi, dianfa, tieqi) && longxin
         }, chooseHero = {
             if (zhanjiang.isInCar()) {
-                upAny(zhanjiang, niutou, jiaonv, feiting)
-            } else upAny(zhanjiang)
+                upAny(tianshi, zhanjiang, tieqi, dianfa, niutou, jiaonv, feiting, zhuangbei = { longxin })
+            } else upAny(zhanjiang, feiting)
         }))
 
-        addGuanDeal(25) {
-            over { fulls(zhanjiang, niutou, jiaonv, feiting, tieqi, dianfa, wangjiang) && longxin }
-            chooseHero {
-                upAny(zhanjiang, niutou, jiaonv, feiting, tieqi, dianfa, wangjiang, zhuangbei = {longxin})
-            }
-        }
 
-        guanDealList.add(GuanDeal(95, isOver = {
-            fullBase() && yandou
-        }, chooseHero = {
-            carDoing.downHero(wangjiang)
-            upBase(zhuangbei = { yandou })
-        }))
-
+//        changeZhuangbei(101) { yandou }
 
         guanDealList.add(
-            GuanDeal(109, isOver = { false },
+            GuanDeal(109, isOver = {  curGuan > 109 },
                 chooseHero = {
                     delay(500)
                     val ind = upBase()
@@ -86,7 +74,7 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
             upBase { yandou }
         }, onGuanDealStart = { stopChuanZhangOberserver() }))
 
-        addGuanDeal(133){
+        addGuanDeal(133) {
             over {
                 wangjiang.isInCar()
             }
@@ -96,17 +84,17 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
             }
         }
 
-        addGuanDeal(140){
+        addGuanDeal(140) {
             over {
                 fullBase()
             }
-            chooseHero{
+            chooseHero {
                 carDoing.downHero(wangjiang)
                 upBase()
             }
         }
 
-        changeZhuangbei(150){qiangxi}
+        changeZhuangbei(150) { qiangxi }
 
         addGuanDeal(159) {
             over {
@@ -162,12 +150,12 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
             needReCheckStar = true
         }))
 
-        addGuanDeal(195){
+        addGuanDeal(195) {
             over {
                 tianshi.currentLevel == 3
             }
             chooseHero {
-                if(tianshi.isFull()){
+                if (tianshi.isFull()) {
                     carDoing.downHero(tianshi)
                 }
                 upAny(tianshi)
@@ -188,7 +176,7 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
                         "如果不小心按3进了打白球的话，就再按3进点名补满卡即可，更新后，这里只需要白球后点一次3进点名就可以了，不会出第二个白球了，直接进入崩坏"
         })
 
-        addGuan210(arrayListOf( jiaonv, tieqi, zhanjiang,niutou, tianshi, dianfa))
+        addGuan210(arrayListOf(tieqi, zhanjiang, niutou, tianshi, dianfa, jiaonv))
 
         curGuanDeal = guanDealList.first()
     }
@@ -211,14 +199,14 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
             delay(200)
         }
 
-        if(step199==1){
+        if (step199 == 1) {
             //等点名
             XueLiang.observerXueDown()//掉血 等于 白球撞上了
             PackingUtils.log("白球撞上了，进入step2")
             step199 = 2
             delay(300)//怕不同步，延迟300，满上萨满
 
-            return heros.upAny( tianshi)
+            return heros.upAny(tianshi)
         }
 
 

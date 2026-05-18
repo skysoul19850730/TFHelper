@@ -29,24 +29,20 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang, gugu, jiaonv, dijing, feiting)
+                fulls(zhanjiang, gugu, jiaonv, feiting,tieqi,tianshi) && dijing.isInCar()
             }
             chooseHero {
                 if (zhanjiang.isInCar()) {
-                    upAny(zhanjiang, gugu, jiaonv, dijing, feiting)
+                    upAny(zhanjiang, gugu, jiaonv,tieqi,tianshi, feiting,dijing)
                 } else {
-                    upAny(zhanjiang)
+                    upAny(zhanjiang,feiting)
                 }
             }
         }
 
-        addGuanDealWithHerosFull(27, listOf(zhanjiang, gugu, jiaonv, dijing, feiting, tieqi))
-
-        addGuanDealWithHerosFull(38, listOf(tianshi))
-
         add39()
 
-        addGuanDealWithHerosFull(40, listOf(tuling), listOf(tianshi))
+        addGuanDealWithHerosFull(40, listOf(tuling), listOf(dijing))
 
         add49(false)
 
@@ -55,9 +51,6 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
         add79()
         add89()
         add99()
-
-
-        addGuanDealWithHerosFull(100, listOf(tianshi), listOf(dijing))
 
         add109()
 
