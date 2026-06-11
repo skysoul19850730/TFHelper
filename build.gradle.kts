@@ -55,6 +55,27 @@ val aaprepareAppResources by tasks.registering(Copy::class) {
 tasks.named("aaprepareAppResources") {
     // 确保资源先编译
 }
+// 打包前把 src/main/resources 复制到 build/appResources/common/
+val aaprepareAppResources2 by tasks.registering(Copy::class) {
+
+    from("tools")  // 你保存的位置
+    into(layout.buildDirectory.dir("wixToolset"))
+}
+
+tasks.named("aaprepareAppResources2") {
+    // 确保资源先编译
+}
+//
+//// 把本地 WiX 复制到 build/wixtoolset，避免重新下载
+//val prepareWix by tasks.registering(Copy::class) {
+//    from("tools/wix311.zip")  // 你保存的位置
+//    into(layout.buildDirectory.dir("build/wixToolset/wix311.zip"))
+//}
+//
+//afterEvaluate {
+//    tasks.findByName("aaprepareAppResources")?.dependsOn(prepareWix)
+//}
+
 
 compose.desktop {
     application {
@@ -89,4 +110,6 @@ compose.desktop {
 afterEvaluate {
     tasks.findByName("createDistributable")?.dependsOn(aaprepareAppResources)
     tasks.findByName("packageMsi")?.dependsOn(aaprepareAppResources)
+    tasks.findByName("createDistributable")?.dependsOn(aaprepareAppResources2)
+    tasks.findByName("packageMsi")?.dependsOn(aaprepareAppResources2)
 }

@@ -688,8 +688,8 @@ fun showOtherWindow(customScreen: MutableState<Boolean>) {
 @ExperimentalComposeUiApi
 @Composable
 private fun customScreenDialog(window: ComposeWindow, customScreen: MutableState<Boolean>) {
-//    val img = getImage(App.rectWindow)
-    val img = getImageFromFile(File("C:\\Users\\sqc\\Desktop\\xw89test\\testjt.png"))
+    val img = getImage(App.rectWindow)
+//    val img = getImageFromFile(File("C:\\Users\\sqc\\Desktop\\xw89test\\testjt.png"))
     window.setBounds(0, 0, img.width, img.height)
     var startPoint: Point? = null
     val movePoint = remember { mutableStateOf<Point?>(null) }
@@ -1353,6 +1353,21 @@ fun logWin(win: WinDef.HWND) {
 
 
 fun main() {
+
+    // 获取 exe 所在目录（打包后）或 user.dir（IDE）
+    val appDir = System.getProperty("jpackage.app-path")?.let {
+        File(it).parentFile.absolutePath
+    } ?: System.getProperty("user.dir")
+
+    Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+        val logFile = File(appDir, "crash.txt")
+        val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())
+        logFile.appendText("===== CRASH $time [${thread.name}] =====\n")
+        logFile.appendText(throwable.stackTraceToString())
+        logFile.appendText("\n\n")
+        throwable.printStackTrace()
+    }
+
 
     // 在最前面写日志到固定位置，排查 exe 启动问题
     try {
