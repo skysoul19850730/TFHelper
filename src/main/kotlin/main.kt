@@ -54,6 +54,8 @@ import tasks.xiaka.XiaKaUtil
 import ui.caiji.IconCreatorPage
 import ui.weights.MRadioBUtton
 import utils.*
+import java.io.RandomAccessFile
+import java.nio.channels.FileLock
 import java.text.SimpleDateFormat
 import kotlin.system.measureTimeMillis
 
@@ -1353,6 +1355,33 @@ fun logWin(win: WinDef.HWND) {
 
 
 fun main() {
+
+    // ===== 单实例检测 =====
+    val lockFile = File(System.getProperty("user.home"), ".tfhelper2.lock")
+    val raf = RandomAccessFile(lockFile, "rw")
+    val lock: FileLock? = try {
+        raf.channel.tryLock()
+    } catch (e: Exception) {
+        null
+    }
+
+    if (lock == null) {
+        // 已有实例在运行，直接退出
+        println("应用已在运行中，退出重复实例")
+        raf.close()
+        return
+    }
+
+    // 确保程序退出时释放锁
+    Runtime.getRuntime().addShutdownHook(Thread {
+        try {
+            lock.release()
+            raf.close()
+            lockFile.delete()
+        } catch (_: Exception) {}
+    })
+    // ===== 单实例检测结束 =====
+
 
     // 获取 exe 所在目录（打包后）或 user.dir（IDE）
     val appDir = System.getProperty("jpackage.app-path")?.let {

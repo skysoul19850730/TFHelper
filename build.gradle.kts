@@ -83,7 +83,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "TFHelper2"
-            packageVersion = "1.0.0"
+            packageVersion = "1.0.1"
 
             // 包含所有 JVM 模块，确保不会缺少
             includeAllModules = true
