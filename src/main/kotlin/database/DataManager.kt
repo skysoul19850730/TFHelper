@@ -29,7 +29,7 @@ object DataManager {
             washFile.createNewFile()
         }
         val text = washFile.readText()
-        val map =  Gson().fromJson<DataConfig>(text, DataConfig::class.java)
+        val map =  Gson().fromJson<DataConfig>(text, DataConfig::class.java)?:DataConfig()
 //        val map = JSONObject.parseObject(text,object : TypeReference<DataConfig>() {})
         return map
     }
@@ -66,6 +66,11 @@ object DataManager {
 
 
     fun init() {
+        var dir = File(dataDirPath)
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
+
         var list = arrayListOf<String>()
         var file = File(dataDirPath, "groups.txt")
         if (!file.exists()) {
@@ -110,6 +115,7 @@ object DataManager {
             text += ","
         }
         text = text.dropLast(1)
+
         var file = File(dataDirPath, "groups.txt")
         if (file.exists()) {
             file.delete()

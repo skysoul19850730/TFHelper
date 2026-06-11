@@ -46,13 +46,47 @@ tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "16"
 }
 
+// 打包前把 src/main/resources 复制到 build/appResources/common/
+val aaprepareAppResources by tasks.registering(Copy::class) {
+    from("src/main/resources")
+    into(layout.buildDirectory.dir("appResources/common"))
+}
+
+tasks.named("aaprepareAppResources") {
+    // 确保资源先编译
+}
+
 compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "塔防助手2"
+            packageName = "TFHelper2"
             packageVersion = "1.0.0"
+
+            // 包含所有 JVM 模块，确保不会缺少
+            includeAllModules = true
+
+            javaHome="C:\\Users\\Administrator\\.jdks\\ms-17.0.19"
+
+            // 指定资源根目录
+            appResourcesRootDir.set(layout.buildDirectory.dir("appResources"))
+
+            // 可选：配置 Windows 特有选项
+            windows {
+                menuGroup = "塔防助手2"
+                shortcut = true
+                dirChooser = true
+
+                // 指定本地 WiX 路径
+//                wixToolsetPath = file("C:\\Users\\Administrator\\IdeaProjects\\intellij-sdk-code-samples\\untitled1\\tools\\wix311")
+            }
         }
     }
+}
+
+// 让打包任务依赖资源复制
+afterEvaluate {
+    tasks.findByName("createDistributable")?.dependsOn(aaprepareAppResources)
+    tasks.findByName("packageMsi")?.dependsOn(aaprepareAppResources)
 }

@@ -1352,11 +1352,26 @@ fun logWin(win: WinDef.HWND) {
 }
 
 
-fun main() = application {
-    App.initPath {
-        testing = false
-        exitApplication()
+fun main() {
+
+    // 在最前面写日志到固定位置，排查 exe 启动问题
+    try {
+        val logFile = File("C:\\temp\\tfhelper_log.txt")
+        logFile.parentFile.mkdirs()
+        logFile.writeText("started\n")
+        logFile.appendText("user.dir=${System.getProperty("user.dir")}\n")
+        logFile.appendText("compose.res=${System.getProperty("compose.application.resources.dir")}\n")
+        logFile.appendText("jpackage.app-path=${System.getProperty("jpackage.app-path")}\n")
+    } catch (e: Exception) {
+        File("C:\\temp\\tfhelper_error.txt").writeText(e.stackTraceToString())
     }
+
+
+    application {
+        App.initPath {
+            testing = false
+            exitApplication()
+        }
 //    if (App.windowClose.value > 0) {
 //        testing = false
 //        App.closeApp()
@@ -1365,15 +1380,16 @@ fun main() = application {
 //            exitApplication()
 //        }
 //    }
-    Window(onCloseRequest = {
-        App.closeApp()
-        exitApplication()
-    }, title = "塔防助手2") {
-        MainUIData.window = this.window
+        Window(onCloseRequest = {
+            App.closeApp()
+            exitApplication()
+        }, title = "塔防助手2") {
+            MainUIData.window = this.window
 //        App()
-        launcher()
-        tttt(this)
+            launcher()
+            tttt(this)
 //        this.window.setLocation(1920 - this.window.width, 0)
+        }
     }
 }
 

@@ -111,13 +111,38 @@ object App {
     var closeCallBack: (() -> Unit)? = null
     fun initPath(callback: () -> Unit) {
         this.closeCallBack = callback
-        var s = File(javaClass.getResource("")?.path ?: "").path
-        s = s.substring(0, s.indexOf("build"))
-        logOnly(s)
-        Config.appRootPath = s
+        val appRoot = getAppRootPath()
+        Config.appRootPath = appRoot
+        logOnly("appRootPath: $appRoot")
         logOnly("caiji path  ${Config.caiji_main_path}")
         logOnly("resPath ${Tess.resPath}")
         init()
+    }
+    private fun getAppRootPath(): String {
+//        // 方式1：尝试从 compose 打包的属性获取
+//        val appDir = System.getProperty("compose.application.resources.dir")
+//        if (appDir != null) {
+//            // 打包后，资源在 app/resources 下，应用根目录是 app 的上级
+//            val appFolder = File(appDir).parentFile
+//            return appFolder.absolutePath + File.separator
+//        }
+//
+//        // 方式2：IDE 开发环境，用项目目录
+//        val userDir = System.getProperty("user.dir")
+//        return userDir + File.separator
+
+        // 判断是否是打包环境
+        val jpackageAppPath = System.getProperty("jpackage.app-path")
+        if (jpackageAppPath != null) {
+            // 打包后：exe 所在目录的上级就是应用根目录
+            // 结构：TFHelper2/TFHelper2.exe, TFHelper2/app/, TFHelper2/runtime/
+            val exeDir = File(jpackageAppPath).parentFile
+            return exeDir.absolutePath + File.separator
+        }
+
+        // IDE 开发环境：用 user.dir（项目根目录）
+        return System.getProperty("user.dir") + File.separator
+
     }
 
     fun init() {
@@ -402,7 +427,14 @@ object App {
             User32.INSTANCE.RegisterHotKey(null, VK_ADD, 0, VK_ADD)
 
 
-
+            if (!result) {
+                val err = com.sun.jna.platform.win32.Kernel32.INSTANCE.GetLastError()
+                log("RegisterHotKey Ctrl+F8 FAILED! errorCode = $err")
+                // 1409 = 热键已被其他程序/进程注册
+                // 5 = 权限不足（ACCESS_DENIED）
+                // 1400 = 无效窗口句柄
+                // 1459 = 需要交互式窗口站
+            }
             log("addKeyLister result $result")
             if (result) {
                 while (listeing) {

@@ -72,11 +72,23 @@ fun MRect.saveImgTo(file: File) {
 }
 
 fun getImageFromRes(name: String): BufferedImage {
+    val composeResDir = System.getProperty("compose.application.resources.dir")
+    if (composeResDir != null) {
+        val file = File(composeResDir, name)
+        if (file.exists()) return ImageIO.read(file)
+    }
+    // IDE 环境
     var loader = Thread.currentThread().contextClassLoader!!
     return ImageIO.read(loader.getResourceAsStream(name))
 }
 
 fun resFile(fileName: String): File {
+    // 打包环境：从 compose.application.resources.dir 读取
+    val composeResDir = System.getProperty("compose.application.resources.dir")
+    if (composeResDir != null) {
+        composeResDir.log("resdir $composeResDir")
+        return File(composeResDir, fileName)
+    }
     var loader = Thread.currentThread().contextClassLoader!!
     return File(loader.getResource(fileName).file)
 }
