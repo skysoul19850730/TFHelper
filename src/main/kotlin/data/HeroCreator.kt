@@ -8,6 +8,7 @@ class HeroBuilder(val name:String,
     }
 
 }
+
 object HeroCreator{
     val aishen = HeroBuilder("aishen")
     val anfa = HeroBuilder("anfa")
