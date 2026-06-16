@@ -84,6 +84,8 @@ class Ay139(val heroDoing: BaseAnYueHeroDoing, val test: Boolean = true) : AnSub
 
             log("顶部结果：${top4.joinToString(";") { it.toPString() }} 不同的是:${differentMat?.toPString()}")
             log(getImage())
+            MainData.curGuanKaDes.value = "顶部不同的是:${differentMat?.toPString()}"
+
 
             while (heroDoing.curGuan == 139 && state < 2) {
                 val bottom = AY139Util.getBottomRunningMat()

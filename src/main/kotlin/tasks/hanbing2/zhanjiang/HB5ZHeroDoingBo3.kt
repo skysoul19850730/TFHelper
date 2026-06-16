@@ -94,29 +94,33 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
             }
         }
 
-        changeZhuangbei(150) { qiangxi }
+        changeZhuangbei(150) { longxin }
 
-        addGuanDeal(159) {
-            over {
-                curGuan > 159
-            }
-
-            chooseHero {
-                while (needZhuangbei == Zhuangbei.curZhuangBei && curGuan < 160) {
-                    delay(100)
-                }
-                if (curGuan < 160) {
-                    zhuangbei { yandou }
-                } else -1
-            }
-
-            onStart {
-                startXiongMaoOberser()
-            }
-            onEnd {
-                xiongmaoOberserver = false
-            }
-        }
+//        addGuanDeal(159) {
+//            over {
+//                curGuan > 159
+//            }
+//
+//            chooseHero {
+//                while (needZhuangbei == Zhuangbei.curZhuangBei && curGuan < 160) {
+//                    delay(100)
+//                }
+//                if (curGuan < 160) {
+//                    if(needZhuangbei==Zhuangbei.YANDOU) {
+//                        zhuangbei { yandou }
+//                    }else {
+//                        zhuangbei { longxin }
+//                    }
+//                } else -1
+//            }
+//
+//            onStart {
+//                startXiongMaoOberser()
+//            }
+//            onEnd {
+//                xiongmaoOberserver = false
+//            }
+//        }
 
         changeZhuangbei(160) { qiangxi }
 
@@ -182,14 +186,18 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
     }
 
     var needZhuangbei = Zhuangbei.QIANGXI
-    override fun onXiongMaoQiuGot(qiu: String) {
-        super.onXiongMaoQiuGot(qiu)
-        if (qiu == "fs") {
-            needZhuangbei = Zhuangbei.YANDOU
-
-            waiting = false
-        }
-    }
+//    override fun onXiongMaoQiuGot(qiu: String) {
+//        super.onXiongMaoQiuGot(qiu)
+//        if (qiu == "fs") {
+//            needZhuangbei = Zhuangbei.YANDOU
+//
+//            waiting = false
+//        }else if(qiu == "zs"){
+//            needZhuangbei = Zhuangbei.LONGXIN
+//
+//            waiting = false
+//        }
+//    }
 
     private var step199 = 1  // 1打白球阶段， 2点名阶段，
     private var count199 = 0
