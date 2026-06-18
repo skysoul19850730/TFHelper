@@ -22,7 +22,7 @@ class LongQuanGameLaunch : IGameLaunch {
     var isRunning = false
     var kaida = false
 
-    var heroDoing: LongQuanHeroDoing2? = null
+    var heroDoing: ZhanjiangHeroDoing2? = null
 
     var mJob: Job? = null
 
@@ -262,7 +262,7 @@ class LongQuanGameLaunch : IGameLaunch {
     private suspend fun startOneGame() {
         var renji = failCount >= 2
         renji = false
-        heroDoing = LongQuanHeroDoing2(renji)
+        heroDoing = ZhanjiangHeroDoing2()
         heroDoing!!.init()
         heroDoing!!.start()
     }

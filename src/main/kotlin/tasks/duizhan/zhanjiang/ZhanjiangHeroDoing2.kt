@@ -100,29 +100,43 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
 
     override suspend fun dealHero(heros: List<HeroBean?>): Int {
 
-        val index = if (!isGaojiMengyan() || shengqi.isInCar()) heros.upAny(
-            zhangjiang,
-            xiaolu,
-            shengqi,
-            dijing,
-            bingnv,
-            xiaochou,
-            wangjiang,
-            nvwang
-        )
-        else heros.upAny(zhangjiang, shengqi, xiaolu, wangjiang, nvwang)
-
-        if (index > -1 && heros.get(index) == guangqiu && zhangjiang.currentLevel in listOf(3, 4)) {
-            val herosInCarAndNotFull = this.heros.filter {
-                it.isInCar() && !it.isFull()
+        val index = if (!isGaojiMengyan() || shengqi.isInCar()) {
+            if (carDoing.carps.count { it.hasHero() } >= 6) {
+                log("车满了")
+                heros.upAny(zhangjiang, shengqi, dijing, xiaochou, wangjiang, nvwang)
+            } else {
+                log("车没满了")
+                heros.upAny(
+                    zhangjiang,
+                    xiaolu,
+                    dijing,
+                    shengqi,
+                    bingnv,
+                    xiaochou,
+                    wangjiang,
+                    nvwang
+                )
             }
-            //战将等级等于3或4，需要冲刺魔化或金时 才下卡，否则就正常上卡
-            //防止下卡太多影响布阵，只有下卡数量少于等于2个时才下卡，否则就直接使用光球
-            if (herosInCarAndNotFull.count() <= 2) {
-                herosInCarAndNotFull.forEach {
-                    carDoing.downHero(it)
+        } else heros.upAny(zhangjiang, shengqi, xiaochou, wangjiang, nvwang)
+
+        val guangQiuIndex = heros.indexOf(guangqiu)
+
+        if (guangQiuIndex > -1) {//战将在时，优先光，否则upany是最后才用光的。。。。。
+            if (zhangjiang.currentLevel in listOf(3, 4)) {
+                val herosInCarAndNotFull = this.heros.filter {
+                    it.isInCar() && it.currentLevel<4 && it!=zhangjiang
                 }
-                return index
+                //战将等级等于3或4，需要冲刺魔化或金时 才下卡，否则就正常上卡
+                //防止下卡太多影响布阵，只有下卡数量少于等于2个时才下卡，否则就直接使用光球
+                if (herosInCarAndNotFull.count() <= 2) {
+                    herosInCarAndNotFull.forEach {
+                        carDoing.downHero(it)
+                    }
+
+                }
+                return guangQiuIndex
+            } else if (zhangjiang.isInCar()) {
+                return guangQiuIndex
             }
         }
 
