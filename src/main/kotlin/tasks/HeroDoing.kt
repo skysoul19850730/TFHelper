@@ -1067,6 +1067,45 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
         }
         return -1
     }
+    fun List<HeroBean?>.upAnyNotInCarFirst(
+        vararg heros: HeroBean,
+        zhuangbei: (() -> Boolean)? = null,
+        useGuang: Boolean = true
+    ): Int {
+        var maxHeroIndex = -1
+        heros.forEach {
+            var index = indexOf(it)
+            if (index > -1) {
+                if(it.isInCar()){
+                    //在车上 只记录第一个，因为外面肯定是按顺序优先满哪个的
+                    if(maxHeroIndex<0) {
+                        maxHeroIndex = index
+                    }
+                }else {//不在车上直接返回
+                    return index
+                }
+            }
+        }
+        if(maxHeroIndex>-1){//如果都在车上且有值，就返回
+            return maxHeroIndex
+        }
+
+        if (zhuangbei != null && !noHuanqiu) {
+            var index = zhuangbei { zhuangbei() }
+            if (index > -1) {
+                return index
+            }
+        }
+
+        if (useGuang) {
+            if (heros.filter { it.isInCar() && !it.isFull() }.isNotEmpty()) {
+                return indexOfFirst {
+                    it?.heroName == "guangqiu"
+                }
+            }
+        }
+        return -1
+    }
 
     fun List<HeroBean?>.zhuangbei(block: () -> Boolean): Int {
         if (!block() && Zhuangbei.hasZhuangbei()) {

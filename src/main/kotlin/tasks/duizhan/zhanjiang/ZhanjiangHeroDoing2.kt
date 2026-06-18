@@ -100,28 +100,15 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
 
     override suspend fun dealHero(heros: List<HeroBean?>): Int {
 
-        val index = if (!isGaojiMengyan() || shengqi.isInCar()) {
-            if (carDoing.carps.count { it.hasHero() } >= 6) {
-                log("车满了")
-                heros.upAny(zhangjiang, shengqi, dijing, xiaochou, wangjiang, nvwang)
-            } else {
-                log("车没满了")
-                heros.upAny(
-                    zhangjiang,
-                    xiaolu,
-                    dijing,
-                    shengqi,
-                    bingnv,
-                    xiaochou,
-                    wangjiang,
-                    nvwang
-                )
-            }
-        } else heros.upAny(zhangjiang, shengqi, xiaochou, wangjiang, nvwang)
+        val zj = heros.indexOf(zhangjiang)
+        if(zj>-1){
+            return zj
+        }
 
         val guangQiuIndex = heros.indexOf(guangqiu)
 
-        if (guangQiuIndex > -1) {//战将在时，优先光，否则upany是最后才用光的。。。。。
+        //有光球一定会用，只是看是不是值得 下其他卡。补：要验证是不是满了。。
+        if (guangQiuIndex > -1 && carDoing.hasNotFull()) {//战将在时，优先光，否则upany是最后才用光的。。。。。
             if (zhangjiang.currentLevel in listOf(3, 4)) {
                 val herosInCarAndNotFull = this.heros.filter {
                     it.isInCar() && it.currentLevel<4 && it!=zhangjiang
@@ -135,10 +122,32 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
 
                 }
                 return guangQiuIndex
-            } else if (zhangjiang.isInCar()) {
+            } else if (zhangjiang.isInCar() && !zhangjiang.isFull()) {
                 return guangQiuIndex
             }
         }
+
+
+        val index = if (!isGaojiMengyan() || shengqi.isInCar()) {
+            if (carDoing.carps.count { it.hasHero() } >= 6) {
+                log("车满了")
+                heros.upAnyNotInCarFirst( shengqi, dijing, xiaochou, wangjiang, nvwang)
+            } else {
+                log("车没满了")
+                heros.upAnyNotInCarFirst(
+
+                    xiaolu,
+                    dijing,
+                    shengqi,
+                    bingnv,
+                    xiaochou,
+                    wangjiang,
+                    nvwang
+                )
+            }
+        } else heros.upAny( shengqi, xiaochou, wangjiang, nvwang)
+
+
 
         return index
     }
