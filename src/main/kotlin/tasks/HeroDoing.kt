@@ -482,10 +482,14 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
 
         var shuaxinClicked = true
 
+        var ths: List<HeroBean?>? = null
+
         while (shuaxinClicked && running) {
             delay(620 - (System.currentTimeMillis() - lastShuaxinTime))
             MRobot.singleClick(Config.zhandou_shuaxinPoint)
             var tmpLastShuaTime = System.currentTimeMillis()
+            //这里遇到过，延迟后跳过了 白色的检测时机，但其实已经刷新了，这时就只能等下一个刷新（500ms左右）
+            //后面考虑 检测白板和检测hs一起
             withTimeoutOrNull(150) {//点完刷新等白的方式,3个预选卡都变的很白，而且大约100ms左右就白了，就可以证明点了刷新了
                 while (shuaxinClicked) {
                     val whiteCount = Config.zhandou_hero1CheckRect.hasColorCount(Color.WHITE)
@@ -498,14 +502,68 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
             }
 
             if (shuaxinClicked) {
-                log("刷新点击没成功，再点一次2")
+                log("刷新点击没成功，稍后使用旧方法在世一次")
             } else {
                 //刷到一个不一样的，就代表刷新了,但可能 比如  只有第三个识别到女王，前两个还没识别到呢，但可以确认已经ok了，那么就用之前方式获取
                 //但如果hs本身就3个都有，且和之前不同，那么就可以直接用了，就不用再识别一次
                 lastShuaxinTime = tmpLastShuaTime
             }
+
+            if (shuaxinClicked) {//如果使用白色失败，继续用hero来试试
+                withTimeoutOrNull(300) {
+                    while (shuaxinClicked) {
+                        ths = doGetPreHeros()
+
+                        if (lastHeroPres != null) {
+                            //如果上次的不为空，那么肯定hs有值，（假设识别是准的)
+                            //如果hs为空，证明其实刷新就成功了
+                            if (ths == null) {//代表把之前的预选刷没了
+                                shuaxinClicked = false
+                            } else if (ths!!.zip(lastHeroPres!!)
+                                    .count { it.first != null && it.first != it.second } > 0
+                            ) {
+                                //发现一个和预选不一样的就是刷成功了
+                                shuaxinClicked = false
+                            } else if (ths!!.all { it != null }) {
+                                //如果ths已经全识别到了，代表没刷新（和last一样，如果有不一样的就走上面条件了）
+                                break
+                            } else {
+                                //这里可能比如说时间太短 前两个一样，但可能第三个会不一样，所以这里要再继续识别，不处理即可
+                            }
+
+                        } else {
+                            //如果本身没有预选卡
+                            if (ths == null) {
+                                //没识别到，继续等识别
+                            } else {
+                                //只要识别到了一个就代表刷下生效了，走外面真正识别的逻辑
+                                shuaxinClicked = false
+                            }
+                        }
+                    }
+                }
+
+                if (shuaxinClicked) {
+                    log("刷新点击检测都没成功，")
+                } else {
+                    //刷到一个不一样的，就代表刷新了,但可能 比如  只有第三个识别到女王，前两个还没识别到呢，但可以确认已经ok了，那么就用之前方式获取
+                    //但如果hs本身就3个都有，且和之前不同，那么就可以直接用了，就不用再识别一次
+                    lastShuaxinTime = tmpLastShuaTime
+                }
+
+            }
+
+
+
         }
-        return getPreHeros(700)
+
+
+        if (ths == null || ths!!.contains(null)) {
+            ths = getPreHeros(700)
+        }
+        return ths
+
+//        return getPreHeros(700)
     }
 
     var yubeiHeroBean: HeroBean? = null
@@ -656,34 +714,34 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
                 if (changeOne != null) {//钱不够扩建时，是否需要替换已在车上的卡
                     log("没钱扩建，替换英雄")
                     var needKuo = false
-                    if(changeOne.isInCar()) {//返回的在车上，代表替换，下卡再上
+                    if (changeOne.isInCar()) {//返回的在车上，代表替换，下卡再上
                         carDoing.downHero(changeOne)
                         delay(50)
-                    }else{
+                    } else {
                         //否则代表换上其他卡，此时主要是魔球，土球，暗球等，当然也可以换成其他在车上的可能
                         lastHeroPres?.let {
                             val reIndex = it.indexOf(changeOne)
-                            if(reIndex>-1) {
+                            if (reIndex > -1) {
                                 rect = when (reIndex) {
                                     0 -> Config.zhandou_hero1CheckRect
                                     1 -> Config.zhandou_hero2CheckRect
                                     else -> Config.zhandou_hero3CheckRect
                                 }
-                                if(changeOne.needCar) { //也可能changeHeroWhenNoSpace返回的不在车上
+                                if (changeOne.needCar) { //也可能changeHeroWhenNoSpace返回的不在车上
                                     needKuo = true
                                 }
-                            }else{//如果返回的 不在预选里，那就阔建了
+                            } else {//如果返回的 不在预选里，那就阔建了
                                 needKuo = true
                             }
                         }
                     }
-                    if(needKuo){
+                    if (needKuo) {
                         while (Config.rect4KuojianColor.hasColor(Color.RED)) {
                             delay(50)
                         }
                         log("点击扩建")
                     }
-                    doUpHeroDeal(rect,needKuo)
+                    doUpHeroDeal(rect, needKuo)
 //                    MRobot.singleClick(MPoint(rect.clickPoint.x, rect.clickPoint.y + 25))
                 } else {//不替换就等钱够
                     while (Config.rect4KuojianColor.hasColor(Color.RED)) {
@@ -1067,6 +1125,7 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
         }
         return -1
     }
+
     fun List<HeroBean?>.upAnyNotInCarFirst(
         vararg heros: HeroBean,
         zhuangbei: (() -> Boolean)? = null,
@@ -1076,17 +1135,17 @@ abstract class HeroDoing(var chePosition: Int = -1, val flags: Int = 0) : IDoing
         heros.forEach {
             var index = indexOf(it)
             if (index > -1) {
-                if(it.isInCar()){
+                if (it.isInCar()) {
                     //在车上 只记录第一个，因为外面肯定是按顺序优先满哪个的
-                    if(maxHeroIndex<0) {
+                    if (maxHeroIndex < 0) {
                         maxHeroIndex = index
                     }
-                }else {//不在车上直接返回
+                } else {//不在车上直接返回
                     return index
                 }
             }
         }
-        if(maxHeroIndex>-1){//如果都在车上且有值，就返回
+        if (maxHeroIndex > -1) {//如果都在车上且有值，就返回
             return maxHeroIndex
         }
 
