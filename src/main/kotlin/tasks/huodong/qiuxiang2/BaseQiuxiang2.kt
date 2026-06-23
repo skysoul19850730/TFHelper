@@ -7,18 +7,10 @@ import java.awt.event.KeyEvent
 
 abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
 
-    var damu = false
-    var dabing = false
-
-    var pBingQiu: HeroBean? = null
-    var pHuanQiu: HeroBean? = null
-
-    lateinit var upHeros: List<HeroBean>
-
 
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
-        if(curGuan == 49){
+        if(curGuan == 99){
             App.startAutoSave()
         }else{
             App.stopAutoSave()
@@ -30,7 +22,7 @@ abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
             waiting = !waiting
             return false
         }
-        if (curGuan == 49 || curGuan == 48) {
+        if (curGuan == 99 || curGuan == 98) {
             var position = when (code) {
                 KeyEvent.VK_NUMPAD2 -> 0
                 KeyEvent.VK_NUMPAD1 -> 1
@@ -42,60 +34,14 @@ abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
                 else -> -1
             }
             carDoing.downPosition(position)
-
-            full49 = false
             return true
-        }
-        if (curGuan == 99 && code == KeyEvent.VK_NUMPAD0) {
-            stop99 = true
         }
         return super.onKeyDown(code)
     }
 
-    fun addStart() {
-//        if (huanQiu == null) {
-//            addGuanDealWithHerosFull(0, upHeros)
-//        } else {
-//            addGuanDealWithHerosFull(0, upHeros, zhuangbei = { qiangxi })
-//        }
-        addGuanDealWithHerosFull(
-            0, upHeros, zhuangbei = if (pHuanQiu == null) null else {
-                { qiangxi }
-            }
-        )
-    }
-
-    var stop99 = false
-    fun add99() {
-        if (pBingQiu == null) return
-        gudingShuaQiuTask("bingqiu", 99, 2000,
-            customOverJudge = {
-                stop99
-            })
-    }
-
-    var full49 = true
-    fun add49() {
-        addGuanDeal(49) {
-            over {
-                curGuan > 49
-            }
-
-            chooseHero {
-                if (fulls(*upHeros.toTypedArray())) {
-                    full49 = true
-                }
-                while (full49 && curGuan==49) {
-                    delay(200)
-                }
-                upAny(upHeros)
-            }
-        }
-
-        addGuanDealWithHerosFull(50, upHeros)
-    }
 
     fun autoHuanAfter149() {
+        changeZhuangbei(159, { qiangxi })
         changeZhuangbei(169, { yandou })
         changeZhuangbei(179, { qiangxi })
         changeZhuangbei(189, { yandou })
