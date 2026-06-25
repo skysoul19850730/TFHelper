@@ -4,30 +4,48 @@ import data.HeroCreator
 
 class QiuXiang2Day3 : BaseQiuxiang2() {
     val dianfa = HeroCreator.dianfa.create()
-    val huoling = HeroCreator.huoling.create()
-    val gugu = HeroCreator.gugu.create()
+    val mengyan = HeroCreator.mengyan.create()
+    val xiaoye = HeroCreator.xiaoye.create()
     val xiongmao = HeroCreator.xiongmao.create()
-    val gugong = HeroCreator.gugong.create()
+    val kuiqian = HeroCreator.kuiqian.create()
     val ganglie = HeroCreator.ganglie.create()
-    val sishen = HeroCreator.sishen.create()
+    val dasheng = HeroCreator.dasheng.create()
     val huanqiu = HeroCreator.huanqiu.create()
-    val muqiu = HeroCreator.muqiu.create()
+    val moqiu = HeroCreator.moqiu.create()
     val wawa = HeroCreator.wawa.create()
 
 
 
 
     override fun initHeroes() {
-        heros = arrayListOf(dianfa, gugu, ganglie, wawa, muqiu, sishen, xiongmao, gugong, huoling, huanqiu)
+        heros = arrayListOf(dianfa, xiaoye, ganglie, wawa, moqiu, dasheng, xiongmao, kuiqian, mengyan, huanqiu)
+
+        addGuanDeal(0){
+            over {
+                fulls(mengyan,kuiqian,dianfa,xiongmao,xiaoye,ganglie,wawa) && qiangxi
+            }
+            chooseHero {
+                if(mengyan.isInCar().not()){
+                    upAny(mengyan,wawa)
+                }else if(kuiqian.isInCar().not()){
+                    upAny(mengyan,kuiqian,wawa)
+                }else{
+                    upAny(mengyan,kuiqian,dianfa,xiongmao,xiaoye,ganglie,wawa)
+                }
+            }
+        }
+
+        addGuanDealWithHerosFull(90,listOf(dasheng),listOf(kuiqian))
 
 
-        addGuanDealWithHerosFull(0, listOf(huoling,dianfa,gugu,xiongmao,gugong,ganglie,wawa)
-        , zhuangbei = {qiangxi})
+        var start = 98
+        for (i in start..199) {
 
-        addGuanDealWithHerosFull(50, listOf(huoling,dianfa,gugu,xiongmao,gugong,ganglie,wawa)
-            , zhuangbei = {qiangxi})
+            if (i % 10 == 9) {
+               gudingShuaQiuTask("moqiu",i,5000)
+            }
 
-        addGuanDealWithHerosFull(140, listOf(sishen), listOf(ganglie))
+        }
 
         curGuanDeal = guanDealList.get(0)
     }
