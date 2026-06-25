@@ -62,6 +62,7 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
     }
 
     override fun initHeroes() {
+        userNewShuaxin = false
         heros =
             arrayListOf(zhangjiang, nvwang, bingnv, shengqi, wangjiang, xiaolu, guangqiu, kuanglong, xiaochou, dijing)
         carDoing.downCardSpeed = true
