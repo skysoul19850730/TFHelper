@@ -30,7 +30,7 @@ class QiuXiang2Day3 : BaseQiuxiang2() {
                 }else if(kuiqian.isInCar().not()){
                     upAny(mengyan,kuiqian,wawa)
                 }else{
-                    upAny(mengyan,kuiqian,dianfa,xiongmao,xiaoye,ganglie,wawa)
+                    upAny(mengyan,kuiqian,dianfa,xiongmao,xiaoye,ganglie,wawa, zhuangbei = {qiangxi})
                 }
             }
         }
@@ -45,6 +45,22 @@ class QiuXiang2Day3 : BaseQiuxiang2() {
                gudingShuaQiuTask("moqiu",i,5000)
             }
 
+            if(i==141){
+                changeZhuangbei(i){longxin}
+            }
+
+            if(i==151){
+                changeZhuangbei(i){qiangxi}
+            }
+            if(i==161){
+                changeZhuangbei(i){yandou}
+            }
+            if(i==171){
+                changeZhuangbei(i){qiangxi}
+            }
+            if(i==181){
+                changeZhuangbei(i){yandou}
+            }
         }
 
         curGuanDeal = guanDealList.get(0)

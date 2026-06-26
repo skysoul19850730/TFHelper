@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent
 abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
 
 
+    var downLoadHero99:HeroBean? = null
+
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
         if(curGuan == 99){
@@ -33,12 +35,29 @@ abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
                 KeyEvent.VK_NUMPAD0 -> 6
                 else -> -1
             }
+            downLoadHero99 = carDoing.carps.get(position).mHeroBean
             carDoing.downPosition(position)
             return true
         }
         return super.onKeyDown(code)
     }
 
+    fun add99(){
+        addGuanDeal(99){
+            over { curGuan>99 }
+            chooseHero {
+                while (downLoadHero99 == null){
+                    delay(2000)
+                }
+
+                if(downLoadHero99?.isFull() == true){
+                    downLoadHero99 = null
+                }
+
+                return@chooseHero this.indexOf(downLoadHero99)
+            }
+        }
+    }
 
     fun autoHuanAfter149() {
         changeZhuangbei(159, { qiangxi })

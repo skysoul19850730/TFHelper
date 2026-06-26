@@ -3,59 +3,27 @@ package tasks.huodong.qiuxiang2
 import data.HeroCreator
 
 class QiuXiang2Day4 : BaseQiuxiang2() {
-    val yuren = HeroCreator.yuren.create()
-    val zhanjiang2 = HeroCreator.zhanjiang.create()
-    val saman2 = HeroCreator.saman.create()
-    val niutou2 = HeroCreator.niutou.create()
-    val wangjiang2 = HeroCreator.wangjiang.create()
-    val maomi = HeroCreator.maomi.create()
-    val bingqi = HeroCreator.bingqi.create()
-    val guangqiu = HeroCreator.guangqiu.create()
-    val huanqiu = HeroCreator.huanqiu.create()
-    val muqiu = HeroCreator.muqiu.create()
+    val sishen = HeroCreator.sishen.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
+    val saman = HeroCreator.saman.create()
+    val niutou = HeroCreator.niutou.create()
+    val ganglie = HeroCreator.ganglie.create()
+    val xiaoye = HeroCreator.xiaoye.create()
+    val fuke = HeroCreator.fuke.create()
+    val haiyao = HeroCreator.haiyao.create()
+    val bingqiu = HeroCreator.bingqiu.create()
+    val nvwang = HeroCreator.nvwang.create()
 
 
 
 
     override fun initHeroes() {
-        heros = arrayListOf(yuren, zhanjiang2, saman2, niutou2, wangjiang2, maomi, bingqi, guangqiu, huanqiu, muqiu)
 
-
-        guanDealList.add(GuanDeal(
-            startGuan = 0,
-            isOver = {
-                fulls(zhanjiang2,saman2,niutou2)
-            },
-            chooseHero = {
-                if(zhanjiang2.isInCar()) {
-                    upAny(zhanjiang2, saman2, niutou2)
-                }else{
-                    upAny(zhanjiang2)
-                }
-            }
+        addGuanDealWithHerosFull(0,listOf(
+            zhanjiang,niutou,sishen,xiaoye,ganglie,haiyao
         ))
 
-        guanDealList.add(GuanDeal(
-            startGuan = 30,
-            isOver = {
-                fulls(wangjiang2,yuren) && qiangxi
-            },
-            chooseHero = {
-                upAny(wangjiang2,yuren, zhuangbei = {qiangxi})
-            }
-
-        ))
-
-        guanDealList.add(GuanDeal(
-            startGuan = 50,
-            isOver = {
-                fulls(maomi)
-            },
-            chooseHero = {
-                upAny(maomi)
-            }
-        ))
-
+        add99()
 
         curGuanDeal = guanDealList.get(0)
     }
