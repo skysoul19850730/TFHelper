@@ -4,42 +4,27 @@ import data.HeroCreator
 import java.awt.event.KeyEvent
 
 class QiuXiang2Day6 : BaseQiuxiang2() {
-    val dianfa = HeroCreator.dianfa.create()
-    val hugong = HeroCreator.hugong.create()
-    val houyi = HeroCreator.houyi.create()
-    val shenv = HeroCreator.shenv.create()
-    val xiaopao = HeroCreator.zhanjiang.create()
-    val haiyao = HeroCreator.haiyao.create()
-    val gugu = HeroCreator.gugu.create()
-    val nvyao = HeroCreator.nvyao.create()
+    val zhanjiang = HeroCreator.zhanjiang.create()
+    val tieqi = HeroCreator.tieqi.create()
+    val xiongmao = HeroCreator.xiongmao.create()
+    val fuke = HeroCreator.fuke.create()
+    val shengqi = HeroCreator.shengqi.create()
+    val yuren = HeroCreator.yuren.create()
+    val ganglie = HeroCreator.ganglie.create()
+    val shexian = HeroCreator.shexian.create()
     val moqiu = HeroCreator.moqiu.create()
-    val dapao = HeroCreator.dapao.create()
+    val xiaoye = HeroCreator.xiaoye.create()
 
 
     var moPause = false
     override fun initHeroes() {
-        heros = arrayListOf(dianfa, houyi, haiyao, dapao, moqiu, gugu, shenv, xiaopao, hugong, nvyao)
+        heros = arrayListOf(zhanjiang, xiongmao, yuren, xiaoye, moqiu, ganglie, fuke, shengqi, tieqi, shexian)
 
-        addGuanDealWithHerosFull(0, listOf(dianfa, haiyao, houyi, gugu, nvyao, hugong, dapao))
+        addGuanDealWithHerosFull(0, listOf(zhanjiang, yuren, shengqi, ganglie, shexian, tieqi, xiaoye))
 
-        addGuanDealWithHerosFull(50, listOf(dianfa, haiyao, houyi, gugu, nvyao, hugong, dapao))
-
-        gudingShuaQiuTask("moqiu", 58, 5500, overGuan = 200, sholudPasue = {
-            moPause
-        })
-
+        add99()
 
         curGuanDeal = guanDealList.get(0)
-    }
-
-    override suspend fun onKeyDown(code: Int): Boolean {
-        val sr = super.onKeyDown(code)
-
-        if(code == KeyEvent.VK_NUMPAD0 && !sr){
-            moPause = !moPause
-        }
-
-        return sr
     }
 
 }

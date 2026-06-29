@@ -69,7 +69,7 @@ object HuodongUtil {
             0-> QiuXiang2Day1()
             1-> QiuXiang2Day2()
             2-> QiuXiang2Day3()
-            3-> HFHHero4()
+            3-> QiuXiang2Day4()
             4-> QiuXiang2Day5()
             5-> QiuXiang2Day6()
             6-> QiuXiang2Day7()

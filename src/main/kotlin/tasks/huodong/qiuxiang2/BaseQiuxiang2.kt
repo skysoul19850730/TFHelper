@@ -12,7 +12,7 @@ abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
 
     override fun onGuanChange(guan: Int) {
         super.onGuanChange(guan)
-        if(curGuan == 99){
+        if(curGuan == 149){
             App.startAutoSave()
         }else{
             App.stopAutoSave()
@@ -58,6 +58,20 @@ abstract class BaseQiuxiang2 : SimpleHeZuoHeroDoing() {
             }
         }
     }
+
+
+//    fun add149(){
+//        addGuanDeal(149){
+//            over {
+//                curGuan>149
+//            }
+//
+//            chooseHero {
+//
+//
+//            }
+//        }
+//    }
 
     fun autoHuanAfter149() {
         changeZhuangbei(159, { qiangxi })
