@@ -97,7 +97,7 @@ data class CarPosition(
 
     suspend fun downHero(downEvey: Boolean = false) {
         if (mHeroBean != null || downEvey) {
-            withContext(Dispatchers.Main) {
+//            withContext(Dispatchers.Main) {
                 log("车位:$mPos 下卡开始 ${mHeroBean?.heroName}")
                 var start = System.currentTimeMillis()
                 if (mHeroBean?.heroName != "xiaolu" && carDoing.downCardSpeed) {
@@ -134,7 +134,7 @@ data class CarPosition(
                     delay(10)
                     //其实只要上一行代码 一产生点击，这个按钮就变小了，就不fit了。所以这里其实判断没有用处。
                     cardMiss = withTimeoutOrNull(300) {
-                        while (CarDoing.cardClosePoint.isFit() || Recognize.saleRect.isFit()) {
+                        while (CarDoing.cardClosePoint.isFit() || Recognize.saleRect.isFit() || Recognize.saleRect2.isFit()) {
                             delay(10)//妈的，这里不加delay就检测不会timeout，fuck
                         }
 //                        log(getImage(App.rectWindow, null))
@@ -147,7 +147,7 @@ data class CarPosition(
                 mHeroBean?.reset()
                 mHeroBean = null
 //                delay(50)//多delay50，否则连续下卡时太快，第二次点击hero（其实没点击到）第一个的弹窗还没消息，弹窗按钮点击会缩小。所以一点击其实就不fit了
-            }
+//            }
         }
     }
 

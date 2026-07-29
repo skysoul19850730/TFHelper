@@ -105,7 +105,7 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
         fullHeros: List<HeroBean>,
         downHeros: List<HeroBean>? = null,
         zhuangbei: (() -> Boolean)? = null,
-        delay: Long = 0L
+        delay: Long = 1000L
     ) {
         addGuanDeal(guan) {
             over {

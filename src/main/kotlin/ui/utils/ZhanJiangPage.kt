@@ -44,7 +44,7 @@ fun ZhanJiangPage() {
             val pure = pureNum.value.toFloatOrNull() ?: 0f
             val pureReduce = pureReduce.value.toFloatOrNull() ?: 0f
 
-            val attackUpRate = 0.05
+            val attackUpRate = 0.04
 
             val baseAtt = attackNum.value.toFloatOrNull() ?: 0f
 

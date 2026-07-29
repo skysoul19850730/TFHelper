@@ -13,10 +13,10 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
 
 
     val niutou = HeroCreator.niutou.create()
-    val tieqi = HeroCreator.tieqi.create()
+    val yuren = HeroCreator.yuren.create()
     val tianshi = HeroCreator.tianshi.create()
     val zhanjiang = HeroCreator.zhanjiang.create()
-    val dianfa = HeroCreator.dianfa.create()
+    val sishen = HeroCreator.sishen.create()
     val jiaonv = HeroCreator.jiaonv.create()
 
     val feiting = HeroCreator.feiting.create()
@@ -27,13 +27,13 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
 
     override fun initHeroes() {
         super.initHeroes()
-        heros = arrayListOf(niutou, tieqi, tianshi, zhanjiang, dianfa, wangjiang, huanqiu, jiaonv, feiting, guangqiu)
+        heros = arrayListOf(niutou, yuren, tianshi, zhanjiang, sishen, wangjiang, huanqiu, jiaonv, feiting, guangqiu)
 
         guanDealList.add(GuanDeal(0, isOver = {
-            fulls(zhanjiang, niutou, jiaonv, feiting, tianshi, dianfa, tieqi) && longxin
+            fulls(zhanjiang, niutou, jiaonv, feiting, tianshi, sishen, yuren) && longxin
         }, chooseHero = {
             if (zhanjiang.isInCar()) {
-                upAny(tianshi, zhanjiang, tieqi, dianfa, niutou, jiaonv, feiting, zhuangbei = { longxin })
+                upAny(tianshi, zhanjiang, yuren, sishen, niutou, jiaonv, feiting, zhuangbei = { longxin })
             } else upAny(zhanjiang, feiting)
         }))
 
@@ -79,7 +79,7 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
                 wangjiang.isInCar()
             }
             chooseHero {
-                carDoing.downHero(tianshi)
+                carDoing.downHero(jiaonv)
                 upAny(wangjiang)
             }
         }
@@ -122,10 +122,7 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
 //            }
 //        }
 
-        changeZhuangbei(160) { qiangxi }
-
-        changeZhuangbei(181) { longxin }
-
+        changeZhuangbei(181) { yandou }
 
         guanDealList.add(
             GuanDeal(189, isOver = { curGuan > 189 },
@@ -180,7 +177,7 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
                         "如果不小心按3进了打白球的话，就再按3进点名补满卡即可，更新后，这里只需要白球后点一次3进点名就可以了，不会出第二个白球了，直接进入崩坏"
         })
 
-        addGuan210(arrayListOf(tieqi, zhanjiang, niutou, tianshi, dianfa, jiaonv))
+        addGuan210(arrayListOf(yuren, zhanjiang, niutou, tianshi, sishen, jiaonv))
 
         curGuanDeal = guanDealList.first()
     }
@@ -263,11 +260,11 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
 
 
     fun fullBase(): Boolean {
-        return fulls(niutou, tieqi, tianshi, jiaonv, dianfa, zhanjiang, feiting)
+        return fulls(niutou, yuren, tianshi, jiaonv, sishen, zhanjiang, feiting)
     }
 
     fun List<HeroBean?>.upBase(zhuangbei: (() -> Boolean)? = null): Int {
-        return upAny(niutou, tieqi, tianshi, dianfa, jiaonv, zhanjiang, feiting, zhuangbei = zhuangbei)
+        return upAny(niutou, yuren, tianshi, sishen, jiaonv, zhanjiang, feiting, zhuangbei = zhuangbei)
     }
 
     private suspend fun checkHeroStarAndFull(heros: List<HeroBean?>, over: () -> Boolean): Int {
