@@ -152,6 +152,10 @@ open class SimpleHeZuoHeroDoing : HeroDoing(0, FLAG_GUANKA or FLAG_KEYEVENT) {
             GlobalScope.launch {
                 try {
                     changeTo.onGuanDealStart?.invoke()
+                    if(changeTo.onGuanDealStart!=null){
+                        delay(1000)//有些start是下卡，但上个任务是幻装备，会卡在有英雄识别后（因为可以直接上，或者就处理成drop
+                        //最早下卡还是重开一个线程，导致下卡中就去uphero了，就会以为上去了，然后又去
+                    }
                 } catch (e: Exception) {
                     log("changeGuanKa onGuanDealStart error:${e.message}")
                 }
