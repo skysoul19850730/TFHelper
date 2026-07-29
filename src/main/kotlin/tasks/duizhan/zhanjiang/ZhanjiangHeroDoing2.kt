@@ -62,7 +62,7 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
     }
 
     override fun initHeroes() {
-        userNewShuaxin = false
+//        userNewShuaxin = false
         heros =
             arrayListOf(zhangjiang, nvwang, bingnv, shengqi, wangjiang, xiaolu, guangqiu, kuanglong, xiaochou, dijing)
         carDoing.downCardSpeed = true
@@ -125,14 +125,16 @@ class ZhanjiangHeroDoing2(val renji: Boolean = false) : HeroDoing(-1, FLAG_KEYEV
                 return guangQiuIndex
             } else if (zhangjiang.isInCar() && !zhangjiang.isFull()) {
                 return guangQiuIndex
+            }else if (nvwang.isInCar() && !nvwang.isFull() && carDoing.carps.count { it.hasHero() } >= 5) {
+                return guangQiuIndex
             }
         }
 
 
         val index = if (!isGaojiMengyan() || shengqi.isInCar()) {
-            if (carDoing.carps.count { it.hasHero() } >= 6) {
+            if (carDoing.carps.count { it.hasHero() } >= 5) {
                 log("车满了")
-                heros.upAnyNotInCarFirst( shengqi, dijing, xiaochou, wangjiang, nvwang)
+                heros.upAny(nvwang, shengqi, dijing, xiaochou, wangjiang)
             } else {
                 log("车没满了")
                 heros.upAnyNotInCarFirst(

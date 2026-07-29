@@ -18,6 +18,7 @@ class QiuXiang2Day4 : BaseQiuxiang2() {
 
 
     override fun initHeroes() {
+        heros = arrayListOf(sishen,zhanjiang,saman,niutou,ganglie,xiaoye,fuke,haiyao,bingqiu,nvwang)
 
         addGuanDealWithHerosFull(0,listOf(
             zhanjiang,niutou,sishen,xiaoye,ganglie,haiyao

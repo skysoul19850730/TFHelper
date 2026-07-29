@@ -3,42 +3,26 @@ package tasks.huodong.qiuxiang2
 import data.HeroCreator
 
 class QiuXiang2Day2 : BaseQiuxiang2() {
-    val zhanjiang = HeroCreator.zhanjiang.create()
-    val nvwang = HeroCreator.nvwang.create()
-    val shahuang = HeroCreator.shahuang.create()
-    val tianshi = HeroCreator.tianshi.create()
-    val jiaonv = HeroCreator.jiaonv.create()
-    val saman = HeroCreator.saman.create()
-    val shengqi = HeroCreator.shengqi.create()
+    val dianfa = HeroCreator.dianfa.create()
+    val gugu = HeroCreator.gugu.create()
+    val hugong = HeroCreator.hugong.create()
+    val houyi = HeroCreator.houyi.create()
+    val shenv = HeroCreator.shenv.create()
+    val niutou = HeroCreator.niutou.create()
+    val ganglie = HeroCreator.ganglie.create()
     val moqiu = HeroCreator.moqiu.create()
-    val huanqiu = HeroCreator.huanqiu.create()
+    val xiaopao = HeroCreator.zhanjiang.create()
     val shexian = HeroCreator.shexian.create()
 
 
 
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, shahuang, saman, shexian, huanqiu, shengqi, tianshi, jiaonv, nvwang, moqiu)
+        heros = arrayListOf(dianfa, hugong, niutou, shexian, xiaopao, ganglie, houyi, shenv, gugu, moqiu)
 
-        guanDealList.add(GuanDeal(
-            startGuan = 0,
-            isOver = {
-                fulls(zhanjiang,jiaonv,saman,shexian,shengqi)
-            },
-            chooseHero = {
-                if(zhanjiang.isInCar()){
-                    upAny(zhanjiang,jiaonv,saman,shexian,shengqi)
-                }else{
-                    upAny(zhanjiang)
-                }
-            }
+        addGuanDealWithHerosFull(0,listOf(
+            hugong,dianfa,houyi,niutou,gugu,ganglie,shexian
         ))
-
-
-        addGuanDealWithHerosFull(50, listOf(zhanjiang,jiaonv,saman,shexian,nvwang,shahuang,tianshi)
-        , listOf(shengqi), zhuangbei = {qiangxi}
-        )
-
 
 
         curGuanDeal = guanDealList.get(0)

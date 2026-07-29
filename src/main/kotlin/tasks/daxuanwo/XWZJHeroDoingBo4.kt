@@ -7,10 +7,10 @@ import java.awt.event.KeyEvent
 class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
     val niutou = HeroCreator.niutou.create()
     val zhanjiang = HeroCreator.zhanjiang.create()
-    val tieqi = HeroCreator.tieqi.create()
+    val bingniao = HeroCreator.bingniao.create()
     val tianshi = HeroCreator.tianshi.create()
     val sishen = HeroCreator.sishen.create()
-    val yuren = HeroCreator.yuren.create()
+    val xiaoye = HeroCreator.xiaoye.create()
 
     val wangjiang = HeroCreator.wangjiang.create()
     val feiting = HeroCreator.feiting.create()
@@ -24,43 +24,47 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
         super.initHeroes()
         auto59 = true
         heros = arrayListOf(
-            sishen, tieqi, zhanjiang, haiyao, niutou, wangjiang, feiting, tianshi, guangqiu, yuren
+            sishen, bingniao, zhanjiang, haiyao, niutou, wangjiang, feiting, tianshi, guangqiu, xiaoye
         )
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang, niutou, sishen, feiting, tieqi, tianshi, yuren)
+                fulls(zhanjiang, niutou, sishen, feiting, bingniao, tianshi, xiaoye)
             }
             chooseHero {
                 if (zhanjiang.isInCar()) {
                     if (feiting.isInCar()) {
-                        upAny(zhanjiang, feiting, niutou, sishen,tieqi,tianshi,yuren)
+                        upAny(zhanjiang, feiting, niutou, sishen,bingniao,tianshi,xiaoye)
                     } else
-                        upAny(feiting, zhanjiang, niutou, sishen,tieqi,tianshi,yuren)
+                        upAny(feiting, zhanjiang, niutou, sishen,bingniao,tianshi,xiaoye)
                 } else upAny(zhanjiang, feiting)
             }
         }
 
-        addGuanDealWithHerosFull(40, listOf(haiyao), listOf(yuren))
+        addGuanDealWithHerosFull(40, listOf(haiyao), listOf(bingniao))
 
         add49(feiting)
 
         //内部实际是52关开始
-        add50(listOf(zhanjiang, niutou, feiting, tieqi, sishen, yuren, tianshi), listOf(yuren, tianshi))
+//        add50(listOf(zhanjiang, niutou, feiting, bingniao, sishen, xiaoye, tianshi), listOf(bingniao, tianshi))
 
-        add69()
-        g69State = 1//跟波打，上来就是1  下卡，等掉血上去抗个无敌就可以了，就不需要快捷键上下卡了
+        addGuanDealWithHerosFull(50,listOf(zhanjiang, niutou, feiting, bingniao, sishen, xiaoye, tianshi)
+        , downHeros = listOf(haiyao)
+        )
 
-        addGuanDealWithHerosFull(70, listOf(wangjiang), listOf(yuren))
+//        add69()
+//        g69State = 1//跟波打，上来就是1  下卡，等掉血上去抗个无敌就可以了，就不需要快捷键上下卡了
 
-        addGuanDealWithHerosFull(82, listOf(yuren), listOf(wangjiang))
+        addGuanDealWithHerosFull(70, listOf(wangjiang), listOf(bingniao))
 
-        addGuanDeal(80){
-            onlyDo {
-                carDoing.carps.forEach {
-                    it.downHero()
-                }
-            }
-        }
+        addGuanDealWithHerosFull(82, listOf(bingniao), listOf(wangjiang))
+
+//        addGuanDeal(80){
+//            onlyDo {
+//                carDoing.carps.forEach {
+//                    it.downHero()
+//                }
+//            }
+//        }
 
         curGuanDeal = guanDealList.get(0)
     }
