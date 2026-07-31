@@ -88,7 +88,7 @@ compose.desktop {
             // 包含所有 JVM 模块，确保不会缺少
             includeAllModules = true
 
-            javaHome="C:\\Users\\Administrator\\.jdks\\ms-17.0.19"
+            javaHome="C:\\Users\\Administrator\\.jdks\\jbr-17.0.14"
 
             // 指定资源根目录
             appResourcesRootDir.set(layout.buildDirectory.dir("appResources"))
