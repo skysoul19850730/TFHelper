@@ -113,9 +113,10 @@ object App {
         this.closeCallBack = callback
         val appRoot = getAppRootPath()
         Config.appRootPath = appRoot
-        logOnly("appRootPath: $appRoot")
-        logOnly("caiji path  ${Config.caiji_main_path}")
-        logOnly("resPath ${Tess.resPath}")
+        log("appRootPath: $appRoot")
+        log("caiji path  ${Config.caiji_main_path}")
+        log("resPath ${Tess.resPath}")
+        log("resFolder ${resFolder.path}")
         init()
     }
     private fun getAppRootPath(): String {

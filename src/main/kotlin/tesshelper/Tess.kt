@@ -5,12 +5,13 @@ import net.sourceforge.tess4j.Tesseract
 import java.awt.Image
 import java.awt.image.BufferedImage
 import java.io.File
+import resFolder
 
 object Tess {
 
     //    val resPath = "C:/Users/Administrator/IdeaProjects/intellij-sdk-code-samples/untitled1/build/resources/main"
     val resPath
-        get() = "${Config.appRootPath}resources"
+        get() = "${resFolder.path}${File.separator}resources"
 //    else  "C:/Users/Administrator/IdeaProjects/intellij-sdk-code-samples/untitled1/build/resources/main"
 
 //    val api = Tesseract().apply {

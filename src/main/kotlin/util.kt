@@ -1,3 +1,4 @@
+import androidx.compose.ui.window.rememberTrayState
 import com.skysoul.pdftool.WeChatWindowHelper
 import com.sun.jna.platform.win32.WinDef
 import data.Config
@@ -72,25 +73,37 @@ fun MRect.saveImgTo(file: File) {
 }
 
 fun getImageFromRes(name: String): BufferedImage {
-    val composeResDir = System.getProperty("compose.application.resources.dir")
-    if (composeResDir != null) {
-        val file = File(composeResDir, name)
-        if (file.exists()) return ImageIO.read(file)
-    }
-    // IDE 环境
-    var loader = Thread.currentThread().contextClassLoader!!
-    return ImageIO.read(loader.getResourceAsStream(name))
+     return ImageIO.read(resFile(name))
+//    val composeResDir = System.getProperty("compose.application.resources.dir")
+//    if (composeResDir != null) {
+//        val file = File(composeResDir, name)
+//        if (file.exists()) return ImageIO.read(file)
+//    }
+//    // IDE 环境
+//    var loader = Thread.currentThread().contextClassLoader!!
+//    return ImageIO.read(loader.getResourceAsStream(name))
 }
 
 fun resFile(fileName: String): File {
+    return File(resFolder, fileName)
     // 打包环境：从 compose.application.resources.dir 读取
-    val composeResDir = System.getProperty("compose.application.resources.dir")
-    if (composeResDir != null) {
-        composeResDir.log("resdir $composeResDir")
-        return File(composeResDir, fileName)
+//    val composeResDir = System.getProperty("compose.application.resources.dir")
+//    if (composeResDir != null) {
+//        composeResDir.log("resdir $composeResDir")
+//        return File(composeResDir, fileName)
+//    }
+//    var loader = Thread.currentThread().contextClassLoader!!
+//    return File(loader.getResource(fileName).file)
+}
+
+val resFolder:File by lazy  {
+    val folder = File("src/main/resources")
+    if(folder.exists()){
+        folder
+    }else{
+        val composeResDir = System.getProperty("compose.application.resources.dir")
+        File(composeResDir)
     }
-    var loader = Thread.currentThread().contextClassLoader!!
-    return File(loader.getResource(fileName).file)
 }
 
 fun getImageFromFile(file: File): BufferedImage {
