@@ -8,12 +8,12 @@ import kotlinx.coroutines.launch
 import tasks.XueLiang
 import tasks.anyue.base.BaseAnYueHeroDoing
 
-class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
+class AYWuZhanHeroDoingZQ3 : BaseAnYueHeroDoing() {
 
     val zhanjiang = HeroCreator.zhanjiang.create()
-    val dianfa = HeroCreator.dianfa.create()
+    val tieqi = HeroCreator.tieqi.create()
     val gugu = HeroCreator.gugu.create()
-    val wuyi = HeroCreator.wuyi.create()
+    val guangqiu = HeroCreator.guangqiu.create()
     val jiaonv = HeroCreator.jiaonv.create()
     val feiting = HeroCreator.feiting.create()
 
@@ -25,15 +25,15 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, dianfa, tuling, tianshi, gugu, feiting, jiaonv, dijing, bingqiu, wuyi)
+        heros = arrayListOf(zhanjiang, tieqi, tuling, tianshi, gugu, feiting, jiaonv, dijing, bingqiu, guangqiu)
 
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang, gugu, jiaonv, feiting,dianfa,tianshi) && dijing.isInCar()
+                fulls(zhanjiang, gugu, jiaonv, feiting,tieqi,tianshi) && dijing.isInCar()
             }
             chooseHero {
                 if (zhanjiang.isInCar()) {
-                    upAny(zhanjiang, gugu, jiaonv,dianfa,tianshi, feiting,dijing)
+                    upAny(zhanjiang, gugu, jiaonv,tieqi,tianshi, feiting,dijing)
                 } else {
                     upAny(zhanjiang,feiting)
                 }
@@ -42,7 +42,7 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
         add39()
 
-        addGuanDealWithHerosFull(40, listOf(wuyi), listOf(dijing))
+        addGuanDealWithHerosFull(40, listOf(tuling), listOf(dijing))
 
         add49(false)
 
@@ -51,7 +51,6 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
         add79()
         add89()
         add99()
-        addGuanDealWithHerosFull(100, listOf(tuling), listOf(jiaonv))
 
         add109()
 
@@ -78,7 +77,7 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
         guanDealList.add(
             GuanDeal(
-                131,
+                130,
                 isOver = { fulls(feiting,jiaonv) },
                 chooseHero = {
                     upAny(feiting,jiaonv)

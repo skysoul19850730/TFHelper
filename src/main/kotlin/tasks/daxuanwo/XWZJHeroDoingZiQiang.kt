@@ -5,18 +5,18 @@ import kotlinx.coroutines.delay
 import java.awt.event.KeyEvent
 
 class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
-    val tieqi = HeroCreator.tieqi.create()
-    val zhanjiang = HeroCreator.zhanjiang.create()
-    val yuren = HeroCreator.yuren.create()
+    val dianfa = HeroCreator.dianfa.create()
+    val zhanjiang = HeroCreator.niutou.create()
+    val wuyi = HeroCreator.wuyi.create()
     val feiting = HeroCreator.feiting.create()
     val gugu = HeroCreator.gugu.create()
 
-    val niutou = HeroCreator.niutou.create()
+    val tianshi = HeroCreator.tianshi.create()
     val moqiu = HeroCreator.moqiu.create()
 
     val muqiu = HeroCreator.hunqiu.create()
     val guangqiu = HeroCreator.guangqiu.create()
-    val haiyao = HeroCreator.haiyao.create()
+    val jiaonv = HeroCreator.jiaonv.create()
 
     var lastHun = 0L
 
@@ -38,32 +38,22 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
             var index = it.indexOf(muqiu)
             backHun(index)
         }
-        heros = arrayListOf(tieqi,zhanjiang,yuren,feiting,gugu,niutou,moqiu,muqiu,guangqiu,haiyao)
+        heros = arrayListOf(dianfa,zhanjiang,wuyi,feiting,gugu,tianshi,moqiu,muqiu,guangqiu,jiaonv)
         addGuanDeal(0){
             over {
-                fulls(zhanjiang,gugu,feiting,niutou,yuren,haiyao,tieqi)
+                fulls(zhanjiang,gugu,feiting,tianshi,wuyi,jiaonv,dianfa)
             }
             chooseHero {
-                if(zhanjiang.isInCar()) {
-                    upAny(zhanjiang,gugu,feiting,niutou,yuren,haiyao,tieqi)
-                }else upAny(zhanjiang)
+//                if(zhanjiang.isInCar()) {
+                    upAny(feiting,zhanjiang,gugu,tianshi,wuyi,jiaonv,dianfa)
+//                }else upAny(zhanjiang)
             }
         }
 
-//        addGuanDeal(18){
-//            over {
-//                fulls(zhanjiang,feiting,tieqi,niutou,gugu,yuren,haiyao)
-//            }
-//            chooseHero{
-//                upAny(zhanjiang,feiting,tieqi,niutou,gugu,yuren,haiyao)
-//            }
-//        }
-
-
         add49WithQiu(gugu,moqiu,5000)
 
-        add50(listOf(zhanjiang,feiting,tieqi,niutou,gugu,yuren,haiyao), listOf(haiyao,yuren))
-        add69(auto = true)
+//        add50(listOf(zhanjiang,feiting,dianfa,tianshi,gugu,wuyi,jiaonv), listOf(jiaonv,wuyi))
+//        add69(auto = true)
         curGuanDeal = guanDealList.get(0)
     }
 

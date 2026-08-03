@@ -79,6 +79,7 @@ object HeroCreator{
     val wawa = HeroBuilder("wawa", isGC = true)
     val wangjiang = HeroBuilder("wangjiang")
     val wugui = HeroBuilder("wugui")
+    val wuyi = HeroBuilder("wuyi")
     val xiaochou = HeroBuilder("xiaochou")
     val xiaolu = HeroBuilder("xiaolu")
     val xiaoye = HeroBuilder("xiaoye")
