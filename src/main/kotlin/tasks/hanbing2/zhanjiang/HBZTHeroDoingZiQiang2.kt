@@ -18,7 +18,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
     val gugu = HeroCreator.gugu.create()
     val wangjiang = HeroCreator.wangjiang.create()
     val jiaonv = HeroCreator.jiaonv.create()
-    val yuren = HeroCreator.yuren.create()
+    val yuren = HeroCreator.xuemo.create()
     val feiting = HeroCreator.feiting.create()
     val tianshi = HeroCreator.tianshi.create()
 
@@ -139,7 +139,7 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
         })
 
 
-        addGuan210(arrayListOf(tieqi, zhanjiang, gugu, tianshi, jiaonv, yuren))
+        addGuan210(arrayListOf(tieqi,yuren , gugu, tianshi, jiaonv, zhanjiang))
         curGuanDeal = guanDealList.first()
     }
 
@@ -158,9 +158,9 @@ class HBZTHeroDoingZiQiang2 : BaseSimpleHBHeroDoing() {
             if (tianshi.isFull()) {
                 carDoing.downHero(tianshi)
             }
-            if (yuren.isFull()) {
-                carDoing.downHero(yuren)
-            }
+//            if (yuren.isFull()) {
+//                carDoing.downHero(yuren)
+//            }
 
             if (tieqi.currentLevel < 3 || tianshi.currentLevel < 3 || yuren.currentLevel < 3) {
                 val list = arrayListOf(tieqi, tianshi, yuren).filter {

@@ -897,7 +897,7 @@ fun button(text: State<String>, onClick: () -> Unit) {
 var testing = false
 fun resPrepare() {
     //管卡rename
-    var file = File(Guanka.caijiPath + File.separator + "1699083434974")
+    var file = File(Guanka.caijiPath + File.separator + "gf2")
     var files = file.listFiles().sortedBy {
         it.lastModified()
     }

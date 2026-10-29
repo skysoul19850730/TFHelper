@@ -482,14 +482,17 @@ object App {
                             }
 
                             VK_NUMPAD4 -> {
+                                XiangrikuiDadishu.type=-1
                                 MRobot.singleClickPc(Config.zhandou_hero1CheckRect.clickPoint)
                             }
 
                             VK_NUMPAD5 -> {
+                                XiangrikuiDadishu.type=0
                                 MRobot.singleClickPc(Config.zhandou_hero2CheckRect.clickPoint)
                             }
 
                             VK_NUMPAD6 -> {
+                                XiangrikuiDadishu.type=1
                                 MRobot.singleClickPc(Config.zhandou_hero3CheckRect.clickPoint)
                             }
 
@@ -512,7 +515,7 @@ object App {
                                     VK_RIGHT -> curLeft++
                                 }
                                 log("$curLeft top:  $curTop")
-                                moveWindow()
+//                                moveWindow()
                             }
 //                        VK_LEFT -> {
 //                            CarDoing.moveLeft()

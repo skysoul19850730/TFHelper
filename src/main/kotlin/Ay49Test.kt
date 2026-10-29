@@ -20,6 +20,8 @@ import java.io.File
 
 object TestUtil {
     suspend fun test() {
+        XiangrikuiDadishu().needClickIndex()
+//        resPrepare()
 //        val start = System.currentTimeMillis()
 //        val img = WeChatWindowHelper.captureWindow(App.tfWindow!!,false)
 //        val end1 = System.currentTimeMillis()

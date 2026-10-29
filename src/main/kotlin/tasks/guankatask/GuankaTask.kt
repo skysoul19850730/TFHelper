@@ -20,7 +20,7 @@ class GuankaTask {
     var running = false
 
     var imgList = arrayListOf<BufferedImage>().apply {
-        var suFolder = resFile("${Config.platName}/guanka/gf1")
+        var suFolder = resFile("${Config.platName}/guanka/gf2")
         suFolder.listFiles().sortedBy {
             it.name.substring(1, it.name.length - 4).toInt()
         }.forEach {

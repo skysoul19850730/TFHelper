@@ -10,7 +10,7 @@ import tasks.anyue.base.BaseAnYueHeroDoing
 
 class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
-    val zhanjiang = HeroCreator.zhanjiang.create()
+    val guangqiu = HeroCreator.guangqiu.create()
     val dianfa = HeroCreator.dianfa.create()
     val gugu = HeroCreator.gugu.create()
     val wuyi = HeroCreator.wuyi.create()
@@ -25,24 +25,20 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
 
 
     override fun initHeroes() {
-        heros = arrayListOf(zhanjiang, dianfa, tuling, tianshi, gugu, feiting, jiaonv, dijing, bingqiu, wuyi)
+        heros = arrayListOf(guangqiu, dianfa, tuling, tianshi, gugu, feiting, jiaonv, dijing, bingqiu, wuyi)
 
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang, gugu, jiaonv, feiting,dianfa,tianshi) && dijing.isInCar()
+                fulls(tianshi, dianfa, gugu, jiaonv, wuyi, feiting) && dijing.isInCar()
             }
             chooseHero {
-                if (zhanjiang.isInCar()) {
-                    upAny(zhanjiang, gugu, jiaonv,dianfa,tianshi, feiting,dijing)
-                } else {
-                    upAny(zhanjiang,feiting)
-                }
+                upAny(tianshi, dianfa, gugu, jiaonv, wuyi, feiting, dijing)
             }
         }
 
         add39()
 
-        addGuanDealWithHerosFull(40, listOf(wuyi), listOf(dijing))
+        addGuanDealWithHerosFull(40, listOf(tuling), listOf(dijing))
 
         add49(false)
 
@@ -51,7 +47,7 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
         add79()
         add89()
         add99()
-        addGuanDealWithHerosFull(100, listOf(tuling), listOf(jiaonv))
+//        addGuanDealWithHerosFull(100, listOf(tuling), listOf(jiaonv))
 
         add109()
 
@@ -79,9 +75,9 @@ class AYWuZhanHeroDoingZQ2 : BaseAnYueHeroDoing() {
         guanDealList.add(
             GuanDeal(
                 131,
-                isOver = { fulls(feiting,jiaonv) },
+                isOver = { fulls(feiting) },
                 chooseHero = {
-                    upAny(feiting,jiaonv)
+                    upAny(feiting)
                 })
         )
 

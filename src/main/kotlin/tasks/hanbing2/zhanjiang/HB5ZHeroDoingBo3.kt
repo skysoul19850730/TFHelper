@@ -122,7 +122,7 @@ class HB5ZHeroDoingBo3 : BaseSimpleHBHeroDoing() {
 //            }
 //        }
 
-        changeZhuangbei(181) { yandou }
+        changeZhuangbei(171) { yandou }
 
         guanDealList.add(
             GuanDeal(189, isOver = { curGuan > 189 },

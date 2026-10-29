@@ -1,6 +1,7 @@
 package com.skysoul.pdftool
 
 import App
+import App.rectWindow
 import com.sun.jna.Native
 import com.sun.jna.Memory
 import com.sun.jna.Pointer
@@ -14,6 +15,7 @@ import com.sun.jna.platform.win32.WinUser
 import com.sun.jna.platform.win32.WinGDI
 import com.sun.jna.platform.win32.GDI32
 import com.sun.jna.ptr.IntByReference
+import data.Config
 import data.MRect
 import getSubImage
 import log
@@ -66,6 +68,11 @@ object WeChatWindowHelper {
     }
 
     fun initWindow() {
+//        val hwnd = findWeChatWindow("保卫向日葵")?:return
+//        App.tfWindow = hwnd
+//        setWindowSize(hwnd,677,947)
+//        rectWindow = MRect.createWH(0, 0,677, 947)
+
         val hwnd = findWeChatWindow("塔防精灵")?:return
         App.tfWindow = hwnd
         setWindowSize(hwnd,1000,607)

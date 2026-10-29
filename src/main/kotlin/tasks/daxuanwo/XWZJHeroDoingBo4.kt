@@ -5,7 +5,7 @@ import kotlinx.coroutines.delay
 import java.awt.event.KeyEvent
 
 class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
-    val niutou = HeroCreator.niutou.create()
+    val xuemo = HeroCreator.xuemo.create()
     val zhanjiang = HeroCreator.zhanjiang.create()
     val bingniao = HeroCreator.bingniao.create()
     val tianshi = HeroCreator.tianshi.create()
@@ -24,39 +24,39 @@ class XWZJHeroDoingBo4 : BaseSimpleXWHeroDoing() {
         super.initHeroes()
         auto59 = true
         heros = arrayListOf(
-            sishen, bingniao, zhanjiang, haiyao, niutou, wangjiang, feiting, tianshi, guangqiu, xiaoye
+            sishen, bingniao, zhanjiang, haiyao, xuemo, wangjiang, feiting, tianshi, guangqiu, xiaoye
         )
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang, niutou, sishen, feiting, bingniao, tianshi, xiaoye)
+                fulls(zhanjiang, xuemo, sishen, feiting, bingniao, tianshi, xiaoye)
             }
             chooseHero {
                 if (zhanjiang.isInCar()) {
                     if (feiting.isInCar()) {
-                        upAny(zhanjiang, feiting, niutou, sishen,bingniao,tianshi,xiaoye)
+                        upAny(zhanjiang, feiting, xuemo, sishen,bingniao,tianshi,xiaoye)
                     } else
-                        upAny(feiting, zhanjiang, niutou, sishen,bingniao,tianshi,xiaoye)
+                        upAny(feiting, zhanjiang, xuemo, sishen,bingniao,tianshi,xiaoye)
                 } else upAny(zhanjiang, feiting)
             }
         }
 
-        addGuanDealWithHerosFull(40, listOf(haiyao), listOf(bingniao))
+        addGuanDealWithHerosFull(40, listOf(haiyao), listOf(xuemo))
 
         add49(feiting)
 
         //内部实际是52关开始
-//        add50(listOf(zhanjiang, niutou, feiting, bingniao, sishen, xiaoye, tianshi), listOf(bingniao, tianshi))
+//        add50(listOf(zhanjiang, xuemo, feiting, bingniao, sishen, xiaoye, tianshi), listOf(bingniao, tianshi))
 
-        addGuanDealWithHerosFull(50,listOf(zhanjiang, niutou, feiting, bingniao, sishen, xiaoye, tianshi)
+        addGuanDealWithHerosFull(50,listOf(zhanjiang, xuemo, feiting, bingniao, sishen, xiaoye, tianshi)
         , downHeros = listOf(haiyao)
         )
 
 //        add69()
 //        g69State = 1//跟波打，上来就是1  下卡，等掉血上去抗个无敌就可以了，就不需要快捷键上下卡了
 
-        addGuanDealWithHerosFull(70, listOf(wangjiang), listOf(bingniao))
+        addGuanDealWithHerosFull(70, listOf(wangjiang), listOf(xuemo))
 
-        addGuanDealWithHerosFull(82, listOf(bingniao), listOf(wangjiang))
+        addGuanDealWithHerosFull(82, listOf(xuemo), listOf(wangjiang))
 
 //        addGuanDeal(80){
 //            onlyDo {
