@@ -51,7 +51,7 @@ class Ay139(val heroDoing: BaseAnYueHeroDoing, val test: Boolean = true) : AnSub
                             daBing()
                         }
                         while (state == 1 && curGuan == 139) {
-                            delay(4000)
+                            delay(6000)
                         }
 
                         if(state==2)return@chooseHero -1

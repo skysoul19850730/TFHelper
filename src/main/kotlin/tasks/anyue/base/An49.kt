@@ -56,7 +56,7 @@ class An49(val heroDoing: BaseAnYueHeroDoing ,val test:Boolean = true) : AnSub {
             var hasQiu = -1//0红，1蓝
             while (curGuan==49){
                 delay(300)
-                val img =getImage(App.rectWindow)
+                var img =getImage(App.rectWindow)
                 val img2 = img.getSubImage(Config.rectCheckOfLeishen)
                 if(hasQiu<0 && MatSearch.templateFit(xuetiao,img2.toMat())){
                     //有血条
@@ -79,6 +79,9 @@ class An49(val heroDoing: BaseAnYueHeroDoing ,val test:Boolean = true) : AnSub {
                 }
                 var same = false
                 if(hasQiu>=0){
+                    //有几率 当出现 已经识别到球的时候，boss还没套上盾的情况,等1秒在识别盾
+                    delay(1000)
+                    img =getImage(App.rectWindow)
                     if(hasRedShield(img.toMat())){
                         log("有红盾")
                         if(hasQiu==0){
