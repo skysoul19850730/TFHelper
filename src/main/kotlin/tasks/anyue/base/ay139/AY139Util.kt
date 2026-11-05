@@ -213,7 +213,7 @@ object AY139Util {
         }
 
 
-        if (slidingPixelMatch(bs, target, log = true).first > 0.6) {
+        if (slidingPixelMatch(bs, target, log = true).first > 0.2) {
             circle = 0
         } else {
             circle = 1
