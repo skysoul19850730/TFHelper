@@ -89,7 +89,7 @@ class AYWuZhanHeroDoingZQ5 : BaseAnYueHeroDoing() {
         )
 
 //        add139()
-        add139(false)
+        add139(true)
 
         curGuanDeal = guanDealList.get(0)
     }
@@ -105,7 +105,7 @@ class AYWuZhanHeroDoingZQ5 : BaseAnYueHeroDoing() {
     suspend fun check129Xue() {
 
         while (curGuan <= 129) {
-            XueLiang.observerXueDown(xueRate = 0.6f, over = { curGuan > 129 })
+            XueLiang.observerXueDown(xueRate = 0.1f, over = { curGuan > 129 })
             g129XueCount++
             if (g129XueCount == 2) {
                 delay(1500)
