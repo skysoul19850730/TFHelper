@@ -2,7 +2,9 @@ package tasks.anyue.base
 
 import data.Config
 import data.HeroBean
+import data.MRect
 import getImage
+import java.awt.Color
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -10,6 +12,7 @@ import log
 import tasks.SimpleHeZuoHeroDoing
 import tasks.anyue.base.ay139.AY139Util
 import utils.AYUtil
+import utils.hasColorCount
 
 //149，如果脚本车是右车，则另一车下一张卡，这边一卡控制，先下风向左，上卡就会向右（delay1秒下掉保持两边一样，下次风就会向左）
 //如果脚本车是左车，则另一车不动，逻辑就和上面一致。
@@ -23,11 +26,10 @@ class Ay149(val heroDoing: BaseAnYueHeroDoing, var downHero1: HeroBean, var down
     override fun addToHeroDoing() {
         heroDoing.apply {
             addGuanDeal(149) {
-                over { curGuan > 149 }
+                over { curGuan > 149 || (state == 3 && fulls(downHero1,downHero2)) }
                 chooseHero {
 
-
-                    -1
+                    deal(this)
                 }
                 onStart {
                     carDoing.downHero(downHero1)
@@ -37,10 +39,43 @@ class Ay149(val heroDoing: BaseAnYueHeroDoing, var downHero1: HeroBean, var down
         }
     }
 
-    private suspend fun List<HeroBean?>.deal(): Int {
+    private suspend fun BaseAnYueHeroDoing.deal(list:List<HeroBean?>): Int {
         if (isLeft) {
 
+            if(state == 3){
+                return list.upAny(downHero1,downHero2)
+            }
+
+            if(state == 0){
+                var needUp = list.upAny(downHero1,downHero2,useGuang = false)
+                if(needUp>-1){
+                    while (state == 0 && heroDoing.running && heroDoing.curGuan == 149) {
+                        delay(100)
+                    }
+                    if (state == 1) {//紫风飞5秒
+                        delay(4800)
+                    }
+                    //下俩，飞右边去
+                    if(state!=3) {
+                        carDoing.downHero(downHero1)
+                        carDoing.downHero(downHero2)
+                        delay(1000)
+                        //上卡回复平衡态
+                        state = 0
+                    }
+                    return needUp
+
+                }else{
+                    return -1
+                }
+            }
+
+
         } else {
+
+            if(state == 3){
+                return list.upAny(downHero1)
+            }
 
             if (state != 0) {
                 delay(1000)
@@ -48,7 +83,7 @@ class Ay149(val heroDoing: BaseAnYueHeroDoing, var downHero1: HeroBean, var down
                 state = 0
             }
 
-            var needUp = this.indexOf(downHero1)
+            var needUp = list.indexOf(downHero1)
             if (needUp > -1) {//预备好上的卡
                 while (state == 0 && heroDoing.running && heroDoing.curGuan == 149) {
                     delay(100)
@@ -65,7 +100,7 @@ class Ay149(val heroDoing: BaseAnYueHeroDoing, var downHero1: HeroBean, var down
         return -1
     }
 
-    var state = 0 //0平衡状态,1.紫风状态，2黄凤状态
+    var state = 0 //0平衡状态,1.紫风状态，2黄凤状态    3 结束
 
     var fengCount = 0
     var huangfengCount = 0
@@ -73,24 +108,51 @@ class Ay149(val heroDoing: BaseAnYueHeroDoing, var downHero1: HeroBean, var down
     //350 150 446,173
     private fun SimpleHeZuoHeroDoing.autoShibie() {
         GlobalScope.launch {
-            while (huangfengCount < 3 && running && curGuan == 149) {
+            while (state!=3 && running && curGuan == 149) {
                 if (fengCount == 0) {
                     delay(15000)
                 } else {
                     delay(10000)
                 }
-                getFengType()
+                if(fengCount == 6){//等6次风后，又delay10秒后，改state=3，因为等3后就开始满卡了,如果还有风就会影响风向
+                    state = 3
+                }else {
+                    getFengType()
+                }
             }
         }
     }
+
+    //紫风 198，110，228
+    //黄蜂 255,255,160
+    //531  73  170 80
+
+    val rect = MRect.createWH(531,73,170,80)
+    val colorZi = Color(193, 110, 228)
+    val colorYe = Color(255,255,160)
 
     private fun getFengType(): Int {
         //0 紫风，   1  黄风
         var type = -1
 
-        fengCount++
-        if (type == 1)
-            huangfengCount++
+        while(type == -1) {
+            //type = ?
+            val img = getImage(rect)
+            if(img.hasColorCount(colorZi)>1000){
+                type = 0
+            }else if(img.hasColorCount(colorYe)>1000){
+                type = 1
+            }
+            if(type > -1) {
+                fengCount++
+                if (type == 1) {
+                    state = 2
+                    huangfengCount++
+                } else if (type == 2) {
+                    state = 1
+                }
+            }
+        }
         return type
     }
 
