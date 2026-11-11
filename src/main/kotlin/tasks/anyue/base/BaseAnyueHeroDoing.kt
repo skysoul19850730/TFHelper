@@ -60,6 +60,11 @@ abstract class BaseAnYueHeroDoing() : SimpleHeZuoHeroDoing() {
         Ay139(this,test).addToHeroDoing()
     }
 
+    fun add149(){
+        if(carDoing.chePosition == 1 ){ //前车
+            return
+        }
+    }
 
     override fun onStart() {
         super.onStart()
