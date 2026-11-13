@@ -3,9 +3,11 @@ package tasks.anyue.base.ay139
 import data.Config
 import data.MPoint
 import data.MRect
+import foreach
 import getImage
 import getImageFromRes
 import getSubImage
+import log
 import opencv.MatSearch
 import opencv.toGray
 import opencv.toMat
@@ -99,7 +101,7 @@ object AY139Util {
         }
 
         r = slidingPixelMatch(sfe, target, log = true)
-        if (r.first > max&& target.hasColorCount(Color.WHITE) < 800) {
+        if (r.first > max && target.hasColorCount(Color.WHITE) < 800) {
             max = r.first
             futou = 1
             fill = 0
@@ -111,7 +113,7 @@ object AY139Util {
             fill = 1
         }
         r = slidingPixelMatch(sze, target, log = true)
-        if (r.first > max&& target.hasColorCount(Color.WHITE) < 800) {
+        if (r.first > max && target.hasColorCount(Color.WHITE) < 800) {
             max = r.first
             futou = 0
             fill = 0
@@ -179,12 +181,18 @@ object AY139Util {
 
         var max = 0.3
 
+        var maxP: MPoint? = null
+        var maxBitmap: BufferedImage? = null
+
         var r = slidingPixelMatch(bff, target, log = true)
         if (r.first > max) {
             max = r.first
+            maxP = r.second
+            maxBitmap = bff
             futou = 1
             fill = 1
         }
+        log("充斧子识别率 ${r.first}")
 
         r = slidingPixelMatch(bfe, target, log = true)
 
@@ -194,36 +202,75 @@ object AY139Util {
 // 所以这里加一步粗略计算是否镂空，暂时按300,实心的应该远大于300了
         if (r.first > max && target.hasColorCount(Color.WHITE) < 2000) {
             max = r.first
+            maxP = r.second
+            maxBitmap = bfe
             futou = 1
             fill = 0
         }
+        log("空斧子识别率 ${r.first}")
 
         r = slidingPixelMatch(bzf, target, log = true)
         if (r.first > max) {
             max = r.first
+            maxP = r.second
+            maxBitmap = bzf
             futou = 0
             fill = 1
         }
+        log("充法杖识别率 ${r.first}")
 
         r = slidingPixelMatch(bze, target, log = true)
         if (r.first > max && target.hasColorCount(Color.WHITE) < 2000) {
             max = r.first
+            maxP = r.second
+            maxBitmap = bze
             futou = 0
             fill = 0
         }
 
+        log("空法杖识别率 ${r.first}")
 
-        if (slidingPixelMatch(bs, target, log = true).first > 0.2) {
-            circle = 0
-        } else {
-            circle = 1
-        }
+//        if (slidingPixelMatch(bs, target, log = true).first > 0.2) {
+
 
         if (futou > -1 && max > 0.6) {
+            var sq = target.isSquare(maxP, maxBitmap?.width)
+            if (sq < 0) return null
+            if (sq == 1) {
+                circle = 0
+            } else {
+                circle = 1
+            }
             return MatType(futou, circle, fill)
         }
         return null
 
+    }
+
+    private fun BufferedImage.isSquare(point: MPoint?, srcW: Int?): Int {
+        point ?: return -1
+        srcW ?: return -1
+        var maxCount = 0
+        var maxX = 0
+        for (x in point.x + srcW until width) {//查图 源图的宽度是86
+            var count = 0
+            for (y in 0 until height) {
+                val rgb = Color(getRGB(x, y))
+                if (rgb.red > 180 && rgb.green > 180 && rgb.blue > 180) {
+                    count++
+                }
+            }
+            if (maxCount < count) {
+                maxCount = count
+                maxX = x
+            }
+            if (count > 60) {
+                log("x ${x} count ${count} ")
+                return 1
+            }
+        }
+        log("x ${maxX} ma ${maxCount} ")
+        return 0
     }
 
 

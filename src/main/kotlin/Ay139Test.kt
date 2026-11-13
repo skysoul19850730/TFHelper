@@ -13,6 +13,7 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import kotlin.math.abs
+import kotlin.math.log
 import kotlin.math.min
 
 object Ay139Test {
@@ -47,15 +48,17 @@ object Ay139Test {
 
 
     fun testOne(img1:BufferedImage? = null){
-        val img = getImageFromFile(File("E:\\ideaspace\\TFHelperHome\\tfres\\window\\01_23_53_472.png"))
-        val tops = AY139Util.getTopMatTypes(img)
-        var diff: AY139Util.MatType? = null
-        if (tops != null) {
-            println("识别结果：${tops.joinToString(";") { it.toPString() }}")
-
-            diff = AY139Util.theDifferentMat(tops)
-            println("识别结果Diff：${diff.toPString()}")
-        }
+//        09_11_48_816
+//        09_11_56_581
+        val img =img1?: getImageFromFile(File("E:\\ideaspace\\TFHelperHome\\tfres\\window\\09_11_56_581.png"))
+//        val tops = AY139Util.getTopMatTypes(img)
+//        var diff: AY139Util.MatType? = null
+//        if (tops != null) {
+//            println("识别结果：${tops.joinToString(";") { it.toPString() }}")
+//
+//            diff = AY139Util.theDifferentMat(tops)
+//            println("识别结果Diff：${diff.toPString()}")
+//        }
 //
         val bottom = AY139Util.getBottomRunningMat(img)
         if(bottom!=null){
@@ -72,5 +75,22 @@ fun main() {
     } catch (e: Exception) {
         System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME)
     }
-   Ay139Test. testOne()
+
+    val folder = File("C:\\Users\\sqc\\Desktop\\debug139")
+
+//    var name = "09_11_56_315.png"
+    var name = "08_46_52_961.png"
+    var testOne = false
+    folder.listFiles().forEach {
+
+        if( testOne) {
+            if(it.name == name) {
+                Ay139Test.testOne(getImageFromFile(it))
+            }
+        }else {
+            println("\n\ncurFile is ${it.name}")
+            Ay139Test.testOne(getImageFromFile(it))
+        }
+    }
+
 }

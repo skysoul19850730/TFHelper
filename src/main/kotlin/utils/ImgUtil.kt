@@ -241,7 +241,7 @@ object ImgUtil {
 
 }
 
-fun BufferedImage.hasColorCount(toColor: Color, sim: Int = 20): Int {
+fun BufferedImage.hasColorCount(toColor: Color, sim: Int = 20,log:Boolean = false): Int {
     var count = 0
     this.foreach { i, i2 ->
         val color = Color(this.getRGB(i, i2))
@@ -249,6 +249,9 @@ fun BufferedImage.hasColorCount(toColor: Color, sim: Int = 20): Int {
             count++
         }
         false
+    }
+    if(log){
+        log("count is ${count}")
     }
     return count
 }
