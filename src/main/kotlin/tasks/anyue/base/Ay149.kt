@@ -30,7 +30,7 @@ class Ay149(val heroDoing: BaseAnYueHeroDoing, var downHero1: HeroBean, var down
                 over {
                     var ov = false
                     if(isLeft){
-
+                        ov =( (state == 3 || state == 5) && fulls(downHero1, downHero2))
                     }else{
                         //右侧时，state=3 或 =5 都可以，只要满上就结束了，只剩打英雄了，（某个形态下 需要打冰，但这里后面再考虑加点击按钮看boss属性的逻辑
                         ov =( (state == 3 || state == 5) && fulls(downHero1, downHero2))
@@ -77,7 +77,7 @@ class Ay149(val heroDoing: BaseAnYueHeroDoing, var downHero1: HeroBean, var down
                         delay(100)
                     }
                     if (state == 1 || state==5) {//紫风飞5秒
-                        delay(4500)
+                        delay(4000)
                     }
                     //下俩，飞右边去
                     if (state != 3) {
@@ -86,11 +86,14 @@ class Ay149(val heroDoing: BaseAnYueHeroDoing, var downHero1: HeroBean, var down
 
                         if(state==5){
                             //3个紫风了，保持下俩卡状态，只等所有黄风结束了
-
+                            while(state == 5){
+                                delay(200)
+                            }
+                        }else {
+                            delay(1000)
+                            //上卡回复平衡态
+                            state = 0
                         }
-                        delay(1000)
-                        //上卡回复平衡态
-                        state = 0
                     }
                     return needUp
 
@@ -118,7 +121,7 @@ class Ay149(val heroDoing: BaseAnYueHeroDoing, var downHero1: HeroBean, var down
                     delay(100)
                 }
                 if (state == 1 || state == 5) {
-                    delay(5000)
+                    delay(4000)
                 }
                 return needUp
             } else {
