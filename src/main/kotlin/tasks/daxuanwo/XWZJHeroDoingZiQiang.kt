@@ -5,13 +5,13 @@ import kotlinx.coroutines.delay
 import java.awt.event.KeyEvent
 
 class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
-    val yuren = HeroCreator.yuren.create()
+    val nvwang = HeroCreator.nvwang.create()
     val zhanjiang = HeroCreator.zhanjiang.create()
     val xuemo = HeroCreator.xuemo.create()
     val feiting = HeroCreator.feiting.create()
     val gugu = HeroCreator.gugu.create()
 
-    val tianshi = HeroCreator.tianshi.create()
+    val hunqiu = HeroCreator.hunqiu.create()
     val huanqiu = HeroCreator.huanqiu.create()
 
     val tieqi = HeroCreator.tieqi.create()
@@ -20,41 +20,42 @@ class XWZJHeroDoingZiQiang : BaseSimpleXWHeroDoing() {
 
 
     override fun initHeroes() {
-        midHeros69 = listOf(yuren,tieqi)
+        midHeros69 = listOf(tieqi,xuemo)
         super.initHeroes()
         auto59 = true
-        heros = arrayListOf(yuren, zhanjiang, xuemo, feiting, gugu, tianshi, huanqiu, tieqi, guangqiu, xiaoye)
+        heros = arrayListOf(nvwang, zhanjiang, xuemo, feiting, gugu, hunqiu, huanqiu, tieqi, guangqiu, xiaoye)
         addGuanDeal(0) {
             over {
-                fulls(zhanjiang, gugu, feiting, tianshi, xuemo, xiaoye, tieqi)
+                fulls(zhanjiang, gugu, feiting, hunqiu, xuemo, xiaoye, tieqi)
             }
             chooseHero {
                 if (!zhanjiang.isInCar()) {
                     return@chooseHero upAny(zhanjiang, feiting)
                 } else {
-                    if (!xuemo.isInCar()) {
-                        return@chooseHero upAny(xuemo, zhanjiang, feiting)
-                    } else if (!tianshi.isInCar() || !tieqi.isInCar()) {
-                        return@chooseHero upAny(tianshi, tieqi, xuemo, zhanjiang, feiting)
+                    if (!feiting.isInCar()) {
+                        return@chooseHero upAny(feiting, nvwang, zhanjiang)
+                    } else if (!nvwang.isInCar()) {
+                        return@chooseHero upAny(nvwang, zhanjiang, feiting)
+                    } else if (!xuemo.isInCar() || !tieqi.isInCar()) {
+                        return@chooseHero upAny(tieqi, xuemo, nvwang, zhanjiang, feiting)
                     } else return@chooseHero upAny(
-                        xuemo, tianshi, feiting,
-                        zhanjiang, gugu, xiaoye, tieqi
+                        xuemo, zhanjiang, nvwang, feiting,
+                        gugu, xiaoye, tieqi
                     )
                 }
             }
         }
 
-        changeZhuangbei(31,{yandou})
+        changeZhuangbei(31, { yandou })
 
-        addGuanDealWithHerosFull(46, listOf(yuren), listOf(tianshi))
-        add49(feiting)
+        gudingShuaQiuTask("hunqiu",39,2500)
 
-//        add50(listOf(zhanjiang,feiting,yuren,tianshi,gugu,xuemo,xiaoye), listOf(xiaoye,xuemo))
+        add49WithQiu(feiting,hunqiu,2500)
+
+//        add50(listOf(zhanjiang,feiting,nvwang,hunqiu,gugu,xuemo,xiaoye), listOf(xiaoye,xuemo))
 //        add69(auto = true)
-        addGuanDealWithHerosFull(51, listOf(tianshi), listOf(yuren))
-        changeZhuangbei(61){longxin}
-        addGuanDealWithHerosFull(67, listOf(yuren), listOf(tianshi))
-
+        addGuanDealWithHerosFull(51, listOf(feiting))
+        changeZhuangbei(61) { longxin }
         add69()
         curGuanDeal = guanDealList.get(0)
     }
